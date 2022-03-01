@@ -67,4 +67,4 @@ This project utilizes HTML, Javascript, CSS, and plaintext. There are no specifi
 This repository uses a Root branching pattern. Any new or patch commits will have to be based on Main and ready to merge back into Main without merge conflicts. A Pull Request should have helpful comments as to what it contains, as well as have a link to an associated GitHub Issue.
 
 ## Participating In Development
-Wanted: Your help and input! Contact K7RMZ at ARRL dot NET with the subject line including the name of this repository, and I can help you get started.
+Wanted: Your help and input! Contact K7RMZ at ARRL dot NET with your message, and put the name of this repository in the subject line.
