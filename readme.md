@@ -89,6 +89,8 @@ Enter information into the top section of the form. What you enter here will upd
 
 ### Store And Load Existing Race Data
 
+#### Save Existing Race Data
+
 *Note*: This functionality will help you store all of the "top" form fields (and therefore the subject line) as well as any entered bib data.
 
 1. Complete the top section of the form.
@@ -99,7 +101,7 @@ Enter information into the top section of the form. What you enter here will upd
 
 *Note*: If you enter bib data, that will get saved too!
 
-Load Existing Race Data:
+#### Load Existing Race Data
 
 1. Open the Form.
 1. Click the Load Race Data button and a Windows Explorer view will appear. If you are lucky it will point to your *Downloads* directory.
@@ -115,7 +117,7 @@ Load Existing Race Data:
 1. *Optional*: Tap or Click the checkbox to tell the Form the time references *yesterday*. If the checkbox is highlighted you can press the space bar on your keyboard to check or un-check it.
 1. *Choose one*: IN, OUT, DROP. Depending on what the event was.
 
-The correctly formatted bib data will appear in the window below and the "Number of entries" count will increase by 1.
+The correctly formatted bib data will appear in the window below and the "Number of entries" count will increase by `1`.
 
 *Important*: All bib data inside the entries window will disappear without chance for recovery if you click the Clear Entries button. The only way to recover entries is to have already used the [Store and Load Existing Race Data](#store-and-load-existing-race-data) operation listed above.
 
@@ -129,21 +131,37 @@ The correctly formatted bib data will appear in the window below and the "Number
 
 ## Development
 
-This project utilizes HTML, Javascript, CSS, and plaintext. There are no specific build requirements. It is helpful to have an operable and up-to-date version of Winlink Express installed on (or near) your development machine.
+This project utilizes HTML, Javascript, CSS, and plaintext. Compatibility is severely biased toward older standards in all three languages, resulting in lots of code, and some challenges in making the form "pretty" and useable.
+
+However, single-page websites have no specific build requirements. It is helpful to have an operable and up-to-date version of Winlink Express installed on (or near) your development machine, as well as a bunch of browsers for testing/viewing results.
 
 This form should support the "top ~~~three~~~ four" popular browsers including Chrome, Firefox, Edge, and the last few major versions of IE.
 
 If you run across issues running this form in a specific browser, use the [Discussions](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/discussions/11) page to bring up the issue.
 
-Wanted: Your help and input! Contact K7RMZ at ARRL dot NET with a message about your interest(s), and be sure to include the name of this repository in the subject line.
+Wanted: *Your help and input developing this form!* Contact K7RMZ at ARRL dot NET with a message about your interest(s) and a link to your Github profile. Be sure to include the name of this repository in the subject line.
 
-## Branching and Pull Requests
+### To Develop Locally
+
+1. Fork this repo to your Github account (this is optional but can be very helpful).
+1. Clone this repo to your local.
+1. Create a development branch named appropriately for what work you are about to do.
+1. Open the project in your preferred HTML, CSS, and javascript editor/IDE.
+1. Add, Commit, and Push your changes with appropriate comments.
+1. When you are done adding or editing the code, open a [Pull Request](#pull-requests) with appropriate documentation.
+1. If there is already an Issue and/or Discussion related to the work, please mention those in your PR Comment using the `#` linking method.
+
+## Branching
 
 This repository uses a Root branching pattern.
 
 *main* is protected and requires approvals to merge in to.
 
-Any new or patch commits must be based on "main" and ready to merge without merge conflict in order to be considered.
+Any commits, new or patch, must be based on "main" and ready to merge without merge conflicts in order to be considered. I will work with you to help resolve merge conflicts, but first please review [Github's Resolving Merge Conflicts](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-using-the-command-line) and [Atlassian's Resolving Merge Conflicts](https://www.atlassian.com/git/tutorials/using-branches/merge-conflicts).
+
+Your "dev" branch should be created in your local dev environment, and be based on 'main' in this repository.
+
+## Pull Requests
 
 A Pull Request should have helpful comments within it:
 
@@ -151,3 +169,13 @@ A Pull Request should have helpful comments within it:
 1. Detailed body with a problem-solution-result format.
 1. Body of themessage shoudl include a link to an associated GitHub Issue (if it exists).
 1. Include details on which browser(s) are affected.
+
+## Final Thoughts
+
+Have fun!
+
+This is a personal effort of love.
+
+I have made this project open to the amateur community.
+
+The original author might import restrictions or limitations on use of their source code, please see [Winlink.org](https://winlink.org/) for details about the originating source code.
