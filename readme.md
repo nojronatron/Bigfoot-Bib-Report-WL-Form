@@ -46,8 +46,8 @@ Aid Station volunteers should have a notebook of all the possible bib numbers th
 
 ## How to Install This Form and Template
 
-1. Download the Template and Form files.
-1. Copy them to your Winlink Express installation folder in the {callsign}\Templates folder.
+1. Download the Template and Form files from the [releases page](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/tags) or [the code repository](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form).
+1. Copy "Bigfoot Bib Report Initial.html" and "Bigfoot Bib Report.txt" to your Winlink Express installation folder in the {callsign}\Templates folder.
 1. Optional: Create a new folder within the Templates directory if you wish.
 1. Open In Winlink Express.
 1. Click the Messages menu and select "Set Favorite Templates".
