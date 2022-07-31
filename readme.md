@@ -44,12 +44,34 @@ The recipient of the message will get the same data formatting and layout with e
 
 Aid Station volunteers should have a notebook of all the possible bib numbers that are registered for the race. As runners enter and leave each Aid Station (or drop from the event), their bib information is updated in that notebook. Hams take note of each bib number in/out/drop times, including the date, and enter that into this form. The form is then submitted as a New Winlink Message and posted to the Winlink Outbox.
 
+## Download Files
+
+There are 2 files to download: "Bigfoot Bib Report Initial.html" and "Bigfoot Bib Report.txt".
+
+You have options as to how to download them to your local machine:
+
+Preferred:
+
+Download template and form files from [releases page](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/tags) but be aware you might need to [ensure CRLF are included in the template file](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/issues/15#issuecomment-1200459504)
+
+Second Preference:
+
+Download the files directly from blob storage (main - will always be 'latest' but might not include the latest fixes in development):
+
+[Bigfoot Bib Report Initial.html](https://raw.githubusercontent.com/nojronatron/Bigfoot-Bib-Report-WL-Form/main/Bigfoot%20Bib%20Report%20Initial.html)
+
+[Bigfoot Bib Report.txt](https://raw.githubusercontent.com/nojronatron/Bigfoot-Bib-Report-WL-Form/main/Bigfoot%20Bib%20Report.txt)
+
+One Last Option (but least likely to be up-to-date):
+
+My [Google Drive](https://drive.google.com/drive/folders/1K-rI1WckMAZQ5hfbiFnTwz_O9RvKmWW5)
+
 ## How to Install This Form and Template
 
-1. Download the Template and Form files from the [releases page](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/tags) or [the code repository](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form).
+1. Download the Template and Form files as indicated above.
 1. Copy "Bigfoot Bib Report Initial.html" and "Bigfoot Bib Report.txt" to your Winlink Express installation folder in the {callsign}\Templates folder.
 1. Optional: Create a new folder within the Templates directory if you wish.
-1. Open In Winlink Express.
+1. Open Winlink Express.
 1. Click the Messages menu and select "Set Favorite Templates".
 1. Supply a display name (suggest "Bigfoot" or similar), and update the filename to Bigfoot Bib Report Initial.html.
 
@@ -138,6 +160,8 @@ However, single-page websites have no specific build requirements. It is helpful
 This form should support the "top ~~~three~~~ four" popular browsers including Chrome, Firefox, Edge, and the last few major versions of IE.
 
 If you run across issues running this form in a specific browser, use the [Discussions](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/discussions/11) page to bring up the issue.
+
+Keep track of what is going on with development in the [GitHub Issues](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/issues) page, where you will find bugs, enhancements requests, and so-on.
 
 Wanted: *Your help and input developing this form!* Contact K7RMZ at ARRL dot NET with a message about your interest(s) and a link to your Github profile. Be sure to include the name of this repository in the subject line.
 
