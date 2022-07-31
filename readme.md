@@ -50,21 +50,15 @@ There are 2 files to download: "Bigfoot Bib Report Initial.html" and "Bigfoot Bi
 
 You have options as to how to download them to your local machine:
 
-Preferred:
+Preferred: Download template and form files from [releases page](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/tags). You might need to [ensure CRLF are included in the template file](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/issues/15#issuecomment-1200459504) to avoid a bug.
 
-Download template and form files from [releases page](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/tags) but be aware you might need to [ensure CRLF are included in the template file](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/issues/15#issuecomment-1200459504)
+Second Preference: Download the files directly from blob storage (main - will always be 'latest' but might not include the latest fixes in development):
 
-Second Preference:
+> [Bigfoot Bib Report Initial.html](https://raw.githubusercontent.com/nojronatron/Bigfoot-Bib-Report-WL-Form/main/Bigfoot%20Bib%20Report%20Initial.html)
 
-Download the files directly from blob storage (main - will always be 'latest' but might not include the latest fixes in development):
+> [Bigfoot Bib Report.txt](https://raw.githubusercontent.com/nojronatron/Bigfoot-Bib-Report-WL-Form/main/Bigfoot%20Bib%20Report.txt)
 
-[Bigfoot Bib Report Initial.html](https://raw.githubusercontent.com/nojronatron/Bigfoot-Bib-Report-WL-Form/main/Bigfoot%20Bib%20Report%20Initial.html)
-
-[Bigfoot Bib Report.txt](https://raw.githubusercontent.com/nojronatron/Bigfoot-Bib-Report-WL-Form/main/Bigfoot%20Bib%20Report.txt)
-
-One Last Option (but least likely to be up-to-date):
-
-My [Google Drive](https://drive.google.com/drive/folders/1K-rI1WckMAZQ5hfbiFnTwz_O9RvKmWW5)
+One Last Option (but least likely to be up-to-date) [Google Drive](https://drive.google.com/drive/folders/1K-rI1WckMAZQ5hfbiFnTwz_O9RvKmWW5)
 
 ## How to Install This Form and Template
 
