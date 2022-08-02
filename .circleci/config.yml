@@ -1,0 +1,78 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+jobs:
+  package:
+    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
+    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+    docker:
+      - image: cimg/base:stable
+    resource_class: small
+    # Add steps to the job
+    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+    steps:
+      - checkout
+      - run:
+          name: "Installing unix2dos"
+          command: "sudo apt-get install -y dos2unix"
+      - run:
+          name: "Fixing newlines"
+          command: "unix2dos *.html *.txt"
+      - run:
+          name: "Zipping files"
+          command: |
+            mkdir workspace
+            zip -r workspace/BF-Bib-Report-WLForm-<< pipeline.git.tag >>.zip *.md LICENSE *.txt *.html
+      - store_artifacts:
+          path: workspace/BF-Bib-Report-WLForm-<< pipeline.git.tag >>.zip
+          destination: artifact-file
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - BF-Bib-Report-WLForm-<< pipeline.git.tag >>.zip
+
+  release:
+    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
+    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+    docker:
+      - image: cimg/base:stable
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /mnt/ramdisk/artifacts
+      - run: 
+         name: "Install GHR to perform release"
+         command: |
+           cd /mnt/ramdisk/
+           curl -L -o ghr.tar.gz https://github.com/tcnksm/ghr/releases/download/v0.14.0/ghr_v0.14.0_linux_amd64.tar.gz
+           tar -xvzf ghr.tar.gz
+           cp ghr_v0.14.0_linux_amd64/ghr /mnt/ramdisk/
+      - run: 
+         name: "Publish Release on GitHub"
+         command: |
+           cd /mnt/ramdisk/
+           find /mnt/ramdisk
+           ./ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete << pipeline.git.tag >> /mnt/ramdisk/artifacts/BF-Bib-Report-WLForm-<< pipeline.git.tag >>.zip
+
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+workflows:
+  main:
+    jobs:
+      - package:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v\d+/
+      - release:
+          requires:
+            - package
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v\d+/
