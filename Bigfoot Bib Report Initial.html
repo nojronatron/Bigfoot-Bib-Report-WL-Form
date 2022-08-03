@@ -46,7 +46,11 @@
             var storedAddress = localStorage.getItem('RTrackeradd');
             document.forms[0].address.value = storedAddress;
             var storedLocation = localStorage.getItem('RTrackerloc');
-            document.forms[0].Location.value = storedLocation;
+            if (storedLocation != "") {
+                document.forms[0].Location.value = storedLocation;
+            } else {
+                document.forms[0].location.value = "Choose a station.";
+            }
             var storedTitle = localStorage.getItem('RTrackertitle');
             document.forms[0].EventTitle.value = storedTitle;
             var storedMsgNumber = localStorage.getItem('RTrackermsgNum');
@@ -998,10 +1002,11 @@
                         <label for="address">Send to:</label>
                         <input name="address" type="text" id="address" onchange="store();" size="50" maxlength="45" title="Separate multiple calls or addresses with a semicolon;" placeholder="Winlink Radio Call or Email" required />
                         <label for="Location">Aid Station:</label>
-                        <select name="Location" type="text" id="Location" onchange="store();" size="3" maxlength="2" required>
+                        <select name="Location" type="text" id="Location" onchange="store();" size="1" maxlength="25" required>
+                            <option value="" selected>Choose a station.</option>
                             <option value="MM_Marble Mountain SnoPark">Marble Mountain SnoPark</option>
                             <option value="BL_Blue Lake">Blue Lake</option>
-                            <option value="WR_Windy Ridge" selected>Windy Ridge</option>
+                            <option value="WR_Windy Ridge">Windy Ridge</option>
                             <option value="JR_Johnston Ridge">Johnston Ridge</option>
                             <option value="CW_Coldwater Lake">Coldwater Lake</option>
                             <option value="NP_Norway Pass">Norway Pass</option>
@@ -1013,7 +1018,7 @@
                             <option value="CB_Council Bluff">Council Bluff</option>
                             <option value="CH_Chain of Lakes">Chain of Lakes</option>
                             <option value="KT_Klickitat">Klickitat</option>
-                            <option value="TS_Twin Sisters">Twisted Sister</option>
+                            <option value="TS_Twin Sisters">Twisted Sisters</option>
                             <option value="OC_Owens Creek">Owen&acute;s Creek</option>
                             <option value="FN_Finish (Bigfoot Base)">Finish (Bigfoot Base)</option>
                         </select>
