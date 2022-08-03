@@ -67,7 +67,7 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: /^v\d+/
+              only: /^v\d+.*/
       - release:
           requires:
             - package
