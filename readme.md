@@ -25,6 +25,8 @@ These files were updated to meet the needs of the Bigfoot 200 ultramarathon spec
 
 The latest version of the Form and Template will always be published to the [GitHub Releases page](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/tags).
 
+Semantic versioning has been applied. My intention is to maintain a hard-coded version in the Form and keep the Releases packages synchronized manually until a better solution can be found. The Form version variable will automatically transfer to the Message Template upon submission so that it can be known which version of the code an operator is using, for debugging purposes.
+
 ## How Winlink Forms Work
 
 There are two components to a Form:
