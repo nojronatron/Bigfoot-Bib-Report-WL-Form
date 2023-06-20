@@ -14,10 +14,6 @@
 
     <script language="javascript" type="text/javascript">
       function store() {
-        var formVer = '0.2.0';
-        document.getElementById('thisVersion').innerHTML = formVer.toString();
-        document.getElementById('Theversion').value = formVer.toString();
-        localStorage.setItem('BFVersion', formVer);
         var addressFormatted = document.getElementById('address');
         localStorage.setItem('RTrackeradd', addressFormatted.value);
         var locationFormatted = document.getElementById('Location');
@@ -806,6 +802,11 @@
       }
 
       window.onload = function () {
+        const formVersion = '1.0.0';
+        localStorage.setItem('BFVersion', formVersion);
+        document.getElementById('thisVersion').innerText=`Version ${formVersion}`;
+        document.getElementById('Theversion').value = formVersion;
+
         //Check the support for the File API support
         if (
           window.File &&
@@ -872,10 +873,6 @@
       .style14 {
         font-size: 14px;
         font-weight: bold;
-      }
-
-      .style19 {
-        font-size: 10px;
       }
 
       .style20 {
@@ -1029,7 +1026,7 @@
         right: 1rem;
         bottom: 1rem;
         overflow-y: auto;
-        *overflow-y: scroll;
+        /* *overflow-y: scroll; */
         padding-right: 0.5em;
       }
 
@@ -1084,8 +1081,7 @@
           <td width="842" height="882" valign="top" nowrap="nowrap">
             <p align="center">
               <span class="style21 style29">Bigfoot Bib Report</span>
-              <span class="style19">Version </span>
-              <span class="style19" id="thisVersion">.</span>
+              <label style="padding: 0.4em 0.4em" id="thisVersion"></label>
               <input name="Theversion" type="hidden" id="Theversion" />
               <span class="style1">
                 <input
