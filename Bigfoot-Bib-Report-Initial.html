@@ -700,41 +700,46 @@
 
       function formDataToObject(elForm) {
         if (!elForm instanceof Element) return;
-        var fields = elForm.querySelectorAll('input, select, textarea'),
-          o = {};
+        var fields = elForm.querySelectorAll('input, select, textarea');
+        var inputObjects = {};
+
         for (var i = 0, imax = fields.length; i < imax; ++i) {
           var field = fields[i],
-            sKey = field.name || field.id;
+            elementKey = field.name || field.id;
 
-          if (
+            if (
             field.type === 'button' ||
             field.type === 'image' ||
             field.type === 'submit' ||
-            !sKey
-          )
+            !elementKey
+          ) {
             continue;
+          }
 
           switch (field.type) {
             case 'checkbox':
-              o[sKey] = +field.checked;
+              inputObjects[elementKey] = +field.checked;
               break;
             case 'radio':
-              if (o[sKey] === undefined) o[sKey] = '';
-              if (field.checked) o[sKey] = field.value;
+              if (inputObjects[elementKey] === undefined) inputObjects[elementKey] = '';
+              if (field.checked) inputObjects[elementKey] = field.value;
               break;
             case 'select-multiple':
               var a = [];
-              for (var j = 0, jmax = field.options.length; j < jmax; ++j) {
+              var  jmax = field.options.length;
+              
+              for (var j = 0; j < jmax; ++j) {
                 if (field.options[j].selected) a.push(field.options[j].value);
               }
-              o[sKey] = a;
+
+              inputObjects[elementKey] = a;
               break;
             default:
-              o[sKey] = field.value;
+              inputObjects[elementKey] = field.value;
           }
         }
 
-        document.getElementById('parseme').value = JSON.stringify(o, null, 2);
+        document.getElementById('parseme').value = JSON.stringify(inputObjects, null, 2);
       }
 
       function populateForm(o) {
@@ -879,7 +884,7 @@
         font-weight: bold;
       } */
 
-      .dkOrange14px {
+      /* .dkOrange14px {
         font-size: 14px;
         color: darkorange;
       }
@@ -903,7 +908,7 @@
 
       .poppedText {
         font-size: 16px;
-      }
+      } */
 
       .loadDataButton {
         border: 2px solid blue;
@@ -1022,16 +1027,16 @@
         padding-right: 0.5em;
       }
 
-      .popScroll h2 {
+      /* .popScroll h2 {
         margin-top: 0;
-      }
+      } */
 
       input[type='submit'] {
         border: 2px solid darkblue;
         border-radius: 0.25rem;
         background-color: white;
         color: black;
-        padding: 2px 2px;
+        padding: 0.2em 0.2em;
         font-size: 1em;
         cursor: pointer;
       }
@@ -1354,11 +1359,10 @@
               </tr>
 
               <tr>
-                <td height="88" bgcolor="LightYellow">
+                <td bgcolor="LightYellow">
                   <div align="left">
                     <p align="center">
                       <input
-                        style="height: 28px; width: 85px"
                         title="After submitting, close browser, then address message for posting"
                         class="SubmitBtn"
                         enctype="multipart/form-data"
