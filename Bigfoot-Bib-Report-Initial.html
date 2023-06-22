@@ -54,10 +54,12 @@
         document.forms[0].address.value = storedAddress;
         var storedLocation = localStorage.getItem('RTrackerloc');
         // the following code causes a bug in Aid Station selector
-        if (storedLocation != '') {
+        if (storedLocation != '') { // if statement is not used
+          console.log('storedLocation is empty',storedLocation);
           document.forms[0].Location.value = storedLocation;
         } else {
-          document.forms[0].location.value = 'Choose a station.';
+          console.log('storedLocation is not empty',storedLocation);
+          document.forms[0].location.value = '--Choose a station--';
         }
         // end suspected bug
         var storedTitle = localStorage.getItem('RTrackertitle');
@@ -151,118 +153,6 @@
 
       function putTime() {
         document.getElementById('Timefld').value = RunnerTime();
-      }
-
-      function replaceit() {
-        document.getElementById('beforeformatting').value =
-          document.getElementById('TheData').value;
-        var addtag = '/IN';
-
-        delBlankLines();
-        var d = new Date();
-        var themonth = d.getMonth();
-        themonth = themonth + 1;
-        var mday = d.getDate();
-        var dd = String(mday);
-        var myday = dd;
-        if (dd.length < 2) {
-          myday = '0' + dd;
-        }
-        var mm = String(themonth);
-        mymonth = mm;
-        if (mm.length < 2) {
-          mymonth = '0' + mm;
-        }
-        var theaddress = document.forms[0].address.value;
-        document.forms[0].sendto.value = theaddress;
-        var location = document.forms[0].Location.value;
-        var AddSubject = true;
-        var thelocation = location.split('_')[1];
-        var location = 'BEGIN ' + location.split('_')[0];
-        var str1 = document.forms[0].TheData.value;
-        var str1 = str1.replace(/\t/g, '/');
-        var str1 = str1.replace(/:/g, '');
-        var str1 = str1.replace(/ /g, '');
-        var str = rtrim(str1);
-        var mystring = str;
-        var FirstTime = str;
-        var nostatus = false;
-
-        if (nostatus == false) {
-          FirstTime = mystring.split('/', 2);
-        }
-
-        var FirstTime = str.split('/', 2);
-        var sstr = FirstTime;
-        var FirstTime = sstr[1].split(/\n/, 1);
-        junk = FirstTime;
-        junka = String(junk);
-
-        // now check for 3 digit times
-        var lines = str.split('\n');
-
-        for (var i = 0; i < lines.length; i++) {
-          if (lines[i] != '') {
-            //Check for last/
-            var fixthis = lines[i];
-            var stringLength = fixthis.length;
-            var lastChar = fixthis.charAt(stringLength - 1);
-
-            if (lastChar == '/') {
-              fixthis = fixthis.substr(0, stringLength - 1);
-            }
-
-            lines[i] = fixthis;
-            var mtime = lines[i].split('/', 3);
-
-            try {
-              if (mtime[1].length < 4) {
-                lines[i] = mtime[0] + '/' + '0' + mtime[1];
-              }
-            } catch (err) {
-              alert(
-                'Invalid data entry.\nCorrect format is Bib#/Time/Status\nin line -->' +
-                  fixthis +
-                  '<--'
-              );
-              return false;
-            }
-            if (
-              mtime[2] == '-' ||
-              mtime[2] == '+' ||
-              mtime[2] == '*' ||
-              mtime[2] !== undefined
-            ) {
-              lines[i] = mtime[0] + '/' + mtime[1] + '/' + mtime[2];
-            } else {
-              lines[i] = lines[i] + addtag;
-            }
-          }
-
-          // try agin
-          var mtime = lines[i].split('/', 3);
-          lines[i] = mtime[0] + '/' + mtime[2] + '/' + mtime[1];
-        }
-
-        n = lines.join('\n');
-        var n = n.replace(/\/\//gm, '/');
-        var n = n.replace(/\+/gm, 'IN');
-        var n = n.replace(/\-/gm, 'OUT');
-        expand = false;
-        var msg = location + '\r' + mymonth + myday + '\r' + n + '\r' + 'END';
-        var msubject = 'DATA ' + thelocation + ' ' + FirstTime;
-        if (AddSubject == true) {
-          '\r' + msg;
-        }
-        document.forms[0].TheData.value = msg;
-        delBlankLines();
-        document.forms[0].msgsubject.value = msubject;
-        document.getElementById('Inbtn').disabled = true;
-        document.getElementById('Outbtn').disabled = true;
-        document.getElementById('Dropbtn').disabled = true;
-        document.getElementById('RiderNum').disabled = true;
-        document.getElementById('FormatNote').value =
-          '* The entries in this email have been formatted for use with Ultralive.';
       }
 
       function RunnerTime(RightNow) {
@@ -657,7 +547,7 @@
           window.Blob
         ) {
           var fileSelected = document.getElementById('txtfiletoread');
-
+          
           fileSelected.addEventListener(
             'change',
             function (e) {
@@ -907,7 +797,6 @@
                 maxlength="25"
                 required
               >
-                <option value="">--Choose a station--</option>
                 <option value="MM_Marble Mountain SnoPark">
                   Marble Mountain SnoPark
                 </option>
@@ -1156,103 +1045,105 @@
         <!-- If the content becomes larger than the pop-up this div will scroll the content -->
 
         <div class="popScroll">
-          <h2>Winlink Operator Supplemental Information</h2>
-          <p>
-            Data entered is formatted as TAB delineated text in the sent
-            message, for spreadsheet entry or a running log.
-          </p>
-          <p class="bold14">The Subject line will be formatted for you.</p>
-          <p>
-            The LOAD and SAVE data buttons are for capturing entered race data.
-            This allows you to start a form, close it if needed, then reopen the
-            form and continue on.
-          </p>
-          <p>
-            Suggest you use and learn the form and its features fully before an
-            event.
-          </p>
-          <p>
-            Note: You can change the time entry if doing manual entries, such as
-            from a clipboard of participants. Times out of order have no affect
-            on UltraLive entry or doing a spreadsheet.
-          </p>
+          <h2>Winlink Operator Instructions</h2>
 
+          <p>The form is broken up into roughly three sections:</p>
+
+          <ul>
+            <li>Top: Header information with event, location, and message information.</li>
+            <li>Middle: For entering bib data, and to save/restore data to/from a file.</li>
+            <li>Bottom: To view entered bib data, add comments, and to submit the data for posting a new Winlink Express message.</li>
+          </ul>
+
+          <h4>Note: Keyboard-only mode is supported!</h4>
+            <ul>
+              <li>
+                <kbd>Tab</kbd> key to move between screen elements.
+              </li>
+              <li>
+                <kbd>Spacebar</kbd> or <kbd>Enter</kbd> to activate a highlighted element.
+              </li>
+            </ul>
+          
+          <h3>Top Section</h3>
+          
+          <ol>
+            <li>Enter this Event Name for example &quot;Bigfoot 2023&quot;.</li>
+            <li>Enter a Message Number starting with 1. Increment it for each time you create a new message for the current Aid Station.</li>
+            <li>Enter the recipient's amateur call sign in Send To field.</li>
+            <li>Aid Station: Click it, or press the Spacebar to see a list and click or select one with arrows and the Enter key.</li>
+            <li>Subject Line: It will be entered automagically for you. Try to resist the urge to change it.</li>
+          </ol>
+          
+          <h3>Middle Section</h3>
+          
+          <p>With a list of bib numbers and the times they entered and left the Aid Station, or dropped from the event, enter bib numbers into the form:</p>
+          
+          <ol>
+            <li>Enter Bib Number: Limited to 15 digits (should be more than enough for any event).</li>
+            <li>Enter The Time: This should be 24hr time like <em>HH:MM</em>. The browser might suggest the current time for you.</li>
+            <li>Check This Box If Time Was Yesterday: Runners come and go from Aid Stations all time of day and night. You might have a list of runners that arrived yesterday and left (or dropped) today.</li>
+            <li>Click IN, OUT, or DROP once to enter that bib into the record.</li>
+          </ol>
+          
+          <h4>IN, OUT, and DROP Actions</h4>
+
+          <ul>
+            <li>
+              IN: The runner (bib) arrived at the Aid Station.
+            </li>
+            <li>
+              OUT: The runner left the Aid Station.
+            </li>
+            <li>
+              DROP: Use if the runner has notified Aid Station Staff that they are bowing out of the race, or they have been disqualified by race officials.
+            </li>
+          </ul>
+
+          <p>Save Race Data and Load Race Data are discussed below.</p>
+          <p>For any bib entries that need additional explanation (like DROP) use the &quot;Comments&quot; area to free-form a statement. 
+            <em>Keep the message short</em> and to the point. 
+            If you have more than about 25 words to say, write it down and send all of it via a separate Winlink message, or by voice directly to Net Control.</p>
+
+          <h3>Bottom Section</h3>
+          
+          <p>Number of Entries: This accurately counts the number of bib entries already in the form. 
+            Try to keep the total list size to less than 50.</p>
+          <p>Use the &quot;Clear Entries&quot; button to remove <em>all entries</em> from the text. 
+            Use wisely <em>there is no backup</em>.</p>
           <hr />
 
           <h2>
-            The below information is applicable for UltraLive data format.
+            Saving and Loading Race Data
           </h2>
-          <p class="bold14">
-            Bib records will all be dated with the current date!
+
+          <p>
+            Use the Save Data Race Data button to store the bib entries into a plain text file. 
+            The file will be named with the current date and time with a &quot;txt&quot; file extension so any text editor can open it. 
+            The file will be stored in your browser's download folder. 
+            You can rename the file to something more meaningful if you like.
           </p>
           <p>
-            Suggest you download and have a copy prior to your event if doing
-            UltraLive.
+            The information that is sent via WinLink can be copied and pasted directly into an excel spreadsheet, 
+            or saved to a file and then imported as a &quot;Tab Delimited&quot; file.
           </p>
           <p>
-            <a
-              href="https://docs.google.com/document/d/1J01uupj-9hcXdfFJV5jQau0pp8E6EL_dVkS7H5RjulM/edit"
-              >https://docs.google.com/document/d/1J01uupj-9hcXdfFJV5jQau0pp8E6EL_dVkS7H5RjulM/edit</a
-            >
+            The Subject Line will be formatted for you, for example:
+            <code>BigFoot 2023 Marble Mountain SnoPark Message #1</code>
           </p>
-          <p>
-            Someone needs to register first with UltraLive so you can enter the
-            sent data. Info on how to do this easy process, is in the
-            downloadable document in the above link. You have to do this prior
-            to your event.
-          </p>
-          <p>
-            The information that is sent via WinLink can be pasted into directly
-            into the webcast site, or garnered to any form at Net Control. The
-            data must follow the format examples below, (done for you) or it
-            will not post properly into the Web Site. DO NOT send more than 20
-            lines of rider data at any one time.
-          </p>
-          <p class="bold14">
-            UltraLive Email Subject Line will be formatted for you.
-          </p>
-          <p>
-            DATA CW 0905&emsp;&rArr;&emsp;Subject line identifies this message
-            as being data from Last Chance (LC). The identifying number is the
-            time of the runner in the data report. Times are all in 24 hour
-            format. No AM or PM.
-          </p>
-          <p>Sample Data Report</p>
-          <table border="1">
-            <tr>
-              <td>
-                <ul>
-                  <li>
-                    <code
-                      >BEGIN CW&emsp;&rArr;&nbsp;Start of report. CW is the two
-                      letter ID of the aid station.</code
-                    >
-                  </li>
-                  <li>
-                    <code
-                      >0623&emsp;&rArr;&nbsp;The month and day in a 4 digit
-                      format.</code
-                    >
-                  </li>
-                  <li><code>231/0905/IN</code></li>
-                  <li><code>345/1028/IN</code></li>
-                  <li><code>27/1316/DROP</code></li>
-                  <li><code>END&emsp;&rArr;&nbsp;End of report.</code></li>
-                </ul>
-              </td>
-            </tr>
-          </table>
-          <p>
-            Drops should also be sent via the established voice network in a
-            timely manner.
-          </p>
+
+          <ul>
+            <li>BigFoot 2023: The Race or Event Name entered at the top of the form.</li>
+            <li> Marble Mountain SnoPark: The Aid Station selected at the top of the form.</li>
+            <li>Message #1: The Message Number entered at the top of the form.</li>
+          </ul>
+          <p>The &quot;Send To&quot; data is used to address the Winlink Message to the intended recipient, so it is not included in the subject line.</p>
 
           <hr />
 
           <h2>Credits</h2>
           <p>
-            The original form was designed by Greg KG6SJT of WDT and was tested
-            with UltraLive staff.
+            The original form was designed by Greg KG6SJT of WDT (Winlink Development Team).
           </p>
           <p>
             <em
