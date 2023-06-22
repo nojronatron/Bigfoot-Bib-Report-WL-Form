@@ -78,22 +78,6 @@
         document.getElementById('FormatNote').value = formatNoteText;
       }
 
-      // function never called
-      // function ClearForm() {
-      //   document.forms[0].TheData.value = '';
-      //   document.forms[0].msgsubject.value = '';
-      //   document.getElementById('RiderNum').focus();
-      //   document.getElementById('Inbtn').disabled = false;
-      //   document.getElementById('Outbtn').disabled = false;
-      //   document.getElementById('Dropbtn').disabled = false;
-      //   document.getElementById('RiderNum').disabled = false;
-      //   document.getElementById('numlines').disabled = false;
-      //   document.getElementById('numlines').value = '0';
-      //   var formatNoteText =
-      //     '* The entries in this email are TAB delimited. This allows you to copy and paste into a spreadsheet.';
-      //   document.getElementById('FormatNote').value = formatNoteText;
-      // }
-
       function ClearParticipantData() {
         document.forms[0].TheData.value = '';
         document.getElementById('RiderNum').focus();
@@ -159,54 +143,11 @@
         document.getElementById('TheData').value = temp;
       }
 
-      // function is never called
-      // function DoConfirm() {
-      //   Thelocation = document.getElementById('Location').value;
-      //   if (Thelocation.length < 1) {
-      //     alert('Error: You must add an "Aid/Check Point" ');
-      //     document.getElementById('Location').focus();
-      //   } else {
-      //     if (confirm('Format Times for UltraLive?')) {
-      //       replaceit();
-      //     }
-      //   }
-      // }
-
       function Docleardata() {
         if (confirm('Clear all participant data?')) {
           ClearParticipantData();
         }
       }
-
-      // function never called - not doing UltraLive formatting anyway
-      // function undoformatting() {
-      //   var str = document.getElementById('TheData').value;
-      //   var n = str.search('BEGIN');
-      //   if (n < 0) {
-      //     alert(
-      //       "The data has not been formatted for ultralive\nClick 'Format Message for UltraLive (optional)' button first."
-      //     );
-      //     return false;
-      //   } else {
-      //     if (confirm(' Undo UltraLive formatting?')) {
-      //       document.getElementById('TheData').value =
-      //         document.getElementById('beforeformatting').value;
-      //       document.getElementById('Inbtn').disabled = false;
-      //       document.getElementById('Outbtn').disabled = false;
-      //       document.getElementById('Dropbtn').disabled = false;
-      //       document.getElementById('RiderNum').disabled = false;
-      //       var regulartitle =
-      //         document.getElementById('EventTitle').value +
-      //         ' Tracking Times at ' +
-      //         document.getElementById('Location').value;
-      //       document.getElementById('msgsubject').value = regulartitle;
-      //       document.getElementById('FormatNote').value =
-      //         '* The entries in this email are TAB delimited. This allows you to copy and paste into a spreadsheet.';
-      //     } else {
-      //       return false;
-      //     }
-      //   }
-      // }
 
       function putTime() {
         document.getElementById('Timefld').value = RunnerTime();
@@ -323,14 +264,6 @@
         document.getElementById('FormatNote').value =
           '* The entries in this email have been formatted for use with Ultralive.';
       }
-
-      // function never called
-      // function SelectTheText(fieldName) {
-      //   document.forms[0].sendto.focus();
-      //   document.forms[0].sendto.select();
-      // }
-
-      /* ************************************************* */
 
       function RunnerTime(RightNow) {
         var d = new Date();
@@ -468,19 +401,6 @@
         }
       }
 
-      // function is not used
-      // function moveCursorToEnd(obj) {
-      //   if (!obj.updating) {
-      //     obj.updating = true;
-      //     var oldValue = obj.value;
-      //     obj.value = '';
-      //     setTimeout(function () {
-      //       obj.value = oldValue;
-      //       obj.updating = false;
-      //     }, 100);
-      //   }
-      // }
-
       function AddDrop() {
         temp = document.getElementById('RiderNum').value;
 
@@ -559,35 +479,6 @@
         );
       }
 
-      // functin never called
-      // function Sortit() {
-      //   var myString = document.getElementById('TheData').value;
-      //   orderString(myString);
-      // }
-
-      // function called by Sortit() which is never called
-      // function orderString(str) {
-      //   var i = 0;
-      //   var myArray = str.split('\n');
-
-      //   while (i < str.length) {
-      //     var j = i + 1;
-
-      //     while (j < str.length) {
-      //       if (myArray[j] < myArray[i]) {
-      //         var temp = myArray[i];
-      //         myArray[i] = myArray[j];
-      //         myArray[j] = temp;
-      //       }
-      //       j++;
-      //     }
-      //     i++;
-      //   }
-
-      //   var newString = myArray.join('\n');
-      //   document.getElementById('TheData').value = newString;
-      // }
-
       function AutoGrowTextArea(textField) {
         if (textField.clientHeight < textField.scrollHeight) {
           textField.style.height =
@@ -604,13 +495,6 @@
         var tstr = mytotal.toString();
         return tstr;
       }
-
-      // function is never called
-      // function newfix(f) {
-      //   var ThisText = document.getElementById(f).value;
-      //   var makeit = Countthelines(ThisText);
-      //   document.getElementById(f).style.height = makeit + 'px';
-      // }
 
       function setfocus() {
         document.getElementById('Timefld').focus();
@@ -654,22 +538,6 @@
         }
       }
 
-      // function destroyClickedElement(event) {
-      //   document.body.removeChild(event.target);
-      // }
-
-      // function loadFileAsText() {
-      //   var fileToLoad = document.getElementById('fileToLoad').files[0];
-      //   var fileReader = new FileReader();
-
-      //   fileReader.onload = function (fileLoadedEvent) {
-      //     var textFromFileLoaded = fileLoadedEvent.target.result;
-      //     document.getElementById('inputTextToSave').value = textFromFileLoaded;
-      //   };
-
-      //   fileReader.readAsText(fileToLoad, 'UTF-8');
-      // }
-
       function DateforFile(RightNow) {
         var d = new Date(),
           thisyear = d.getFullYear();
@@ -692,11 +560,6 @@
           thisyear + '-' + thismonth + '-' + thisday + ' ' + h + '_' + m;
         return myprompt;
       }
-
-      // duplicate function
-      // function isObject(arg) {
-      //   return Object.prototype.toString.call(arg) === '[object Object]';
-      // }
 
       function formDataToObject(elForm) {
         if (!elForm instanceof Element) return;
@@ -785,42 +648,6 @@
         saveTextAsFile();
       }
 
-      //-------
-      // function readBlob(opt_startByte, opt_stopByte) {
-      //   var files = document.getElementById('files').files;
-
-      //   if (!files.length) {
-      //     alert('Please select a file!');
-      //     return;
-      //   }
-
-      //   var file = files[0];
-      //   var start = parseInt(opt_startByte) || 0;
-      //   var stop = parseInt(opt_stopByte) || file.size - 1;
-      //   var reader = new FileReader();
-
-      //   // If we use onloadend, we need to check the readyState.
-      //   reader.onloadend = function (evt) {
-      //     if (evt.target.readyState == FileReader.DONE) {
-      //       // DONE == 2
-      //       document.getElementById('byte_content').textContent =
-      //         evt.target.result;
-      //       document.getElementById('byte_range').textContent = [
-      //         'Read bytes: ',
-      //         start + 1,
-      //         ' - ',
-      //         stop + 1,
-      //         ' of ',
-      //         file.size,
-      //         ' byte file',
-      //       ].join('');
-      //     }
-      //   };
-
-      //   var blob = file.slice(start, stop + 1);
-      //   reader.readAsBinaryString(blob);
-      // }
-
       window.onload = function () {
         //Check the support for the File API support
         if (
@@ -874,42 +701,6 @@
         list-style-type: none;
       }
 
-      /* p, label {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 14px;
-      } */
-
-      /* .bold14 {
-        font-size: 14px;
-        font-weight: bold;
-      } */
-
-      /* .dkOrange14px {
-        font-size: 14px;
-        color: darkorange;
-      }
-
-      .blueItalics {
-        color: darkblue;
-        font-style: italic;
-      }
-
-      .formtext {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 10pt;
-        font-weight: normal;
-      }
-
-      .formtext1 {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 11pt;
-        font-weight: normal;
-      }
-
-      .poppedText {
-        font-size: 16px;
-      } */
-
       .loadDataButton {
         border: 2px solid blue;
         border-radius: 0.25rem;
@@ -959,26 +750,6 @@
         opacity: 1;
       }
 
-      /* there is no lightbox */
-      /* Light box properties */
-      /* .lightbox {
-        display: none;
-        text-indent: -200em;
-        background-color: white;
-        width: 100%;
-        height: 100%;
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        z-index: 5;
-      }
-
-      :target .lightbox {
-        display: block;
-      } */
-
       /* The pop-ups close link, moved via CSS to the top right of the pop-up */
       .close:link,
       .close:visited {
@@ -1026,10 +797,6 @@
         overflow-y: auto;
         padding-right: 0.5em;
       }
-
-      /* .popScroll h2 {
-        margin-top: 0;
-      } */
 
       input[type='submit'] {
         border: 2px solid darkblue;
