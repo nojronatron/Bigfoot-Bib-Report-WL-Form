@@ -49,16 +49,39 @@
         return locationVal.slice(underscoreIdx);
       }
 
+      // set message header form elements if empty
+      function loadMessageHeadersIfEmpty() {
+        const storedAddress = localStorage.getItem('RTrackeradd');
+        const storedLocation = localStorage.getItem('RTrackerloc');
+        const storedTitle = localStorage.getItem('RTrackertitle');
+        const storedMsgNumber = localStorage.getItem('RTrackermsgNum');
+
+        if (document.getElementById('address').value == '' && storedAddress != '') {
+          document.getElementById('address').value = storedAddress;
+        }
+        if (document.getElementById('Location').value == '' && storedLocation != '') {
+          document.getElementById('Location').value = storedLocation;
+        }
+        if (document.getElementById('EventTitle').value == '' && storedTitle != '') {
+          document.getElementById('EventTitle').value = storedTitle;
+        }
+        if (document.getElementById('MessageNumber').value == '' && storedMsgNumber != '') {
+          document.getElementById('MessageNumber').value = storedMsgNumber;
+        }
+
+      }
+
+      // set form elements with values stored in local storage
       function getit() {
         var storedAddress = localStorage.getItem('RTrackeradd');
         document.forms[0].address.value = storedAddress;
         var storedLocation = localStorage.getItem('RTrackerloc');
         // the following code causes a bug in Aid Station selector
         if (storedLocation != '') { // if statement is not used
-          console.log('storedLocation is empty',storedLocation);
+          console.log('storedLocation has value:',storedLocation);
           document.forms[0].Location.value = storedLocation;
         } else {
-          console.log('storedLocation is not empty',storedLocation);
+          console.log('storedLocation is empty',storedLocation);
           document.forms[0].location.value = '--Choose a station--';
         }
         // end suspected bug
@@ -127,24 +150,6 @@
         document.getElementById('TheData').value = temp + '\n';
       }
 
-      function delBlankLines() {
-        var stringArray = document.getElementById('TheData').value.split('\n');
-        var temp = [''];
-        var x = 0;
-
-        for (var i = 0; i < stringArray.length; i++) {
-          if (stringArray[i].trim() != '') {
-            temp[x] = stringArray[i];
-            x++;
-          }
-        }
-
-        temp = temp.join('\n');
-        var lookfor = '//';
-        var temp = temp.replace(/lookfor/gm, '/');
-        document.getElementById('TheData').value = temp;
-      }
-
       function Docleardata() {
         if (confirm('Clear all participant data?')) {
           ClearParticipantData();
@@ -173,10 +178,6 @@
         m = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
         var myprompt = h + ':' + m;
         return myprompt;
-      }
-
-      function isObject(arg) {
-        return Object.prototype.toString.call(arg) === '[object Object]';
       }
 
       function AddIn() {
@@ -376,23 +377,14 @@
         }
       }
 
-      function Countthelines(f) {
-        var text1 = f;
-        var text2 = text1.replace(/\s+$/, '');
-        var split2 = text2.split('\n');
-        var ar = text2.length / 100;
-        var mytotal = (split2.length + ar) * 15.5;
-        var tstr = mytotal.toString();
-        return tstr;
-      }
-
       function setfocus() {
         document.getElementById('Timefld').focus();
         return false;
       }
 
-      function saveTextAsFile(fileNameToSaveAs, textToWrite) {
-        var textToWrite = document.getElementById('parseme').value;
+      function saveTextAsFile() {
+        var textToWrite = document.getElementById('parseme').value; // missing JSON.parse?
+        console.log('data copied from hidden element before saving to disk', document.getElementById('parseme').value);
         var fileNameToSaveAs = 'Bigfoot Bib Data ' + DateforFile() + '.txt';
         fileNameToSaveAs = prompt('', fileNameToSaveAs);
 
@@ -428,7 +420,7 @@
         }
       }
 
-      function DateforFile(RightNow) {
+      function DateforFile() {
         var d = new Date(),
           thisyear = d.getFullYear();
         thismonth = d.getMonth();
@@ -446,74 +438,64 @@
 
         h = (d.getHours() < 10 ? '0' : '') + d.getHours();
         m = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
-        var myprompt =
-          thisyear + '-' + thismonth + '-' + thisday + ' ' + h + '_' + m;
-        return myprompt;
+        return thisyear + '-' + thismonth + '-' + thisday + ' ' + h + '_' + m;
       }
 
-      function formDataToObject(elForm) {
-        if (!elForm instanceof Element) return;
-        var fields = elForm.querySelectorAll('input, select, textarea');
-        var inputObjects = {};
+      // stores each form element value in a JSON object and stores it in hidden element 'parseme'
+      function storeFormValuesToHiddenElement() {
+        const thisVersion = document.getElementById('thisVersion').value ?
+          document.getElementById('thisVersion').value : 
+          'null';
+        const EventTitle = document.getElementById('EventTitle').value;
+        const MessageNumber = document.getElementById('MessageNumber').value;
+        const address = document.getElementById('address').value;
+        const Location = document.getElementById('Location').value;
+        const msgsubject = document.getElementById('msgsubject').value;
+        const numlines = document.getElementById('numlines').value;
+        const TheData = document.getElementById('TheData').value;
+        const Comment = document.getElementById('Comment').value;
 
-        for (var i = 0, imax = fields.length; i < imax; ++i) {
-          var field = fields[i],
-            elementKey = field.name || field.id;
+        const formObject = JSON.stringify({
+          thisVersion,
+          EventTitle,
+          MessageNumber,
+          address,
+          Location,
+          msgsubject,
+          numlines,
+          TheData,
+          Comment,
+        });
 
-            if (
-            field.type === 'button' ||
-            field.type === 'image' ||
-            field.type === 'submit' ||
-            !elementKey
-          ) {
-            continue;
-          }
+        console.log('formObject to be stored in hidden element', formObject);
+        document.getElementById('parseme').value = formObject;
+      }
 
-          switch (field.type) {
-            case 'checkbox':
-              inputObjects[elementKey] = +field.checked;
-              break;
-            case 'radio':
-              if (inputObjects[elementKey] === undefined) inputObjects[elementKey] = '';
-              if (field.checked) inputObjects[elementKey] = field.value;
-              break;
-            case 'select-multiple':
-              var a = [];
-              var  jmax = field.options.length;
-              
-              for (var j = 0; j < jmax; ++j) {
-                if (field.options[j].selected) a.push(field.options[j].value);
-              }
-
-              inputObjects[elementKey] = a;
-              break;
-            default:
-              inputObjects[elementKey] = field.value;
-          }
+      // takes values stored in parseme hidden element, iterates through form elements and populates them with values
+      function populateForm() {
+        console.log('entered populateForm function');
+        const parseMeValue = JSON.parse(document.getElementById('parseme').value);
+        console.log('parseMeValue from hidden element', parseMeValue);
+        if (!Object.prototype.toString.call(parseMeValue) === '[object Object]') {
+          console.log('parseme element value could not be parsed by JSON. Exiting function.');
+          return;
         }
 
-        document.getElementById('parseme').value = JSON.stringify(inputObjects, null, 2);
-      }
-
-      function populateForm(o) {
-        o = JSON.parse(document.getElementById('parseme').value);
-        if (!isObject(o)) return;
-
-        for (var i in o) {
+        for (var i in parseMeValue) {
           var el =
             document.getElementById(i) ||
             document.querySelector('[name=' + i + ']');
           if (el.type === 'radio')
             el = document.querySelectorAll('[name=' + i + ']');
 
-          switch (typeof o[i]) {
+          switch (typeof parseMeValue[i]) {
             case 'number':
-              el.checked = o[i];
+              el.checked = parseMeValue[i];
               break;
             case 'object':
-              if (el.options && o[i] instanceof Array) {
+              if (el.options && parseMeValue[i] instanceof Array) {
                 for (var j = 0, jmax = el.options.length; j < jmax; ++j) {
-                  if (o[i].indexOf(el.options[j].value) > -1)
+                  if (parseMeValue[i].indexOf(el.options[j].value) > -1)
                     el.options[j].selected = true;
                 }
               }
@@ -521,20 +503,22 @@
             default:
               if (el instanceof NodeList) {
                 for (var j = 0, jmax = el.length; j < jmax; ++j) {
-                  if (el[j].value === o[i]) el[j].checked = true;
+                  if (el[j].value === parseMeValue[i]) el[j].checked = true;
                 }
               } else {
-                el.value = o[i];
+                el.value = parseMeValue[i];
               }
           }
         }
 
-        getit();
+        // getit();
+        loadMessageHeadersIfEmpty();
         Fixfields();
       }
 
       function SaveData() {
-        formDataToObject(document.getElementById('myform'));
+        storeFormValuesToHiddenElement();
+        store();  // update localstorage values
         saveTextAsFile();
       }
 
@@ -557,14 +541,13 @@
               var fileTobeRead = fileSelected.files[0];
               //Check of the extension match
               if (fileTobeRead.type.match(fileExtension)) {
-                //Initialize the FileReader object to read the file
-
+                //Initialize the FileReader object to read the file data
                 var fileReader = new FileReader();
+
                 fileReader.onload = function (e) {
-                  document.getElementById('parseme').value = fileReader.result;
-                  populateForm(
-                    (obj = document.getElementById('parseme').value)
-                  );
+                  document.getElementById('parseme').value = fileReader.result; // missing JSON.parse?
+                  console.log('json parsed data stored in hidden element', document.getElementById('parseme').value);
+                  populateForm();
                 };
                 fileReader.readAsText(fileTobeRead);
               } else {
@@ -583,6 +566,11 @@
 
       function Fixfields() {
         AutoGrowTextArea(document.getElementById('TheData'));
+      }
+
+      // removes all localStorage values
+      function clearLocalStorage() {
+        localStorage.clear();
       }
     </script>
 
@@ -790,7 +778,6 @@
               <label for="Location">Aid Station:</label>
               <select
                 name="Location"
-                type="text"
                 id="Location"
                 onchange="store();"
                 size="1"
@@ -954,14 +941,14 @@
             <hr />
 
             <table
-              width="588"
+              width="588px"
               border="1"
               align="center"
               cellpadding="0"
               cellspacing="0"
             >
               <tr>
-                <td width="584" height="500" valign="top" bgcolor="ghostwhite">
+                <td valign="top" bgcolor="ghostwhite">
                   <div align="left">
                     <p align="center">
                       <label for="numlines">Number of Entries</label>
@@ -990,7 +977,7 @@
                         name="TheData"
                         cols="55"
                         placeholder="Limit to 20 entries."
-                        rows="23"
+                        rows="10"
                         id="TheData"
                         onkeypress="if(event.keyCode==13){countLines2() }"
                         onblur="countLines2()"
