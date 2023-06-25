@@ -78,10 +78,10 @@
         var storedLocation = localStorage.getItem('RTrackerloc');
         // the following code causes a bug in Aid Station selector
         if (storedLocation != '') { // if statement is not used
-          console.log('storedLocation has value:',storedLocation);
+          // console.log('storedLocation has value:',storedLocation);
           document.forms[0].Location.value = storedLocation;
         } else {
-          console.log('storedLocation is empty',storedLocation);
+          // console.log('storedLocation is empty',storedLocation);
           document.forms[0].location.value = '--Choose a station--';
         }
         // end suspected bug
@@ -575,23 +575,86 @@
     </script>
 
     <style type="text/css">
-      ul {
-        list-style-type: none;
-      }
+        body {
+        font-family:Arial, Helvetica, sans-serif;
+        font-size: 18px;
+        background-color: rgb(220, 220, 220);
+        }
 
-      .loadDataButton {
-        border: 2px solid blue;
-        border-radius: 0.25rem;
-        background-color: white;
-        color: black;
-      }
+        @media screen and (width < 650px) {
+            label, input, textarea, select, button {
+                font-size: .7em;
+            }
+            input {
+                margin: 0.2em 0.2em;
+            }
+            .formTitleHeader {
+                font-size: 2em;
+            }
+            .bibEntries {
+                min-height: 3em;
+                max-height: 6em;
+            }
+            .msgHeaderTitle {
+                font-size: 0.7em;
+            }
+            .addressInput {
+                min-width: 96%;
+            }
+        }
 
-      .saveDataButton {
-        border: 2px solid darkblue;
-        border-radius: 0.25rem;
-        background-color: white;
-        color: black;
-      }
+        @media screen and (width >= 650px) {
+            label, input, textarea, select, button {
+                font-size: 1em;
+            }
+            input {
+                margin: 0.3em 0.3em;
+            }
+            .formTitleHeader {
+                font-size: 3em;
+            }
+            .bibEntries {
+                min-height: 4em;
+                max-height: 10em;
+            }
+            .msgHeaderTitle {
+                font-size: 1.1em;
+            }
+            .addressInput {
+                max-width: 55%;
+            }
+        }
+
+        textarea {
+            width: 96%;
+        }
+
+        ul {
+            list-style-type: none;
+        }
+
+        .aidStnSpan {
+            width: 51%;
+        }
+
+        .formTitleHeader {
+            text-align: center;
+            color:rgb(0,0,255);
+            font-style: italic;
+        }
+      
+        .msgHeaderTitle {
+            color: rgb(0,0,255);
+            text-align:center;
+        }
+
+        .maxSizeInputWidth {
+            min-width: 85%;
+        }
+
+        .readOnlyText {
+            color: rgb(128, 128, 128);
+        }
 
       /* Pop-up content shifted off-screen when not in view. Still readable by screen-reader software. When targeted it fills the browser window. */
       .pop-up {
@@ -641,9 +704,9 @@
         padding: 0em;
         text-align: center;
         text-decoration: none;
-        background-color: black;
-        border: 2px solid white;
-        color: white;
+        background-color: rgb(0,0,0);
+        border: 2px solid rgb(255,255,255);
+        color: rgb(255,255,255);
         border-radius: 50%;
         box-shadow: 0rem 0rem 0.5rem 0.5rem;
       }
@@ -656,8 +719,8 @@
       .close:active,
       .close:focus {
         box-shadow: 0rem 0rem 0.5rem 0.5rem;
-        background-color: silver;
-        color: black;
+        background-color: rgb(192, 192, 192);
+        color: rgb(0,0,0);
       }
 
       .close span {
@@ -676,500 +739,352 @@
         padding-right: 0.5em;
       }
 
-      input[type='submit'] {
-        border: 2px solid darkblue;
-        border-radius: 0.25rem;
-        background-color: white;
-        color: black;
+      input {
         padding: 0.2em 0.2em;
-        font-size: 1em;
-        cursor: pointer;
+        border-radius: 0.5rem;
+      }
+
+      input[type='submit'] {
+        color: black;
+        font-weight: bold;
+        background-color: rgb(0, 255, 255);
+        padding-left: 0.8em;
+        padding-right: 0.8em;
       }
 
       .clearDataButton {
-        font-weight: bold;
-        border: 2px solid darkorange;
-        border-radius: 0.25rem;
-        background-color: lightpink;
         color: black;
+        background-color: #ffb6c1;
+        font-weight: bold;
       }
 
       input[type='button'] {
-        padding: 0.2em 0.2em;
-        font-size: 0.9em;
+        color: black;
+        padding-left: 0.8em;
+        padding-right: 0.8em;
+      }
+
+      textarea, select {
+        padding: 0.3em 0.3em;
+        border: rgb(0,0,0) solid 0.15em;
+        border-radius: 1rem;
+      }
+
+    input:hover, textarea:hover, select:hover {
         cursor: pointer;
-        margin: 0.1em 0.1em 0.1em 0.1em;
+        opacity: 0.8;
+    }
+
+    input:focus, textarea:focus, select:focus {
+        outline: #ffc0cb solid 3px;
+    }
+
+      hr {
+        width: 90%;
       }
     </style>
   </head>
 
-  <body>
-    <form
-      style="font-family: Arial"
-      onsubmit="return confirm('To complete your form submission, click OK and close the browser tab. You will return to the new message window so you can post your message to the outbox.');"
-      method="post"
-      id="myform"
-      enctype="multipart/form-data"
-      action="http://{FormServer}:{FormPort}"
-    >
-      <table
-        width="750"
-        border="1"
-        cellpadding="2"
-        cellspacing="0"
-        bordercolor="#999999"
-      >
-        <tr>
-          <td width="842" height="882" valign="top" nowrap="nowrap">
-            <p align="center">
-              <span class="blueItalics" style="font-size: xx-large;">Bigfoot Bib Report</span>
-              <label style="padding: 0.4em 0.4em" id="thisVersion"></label>
-              <input name="Theversion" type="hidden" id="Theversion" />
-              <span>
-                <input
-                  type="button"
-                  value="Form Information - READ"
-                  onclick="location.href='#pop1'"
-                />
-              </span>
-            </p>
-
-            <hr />
-
-            <p>
-              <span>
-                <label for="EventTitle">Race or Event Name:</label>
-                <input
-                  name="EventTitle"
-                  type="text"
-                  id="EventTitle"
-                  onchange="store();"
-                  size="40"
-                  maxlength="35"
-                  placeholder="Race or Event Name"
-                  required
-                />
-                <label for="MessageNumber">Message Number:</label>
-                <input
-                  name="MessageNumber"
-                  type="text"
-                  id="MessageNumber"
-                  onchange="store();"
-                  size="6"
-                  maxlength="4"
-                  placeholder="1"
-                />
-              </span>
-            </p>
-
-            <p>
-              <label for="address">Send to:</label>
-              <input
-                name="address"
-                type="text"
-                id="address"
-                onchange="store();"
-                size="50"
-                maxlength="45"
-                title="Separate multiple calls or addresses with a semicolon;"
-                placeholder="Winlink Radio Call or Email"
-                required
-              />
-              <label for="Location">Aid Station:</label>
-              <select
-                name="Location"
-                id="Location"
-                onchange="store();"
-                size="1"
-                maxlength="25"
-                required
-              >
-                <option value="MM_Marble Mountain SnoPark">
-                  Marble Mountain SnoPark
-                </option>
-                <option value="BL_Blue Lake">Blue Lake</option>
-                <option value="WR_Windy Ridge">Windy Ridge</option>
-                <option value="JR_Johnston Ridge">Johnston Ridge</option>
-                <option value="CW_Coldwater Lake">Coldwater Lake</option>
-                <option value="NP_Norway Pass">Norway Pass</option>
-                <option value="EP_Elk Pass">Elk Pass</option>
-                <option value="WM_Wright Meadow (Rd.9327)">
-                  Wright Meadow (Rd.9327)
-                </option>
-                <option value="SB_Spencer Butte">Spencer Butte</option>
-                <option value="LR_Lewis River">Lewis River</option>
-                <option value="QR_Quartz Ridge">Quartz Ridge</option>
-                <option value="CB_Council Bluff">Council Bluff</option>
-                <option value="CH_Chain of Lakes">Chain of Lakes</option>
-                <option value="KT_Klickitat">Klickitat</option>
-                <option value="TS_Twin Sisters">Twin Sisters</option>
-                <option value="OC_Owens Creek">Owen&acute;s Creek</option>
-                <option value="FN_Finish (Bigfoot Base)">
-                  Finish (Bigfoot Base)
-                </option>
-              </select>
-              <span>
-                <input
-                  name="FormatNote"
-                  type="hidden"
-                  id="FormatNote"
-                  value="* The entries in this email are TAB delimited. This allows you to copy and paste into a spreadsheet."
-                />
-              </span>
-            </p>
-
-            <p>
-              <label for="msgsubject">Subject:</label>
-              <span>
-                <input
-                  name="msgsubject"
-                  type="text"
-                  id="msgsubject"
-                  readonly="readonly"
-                  size="60"
-                  maxlength="70"
-                />
-              </span>
-            </p>
-
-            <p class="blueItalics">
-              The entry boxes above will remain with what you enter the first
-              time. You overwrite to change.
-            </p>
-            <textarea
-              name="beforeformatting"
-              id="beforeformatting"
-              style="display: none"
-            ></textarea>
-            <input
-              type="file"
-              id="txtfiletoread"
-              accept=".txt"
-              style="display: none"
-            />
-
-            <hr />
-
-            <p>
-              <label for="RiderNum">Enter the Bib Number:</label>
-              <input
-                name="RiderNum"
-                type="text"
-                id="RiderNum"
-                onkeypress="if(event.keyCode==13){a=setfocus(); return false;}"
-                size="15"
-                maxlength="13"
-                onblur="javascript:this.value=this.value.trim();this.value=this.value.toUpperCase(); putTime();"
-              />
-              <label for="Timefld">Enter the Time:</label>
-              <input
-                name="Timefld"
-                type="text"
-                id="Timefld"
-                style="width: 50px"
-                onkeypress="if(event.keyCode==13){alert('Click: IN - OUT - DROP');return false;}"
-                size="6"
-                maxlength="6"
-                onblur=" this.value=this.value.trim(); "
-              />
-              <span class="blueItalics">
-                <label for="yesterday"
-                  >Check this box if time was yesterday:</label
-                >
-                <input
-                  type="checkbox"
-                  id="yesterday"
-                  name="yesterday"
-                  value="Yesterday"
-                />
-              </span>
-            </p>
-
-            <p>
-              Select ONE to create an Entry:
-              <input
-                name="Inbtn"
-                type="button"
-                id="Inbtn"
-                onclick="AddIn();"
-                value="In"
-                title="Participant arrived at this station."
-              />
-              <input
-                name="Outbtn"
-                type="button"
-                id="Outbtn"
-                onclick="AddOut();"
-                value="Out"
-                title="Participant departed from this station."
-              />
-              <input
-                name="Dropbtn"
-                type="button"
-                id="Dropbtn"
-                onclick="AddDrop()"
-                value="Drop"
-                title="Participant dropped from race."
-              />
-              <input name="sendto" type="hidden" id="sendto" size="30" />
-              <textarea
-                name="parseme"
-                cols="60"
-                id="parseme"
-                style="display: none"
-              ></textarea>
-              <input
-                name="savebtn"
-                type="button"
-                class="saveDataButton"
-                id="savebtn"
-                onclick="SaveData()"
-                value="Save Race data"
-                title="Save data to a file."
-              />
-              <input
-                name="loadbtn"
-                type="button"
-                class="loadDataButton"
-                id="loadbtn"
-                onclick="document.getElementById('txtfiletoread').click();"
-                value="Load Race data"
-                title="Load data from a file."
-              />
-            </p>
-
-            <hr />
-
-            <table
-              width="588px"
-              border="1"
-              align="center"
-              cellpadding="0"
-              cellspacing="0"
-            >
-              <tr>
-                <td valign="top" bgcolor="ghostwhite">
-                  <div align="left">
-                    <p align="center">
-                      <label for="numlines">Number of Entries</label>
-                      <input
-                        name="numlines"
-                        type="text"
-                        id="numlines"
-                        readonly
-                        value="0"
-                        size="5"
-                        title="Number of bib entries submitted."
-                      />
-                      <input
-                        name="doclear"
-                        type="button"
-                        id="doclear"
-                        onclick="Docleardata()"
-                        value="Clear Entries"
-                        title="Clear all runner entries."
-                        class="clearDataButton"
-                      />
-                    </p>
-
-                    <p align="center">
-                      <textarea
-                        name="TheData"
-                        cols="55"
-                        placeholder="Limit to 20 entries."
-                        rows="10"
-                        id="TheData"
-                        onkeypress="if(event.keyCode==13){countLines2() }"
-                        onblur="countLines2()"
-                      ></textarea>
-                    </p>
-
-                    <p align="center">
-                      <label for="Comment">Comments:</label>
-                    </p>
-                    <p align="center">
-                      <textarea
-                        name="Comment"
-                        cols="55"
-                        rows="2"
-                        id="Comment"
-                        onkeyup="AutoGrowTextArea(this)"
-                        placeholder="Enter a short comment up to 110 characters."
-                      ></textarea>
-                    </p>
-                  </div>
-                </td>
-              </tr>
-
-              <tr>
-                <td bgcolor="LightYellow">
-                  <div align="left">
-                    <p align="center">
-                      <input
-                        title="After submitting, close browser, then address message for posting"
-                        class="SubmitBtn"
-                        enctype="multipart/form-data"
-                        id="Submit"
-                        method="Post"
-                        name="Submit"
-                        value="SUBMIT"
-                        type="submit"
-                      />
-                    </p>
-                  </div>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-      </table>
-    </form>
-
-    <div id="pop1" class="pop-up">
-      <!-- The pop-up block -->
-
-      <div class="popBox">
-        <!-- If the content becomes larger than the pop-up this div will scroll the content -->
-
-        <div class="popScroll">
-          <h2>Winlink Operator Instructions</h2>
-
-          <p>The form is broken up into roughly three sections:</p>
-
-          <ul>
-            <li>Top: Header information with event, location, and message information.</li>
-            <li>Middle: For entering bib data, and to save/restore data to/from a file.</li>
-            <li>Bottom: To view entered bib data, add comments, and to submit the data for posting a new Winlink Express message.</li>
-          </ul>
-
-          <h4>Note: Keyboard-only mode is supported!</h4>
-            <ul>
-              <li>
-                <kbd>Tab</kbd> key to move between screen elements.
-              </li>
-              <li>
-                <kbd>Spacebar</kbd> or <kbd>Enter</kbd> to activate a highlighted element.
-              </li>
-            </ul>
-          
-          <h3>Top Section</h3>
-          
-          <ol>
-            <li>Enter this Event Name for example &quot;Bigfoot 2023&quot;.</li>
-            <li>Enter a Message Number starting with 1. Increment it for each time you create a new message for the current Aid Station.</li>
-            <li>Enter the recipient's amateur call sign in Send To field.</li>
-            <li>Aid Station: Click it, or press the Spacebar to see a list and click or select one with arrows and the Enter key.</li>
-            <li>Subject Line: It will be entered automagically for you. Try to resist the urge to change it.</li>
-          </ol>
-          
-          <h3>Middle Section</h3>
-          
-          <p>With a list of bib numbers and the times they entered and left the Aid Station, or dropped from the event, enter bib numbers into the form:</p>
-          
-          <ol>
-            <li>Enter Bib Number: Limited to 15 digits (should be more than enough for any event).</li>
-            <li>Enter The Time: This should be 24hr time like <em>HH:MM</em>. The browser might suggest the current time for you.</li>
-            <li>Check This Box If Time Was Yesterday: Runners come and go from Aid Stations all time of day and night. You might have a list of runners that arrived yesterday and left (or dropped) today.</li>
-            <li>Click IN, OUT, or DROP once to enter that bib into the record.</li>
-          </ol>
-          
-          <h4>IN, OUT, and DROP Actions</h4>
-
-          <ul>
-            <li>
-              IN: The runner (bib) arrived at the Aid Station.
-            </li>
-            <li>
-              OUT: The runner left the Aid Station.
-            </li>
-            <li>
-              DROP: Use if the runner has notified Aid Station Staff that they are bowing out of the race, or they have been disqualified by race officials.
-            </li>
-          </ul>
-
-          <p>Save Race Data and Load Race Data are discussed below.</p>
-          <p>For any bib entries that need additional explanation (like DROP) use the &quot;Comments&quot; area to free-form a statement. 
-            <em>Keep the message short</em> and to the point. 
-            If you have more than about 25 words to say, write it down and send all of it via a separate Winlink message, or by voice directly to Net Control.</p>
-
-          <h3>Bottom Section</h3>
-          
-          <p>Number of Entries: This accurately counts the number of bib entries already in the form. 
-            Try to keep the total list size to less than 50.</p>
-          <p>Use the &quot;Clear Entries&quot; button to remove <em>all entries</em> from the text. 
-            Use wisely <em>there is no backup</em>.</p>
-          <hr />
-
-          <h2>
-            Saving and Loading Race Data
-          </h2>
-
-          <p>
-            Use the Save Data Race Data button to store the bib entries into a plain text file. 
-            The file will be named with the current date and time with a &quot;txt&quot; file extension so any text editor can open it. 
-            The file will be stored in your browser's download folder. 
-            You can rename the file to something more meaningful if you like.
-          </p>
-          <p>
-            The information that is sent via WinLink can be copied and pasted directly into an excel spreadsheet, 
-            or saved to a file and then imported as a &quot;Tab Delimited&quot; file.
-          </p>
-          <p>
-            The Subject Line will be formatted for you, for example:
-            <code>BigFoot 2023 Marble Mountain SnoPark Message #1</code>
-          </p>
-
-          <ul>
-            <li>BigFoot 2023: The Race or Event Name entered at the top of the form.</li>
-            <li> Marble Mountain SnoPark: The Aid Station selected at the top of the form.</li>
-            <li>Message #1: The Message Number entered at the top of the form.</li>
-          </ul>
-          <p>The &quot;Send To&quot; data is used to address the Winlink Message to the intended recipient, so it is not included in the subject line.</p>
-
-          <hr />
-
-          <h2>Credits</h2>
-          <p>
-            The original form was designed by Greg KG6SJT of WDT (Winlink Development Team).
-          </p>
-          <p>
-            <em
-              >This version of the form has NOT been tested by UltraLive
-              staff.</em
-            >
-          </p>
+<body>
+    <section>
+    <form 
+        onsubmit="return confirm('To complete your form submission, click OK and close the browser tab. You will return to the new message window so you can post your message to the outbox.');"
+        method="post" id="myform" enctype="multipart/form-data" action="http://{FormServer}:{FormPort}">
+        <div>
+            <span><div class="formTitleHeader">Bigfoot Bib Report</div></span>
+            <span style="text-align: center; margin: auto;">
+                <input type="button" value="Form Information - READ" onclick="location.href='#pop1'" />
+            <label id="thisVersion">v1.2.3</label>
+            </span>
         </div>
-        <!-- The close pop-up link correctly positioned at the end of the content block -->
+        <hr />
 
-        <a class="close" href="#links">
-          <span>Back to links</span>
-        </a>
-      </div>
+        <div>
+            <div class="msgHeaderTitle">Message Header</div>
+            <span>
+                <label for="EventTitle">Event Name:</label>
+                <input name="EventTitle" type="text" id="EventTitle" maxlength="40"
+                    onchange="store();" placeholder="Race or Event Name" required />
+            </span>
+            <span>
+                <label for="MessageNumber">Message #</label>
+                <input name="MessageNumber" type="text" id="MessageNumber" maxlength="3" style="max-width: 3em;" onchange="store();" placeholder="1" />    
+            </span>
+        </div>
+
+        <div>
+            <span>
+                <label for="address">Send to:</label>
+                <input name="address" type="text" id="address" class="addressInput" maxlength="40" onchange="store();"
+                    title="Separate multiple calls or addresses with a semicolon;" placeholder="Winlink Radio Call or Email"
+                    required />    
+            </span>
+
+            <span class="aidStnSpan">
+                <label for="Location">Aid Station:</label>
+                <select name="Location" id="Location" onchange="store();" required>
+                    <option value="MM_Marble Mountain SnoPark">Marble Mountain SnoPark</option>
+                    <option value="BL_Blue Lake">Blue Lake</option>
+                    <option value="WR_Windy Ridge">Windy Ridge</option>
+                    <option value="JR_Johnston Ridge">Johnston Ridge</option>
+                    <option value="CW_Coldwater Lake">Coldwater Lake</option>
+                    <option value="NP_Norway Pass">Norway Pass</option>
+                    <option value="EP_Elk Pass">Elk Pass</option>
+                    <option value="WM_Wright Meadow (Rd.9327)">Wright Meadow (Rd.9327)</option>
+                    <option value="SB_Spencer Butte">Spencer Butte</option>
+                    <option value="LR_Lewis River">Lewis River</option>
+                    <option value="QR_Quartz Ridge">Quartz Ridge</option>
+                    <option value="CB_Council Bluff">Council Bluff</option>
+                    <option value="CH_Chain of Lakes">Chain of Lakes</option>
+                    <option value="KT_Klickitat">Klickitat</option>
+                    <option value="TS_Twin Sisters">Twin Sisters</option>
+                    <option value="OC_Owens Creek">Owen&acute;s Creek</option>
+                    <option value="FN_Finish Line">Finish (Bigfoot Base)</option>
+                </select>
+            </span>
+        </div>
+
+        <!-- hidden elements -->
+        <input name="Theversion" type="hidden" id="Theversion" />
+        <input name="FormatNote" type="hidden" id="FormatNote"
+            value="* The entries in this email are TAB delimited. This allows you to copy and paste into a spreadsheet." />
+        <textarea name="beforeformatting" id="beforeformatting" style="display: none"></textarea>
+        <input type="file" id="txtfiletoread" accept=".txt" style="display: none" />
+        <input name="sendto" type="hidden" id="sendto" />
+        <textarea name="parseme" id="parseme" style="display: none"></textarea>
+        <!-- end hidden elements -->
+
+        <div>
+            <label for="msgsubject">Subject:</label>
+            <input name="msgsubject" type="text" id="msgsubject" readonly="readonly" maxlength="40" class="maxSizeInputWidth readOnlyText" />
+        </div>
+
+        <hr />
+        <div class="msgHeaderTitle">Bib Data Entry</div>
+
+        <div>
+            <label for="RiderNum">Bib Number:</label>
+            <input name="RiderNum" type="text" id="RiderNum" maxlength="15" style="max-width: 6em;"
+                onkeypress="if(event.keyCode==13){a=setfocus(); return false;}"
+                onblur="javascript:this.value=this.value.trim();this.value=this.value.toUpperCase(); putTime();" />
+            <label for="Timefld">Time:</label>
+            <input name="Timefld" type="text" id="Timefld" maxlength="6" style="max-width: 6em;"
+                onkeypress="if(event.keyCode==13){alert('Click: IN - OUT - DROP');return false;}"
+                onblur=" this.value=this.value.trim(); " />
+            <label for="yesterday">Yesterday:</label>
+            <input type="checkbox" id="yesterday" name="yesterday" value="Yesterday" />
+        </div>
+
+        <div id="inOutDropBtns">
+            <label for="inOutDropBtns">Click an Action button to create a record:</label>
+            <input name="Inbtn" type="button" id="Inbtn" onclick="AddIn();" value="In"
+                title="Participant arrived at this station." />
+            <input name="Outbtn" type="button" id="Outbtn" onclick="AddOut();" value="Out"
+                title="Participant departed from this station." />
+            <input name="Dropbtn" type="button" id="Dropbtn" onclick="AddDrop()" value="Drop"
+                title="Participant dropped from race." />
+        </div>
+
+        <hr />
+
+        <div id="saveLoadRaceDataBtns">
+            <input name="savebtn" type="button" class="saveDataButton" id="savebtn" onclick="SaveData()"
+                value="Save Race data" title="Save data to a file." />
+            <input name="loadbtn" type="button" class="loadDataButton" id="loadbtn"
+                onclick="document.getElementById('txtfiletoread').click();" value="Load Race data"
+                title="Load data from a file." />
+        </div>
+
+        <hr />
+
+        <div>
+            <div>
+                <label for="numlines">Number of Entries:</label>
+                <input name="numlines" type="text" id="numlines" maxlength="3" style="max-width: 4em;" readonly title="Number of bib entries submitted." />
+                <input name="doclear" type="button" id="doclear" onclick="Docleardata()" value="Clear Entries"
+                    title="Clear all runner entries." class="clearDataButton" />
+            </div>
+            <textarea name="TheData" placeholder="Limit to a sensible number of entries." id="TheData" class="bibEntries" maxlength="1000"
+                onkeypress="if(event.keyCode==13){countLines2() }" onblur="countLines2()"></textarea>
+            <div>
+                <label for="Comment">Comments:</label>
+                <textarea name="Comment" id="Comment" onkeyup="AutoGrowTextArea(this)"
+                    placeholder="Enter a short comment up to 110 characters."></textarea>
+            </div>
+        </div>
+
+        <div align="left">
+            <input title="After submitting, close browser, then address message for posting" class="SubmitBtn"
+                enctype="multipart/form-data" id="Submit" method="Post" name="Submit" value="SUBMIT" type="submit" />
+        </div>
+    </form>
+    </section>
+    <section>
+    <div id="pop1" class="pop-up">
+        <!-- The pop-up block -->
+
+        <div class="popBox">
+            <!-- If the content becomes larger than the pop-up this div will scroll the content -->
+
+            <div class="popScroll">
+                <h2>Winlink Operator Instructions</h2>
+
+                <p>The form is broken up into roughly three sections:</p>
+
+                <ul>
+                    <li>Top: Header information with event, location, and message information.</li>
+                    <li>Middle: For entering bib data, and to save/restore data to/from a file.</li>
+                    <li>Bottom: To view entered bib data, add comments, and to submit the data for posting a new Winlink
+                        Express
+                        message.</li>
+                </ul>
+
+                <h4>Note: Keyboard-only mode is supported!</h4>
+                <ul>
+                    <li>
+                        <kbd>Tab</kbd> key to move between screen elements.
+                    </li>
+                    <li>
+                        <kbd>Spacebar</kbd> or <kbd>Enter</kbd> to activate a highlighted element.
+                    </li>
+                </ul>
+
+                <h3>Top Section</h3>
+
+                <ol>
+                    <li>Enter this Event Name for example &quot;Bigfoot 2023&quot;.</li>
+                    <li>Enter a Message Number starting with 1. Increment it for each time you create a new message for
+                        the
+                        current Aid Station.</li>
+                    <li>Enter the recipient's amateur call sign in Send To field.</li>
+                    <li>Aid Station: Click it, or press the Spacebar to see a list and click or select one with arrows
+                        and the
+                        Enter key.</li>
+                    <li>Subject Line: It will be entered automagically for you. Try to resist the urge to change it.
+                    </li>
+                </ol>
+
+                <h3>Middle Section</h3>
+
+                <p>With a list of bib numbers and the times they entered and left the Aid Station, or dropped from the
+                    event,
+                    enter bib numbers into the form:</p>
+
+                <ol>
+                    <li>Enter Bib Number: Limited to 15 digits (should be more than enough for any event).</li>
+                    <li>Enter The Time: This should be 24hr time like <em>HH:MM</em>. The browser might suggest the
+                        current time
+                        for you.</li>
+                    <li>Check This Box If Time Was Yesterday: Runners come and go from Aid Stations all time of day and
+                        night. You
+                        might have a list of runners that arrived yesterday and left (or dropped) today.</li>
+                    <li>Click IN, OUT, or DROP once to enter that bib into the record.</li>
+                </ol>
+
+                <h4>IN, OUT, and DROP Actions</h4>
+
+                <ul>
+                    <li>
+                        IN: The runner (bib) arrived at the Aid Station.
+                    </li>
+                    <li>
+                        OUT: The runner left the Aid Station.
+                    </li>
+                    <li>
+                        DROP: Use if the runner has notified Aid Station Staff that they are bowing out of the race, or
+                        they have
+                        been disqualified by race officials.
+                    </li>
+                </ul>
+
+                <p>Save Race Data and Load Race Data are discussed below.</p>
+                <p>For any bib entries that need additional explanation (like DROP) use the &quot;Comments&quot; area to
+                    free-form a statement.
+                    <em>Keep the message short</em> and to the point.
+                    If you have more than about 25 words to say, write it down and send all of it via a separate Winlink
+                    message,
+                    or by voice directly to Net Control.
+                </p>
+
+                <h3>Bottom Section</h3>
+
+                <p>Number of Entries: This accurately counts the number of bib entries already in the form.
+                    Try to keep the total list size to less than 50.</p>
+                <p>Use the &quot;Clear Entries&quot; button to remove <em>all entries</em> from the text.
+                    Use wisely <em>there is no backup</em>.</p>
+                <hr />
+
+                <h2>
+                    Saving and Loading Race Data
+                </h2>
+
+                <p>
+                    Use the Save Data Race Data button to store the bib entries into a plain text file.
+                    The file will be named with the current date and time with a &quot;txt&quot; file extension so any
+                    text editor
+                    can open it.
+                    The file will be stored in your browser's download folder.
+                    You can rename the file to something more meaningful if you like.
+                </p>
+                <p>
+                    The information that is sent via WinLink can be copied and pasted directly into an excel
+                    spreadsheet,
+                    or saved to a file and then imported as a &quot;Tab Delimited&quot; file.
+                </p>
+                <p>
+                    The Subject Line will be formatted for you, for example:
+                    <code>BigFoot 2023 Marble Mountain SnoPark Message #1</code>
+                </p>
+
+                <ul>
+                    <li>BigFoot 2023: The Race or Event Name entered at the top of the form.</li>
+                    <li> Marble Mountain SnoPark: The Aid Station selected at the top of the form.</li>
+                    <li>Message #1: The Message Number entered at the top of the form.</li>
+                </ul>
+                <p>The &quot;Send To&quot; data is used to address the Winlink Message to the intended recipient, so it
+                    is not
+                    included in the subject line.</p>
+
+                <hr />
+
+                <h2>Credits</h2>
+                <p>
+                    The original form was designed by Greg KG6SJT of WDT (Winlink Development Team).
+                </p>
+                <p>
+                    <em>This version of the form has NOT been tested by UltraLive
+                        staff.</em>
+                </p>
+            </div>
+            <!-- The close pop-up link correctly positioned at the end of the content block -->
+
+            <a class="close" href="#links">
+                <span>Back to links</span>
+            </a>
+        </div>
     </div>
 
     <div id="pop2" class="pop-up">
-      <!-- The pop-up block -->
+        <!-- The pop-up block -->
 
-      <div class="popBox">
-        <!-- If the content becomes larger than the pop-up this div will scroll the content -->
+        <div class="popBox">
+            <!-- If the content becomes larger than the pop-up this div will scroll the content -->
 
-        <div class="popScroll">
-          <p>
-            Ultralive formatting Information From
-            <a
-              href="https://docs.google.com/document/d/1J01uupj-9hcXdfFJV5jQau0pp8E6EL_dVkS7H5RjulM/edit"
-              target="_blank"
-              >https://docs.google.com/document/d/1J01uupj-9hcXdfFJV5jQau0pp8E6EL_dVkS7H5RjulM/edit</a
-            >
-            <br />
-            Suggest you download and have a copy for event.
-            <br />
-          </p>
+            <div class="popScroll">
+                <p>
+                    Ultralive formatting Information From
+                    <a href="https://docs.google.com/document/d/1J01uupj-9hcXdfFJV5jQau0pp8E6EL_dVkS7H5RjulM/edit"
+                        target="_blank">https://docs.google.com/document/d/1J01uupj-9hcXdfFJV5jQau0pp8E6EL_dVkS7H5RjulM/edit</a>
+                    <br />
+                    Suggest you download and have a copy for event.
+                    <br />
+                </p>
+            </div>
+
+            <!-- The close pop-up link correctly positioned at the end of the content block -->
+            <a class="close" href="#links">Back to links</a>
         </div>
-
-        <!-- The close pop-up link correctly positioned at the end of the content block -->
-        <a class="close" href="#links">Back to links</a>
-      </div>
     </div>
-  </body>
+    </section>
+</body>
 </html>
