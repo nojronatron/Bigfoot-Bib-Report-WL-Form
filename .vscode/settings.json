@@ -1,3 +1,9 @@
 {
   "editor.formatOnSave": false,
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+  "files.exclude": {
+    "Bigfoot-Bib-Report.txt": true,
+  },
+  "editor.wordWrap": "on",
 }
