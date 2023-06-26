@@ -576,9 +576,9 @@
 
     <style type="text/css">
         body {
-        font-family:Arial, Helvetica, sans-serif;
-        font-size: 18px;
-        background-color: rgb(220, 220, 220);
+            font-family:Arial, Helvetica, sans-serif;
+            font-size: 18px;
+            background-color: rgb(220, 220, 220);
         }
 
         @media screen and (width < 650px) {
@@ -672,7 +672,10 @@
         }
 
         .readOnlyText {
-            color: rgb(128, 128, 128);
+            color: rgb(84, 84, 84) !important;
+            outline: none !important;
+            cursor: default !important;
+            opacity: unset !important;
         }
 
       /* Pop-up content shifted off-screen when not in view. Still readable by screen-reader software. When targeted it fills the browser window. */
@@ -689,7 +692,7 @@
 
       /* The pop-up itself */
       .popBox {
-        background: white;
+        background: rgb(255, 255, 255);
         /* alternatively fixed width / height and negative margins from 50% */
         position: absolute;
         left: 2em;
@@ -697,10 +700,10 @@
         top: 2em;
         bottom: 2em;
         z-index: 10;
-        border: 3px solid darkblue;
+        border: 3px solid rgb(0, 0, 150);
         /* CSS3 where available: rounded corners, drop-shadow, and fade in. */
         border-radius: 0.25rem;
-        box-shadow: 0rem 0.5rem 0.5rem white;
+        box-shadow: 0rem 0.5rem 0.5rem rgb(255, 255, 255);
         opacity: 0;
         transition: opacity 0.8s ease-out;
       }
@@ -764,16 +767,16 @@
       }
 
       input[type='submit'] {
-        color: black;
+        color: rgb(0, 0, 0);
         font-weight: bold;
-        background-color: rgb(0, 255, 255);
+        background-color: rgb(113, 169, 253);
         padding-left: 0.8em;
         padding-right: 0.8em;
       }
 
       .clearDataButton {
         color: black;
-        background-color: #ffb6c1;
+        background-color: rgb(255, 153, 0);
         font-weight: bold;
       }
 
@@ -795,7 +798,7 @@
     }
 
     input:focus, textarea:focus, select:focus {
-        outline: #ffc0cb solid 3px;
+        outline: rgb(255, 153, 0) solid 3px;
     }
 
       hr {
@@ -814,7 +817,7 @@
             </div>
             <div style="text-align: center;">
                 <input type="button" value="Form Information - READ" onclick="location.href='#pop1'" />
-                <label id="thisVersion">v1.2.3</label>
+                <label id="thisVersion"></label>
             </div>
         <hr />
 
@@ -915,7 +918,7 @@
 
             <div class="div-across-auto-align">
                 <label for="numlines">Number of Entries:</label>
-                <input name="numlines" type="text" id="numlines" maxlength="3" style="max-width: 4em;" readonly title="Number of bib entries submitted." />
+                <input name="numlines" type="text" id="numlines" maxlength="3" style="max-width: 4em;" class="readOnlyText" readonly title="Number of bib entries submitted." />
             </div>
             <div class="div-across-auto-align">
                 <textarea name="TheData" placeholder="Limit to a sensible number of entries." id="TheData" class="bibEntries" maxlength="1000"
@@ -923,8 +926,8 @@
             </div>
             <div class="div-across-auto-align">
                 <label for="Comment">Comments:</label>
-                <textarea name="Comment" id="Comment" onkeyup="AutoGrowTextArea(this)"
-                    placeholder="Enter a short comment up to 110 characters."></textarea>
+                <textarea name="Comment" id="Comment" maxlength="300" onkeyup="AutoGrowTextArea(this)"
+                    placeholder="Enter a short comment. Limited to 300 characters."></textarea>
             </div>
 
         <div class="div-across-auto-align">
@@ -952,9 +955,9 @@
             <!-- If the content becomes larger than the pop-up this div will scroll the content -->
 
             <div class="popScroll">
-                <h2>Winlink Operator Instructions</h2>
+                <h1>Winlink Operator Instructions</h1>
 
-                <p>The form is broken up into roughly three sections:</p>
+                <h2>The form is broken up into roughly three sections:</h2>
 
                 <ul>
                     <li>Top: Header information with event, location, and message information.</li>
@@ -964,7 +967,7 @@
                         message.</li>
                 </ul>
 
-                <h4>Note: Keyboard-only mode is supported!</h4>
+                <p>Note:<em>Keyboard-only mode is supported!</em></h4>
                 <ul>
                     <li>
                         <kbd>Tab</kbd> key to move between screen elements.
@@ -1026,7 +1029,7 @@
                 <p>For any bib entries that need additional explanation (like DROP) use the &quot;Comments&quot; area to
                     free-form a statement.
                     <em>Keep the message short</em> and to the point.
-                    If you have more than about 25 words to say, write it down and send all of it via a separate Winlink
+                    If you have more than about 30 words to say, write it down and send all of it via a separate Winlink
                     message,
                     or by voice directly to Net Control.
                 </p>
@@ -1063,7 +1066,7 @@
 
                 <ul>
                     <li>BigFoot 2023: The Race or Event Name entered at the top of the form.</li>
-                    <li> Marble Mountain SnoPark: The Aid Station selected at the top of the form.</li>
+                    <li>Marble Mountain SnoPark: The Aid Station selected at the top of the form.</li>
                     <li>Message #1: The Message Number entered at the top of the form.</li>
                 </ul>
                 <p>The &quot;Send To&quot; data is used to address the Winlink Message to the intended recipient, so it
