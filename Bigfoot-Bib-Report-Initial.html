@@ -650,9 +650,11 @@
             list-style-type: none;
         }
 
-        /* .aidStnSpan {
-            width: 51%;
-        } */
+        .div-across-auto-align {
+            width:100%;
+            margin:auto; 
+            text-align:center;
+        }
 
         .formTitleHeader {
             text-align: center;
@@ -817,7 +819,7 @@
         <hr />
 
         <div class="msgHeaderTitle">Message Header</div>
-        <div style="width:100%; margin:auto; text-align:center;">
+        <div class="div-across-auto-align">
             <div class="block-line-div">
                 <label for="EventTitle">Event Name:</label>
                 <input name="EventTitle" type="text" id="EventTitle" maxlength="40" onchange="store();" placeholder="Race or Event Name" required />
@@ -828,7 +830,7 @@
             </div>
         </div>
 
-        <div style="width:100%; margin:auto; text-align:center;">
+        <div class="div-across-auto-align">
             <div class="block-line-div">
                 <label for="address">Send to:</label>
                 <input name="address" type="text" id="address" class="addressInput" maxlength="40" onchange="store();"
@@ -870,7 +872,7 @@
         <textarea name="parseme" id="parseme" style="display: none"></textarea>
         <!-- end hidden elements -->
 
-        <div style="width:100%; margin:auto; text-align:center;">
+        <div class="div-across-auto-align">
             <label for="msgsubject">Subject:</label>
             <input name="msgsubject" type="text" id="msgsubject" readonly="readonly" maxlength="40" class="maxSizeInputWidth readOnlyText" />
         </div>
@@ -878,7 +880,7 @@
         <hr />
         <div class="msgHeaderTitle">Bib Data Entry</div>
 
-        <div style="width:100%; margin:auto; text-align:center;">
+        <div class="div-across-auto-align">
             <div class="block-line-div">
                 <label for="RiderNum">Bib Number:</label>
                 <input name="RiderNum" type="text" id="RiderNum" maxlength="15" style="max-width: 6em;"
@@ -895,7 +897,7 @@
             </div>
         </div>
 
-        <div id="inOutDropBtns"  style="width:100%; margin:auto; text-align:center;">
+        <div id="inOutDropBtns"  class="div-across-auto-align">
             <div class="block-line-div">
                 <label for="inOutDropBtns">Click an Action button to create a record:</label>
             </div>
@@ -911,19 +913,21 @@
 
         <hr />
 
-            <div style="width:100%; margin:auto; text-align:center;">
+            <div class="div-across-auto-align">
                 <label for="numlines">Number of Entries:</label>
                 <input name="numlines" type="text" id="numlines" maxlength="3" style="max-width: 4em;" readonly title="Number of bib entries submitted." />
             </div>
-            <textarea name="TheData" placeholder="Limit to a sensible number of entries." id="TheData" class="bibEntries" maxlength="1000"
+            <div class="div-across-auto-align">
+                <textarea name="TheData" placeholder="Limit to a sensible number of entries." id="TheData" class="bibEntries" maxlength="1000"
                 onkeypress="if(event.keyCode==13){countLines2() }" onblur="countLines2()"></textarea>
-            <div style="width:100%; margin:auto; text-align:center;">
+            </div>
+            <div class="div-across-auto-align">
                 <label for="Comment">Comments:</label>
                 <textarea name="Comment" id="Comment" onkeyup="AutoGrowTextArea(this)"
                     placeholder="Enter a short comment up to 110 characters."></textarea>
             </div>
 
-        <div style="width:100%; margin:auto; text-align:center;">
+        <div class="div-across-auto-align">
             <div class="block-line-div">
             <input title="After submitting, close browser, then address message for posting" class="SubmitBtn"
                 enctype="multipart/form-data" id="Submit" method="Post" name="Submit" value="SUBMIT" type="submit" />
