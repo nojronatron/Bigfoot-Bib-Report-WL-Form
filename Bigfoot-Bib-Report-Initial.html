@@ -588,6 +588,10 @@
             input {
                 margin: 0.2em 0.2em;
             }
+            input[type="checkbox"] {
+                width: 1em;
+                height: 1em;
+            }
             .formTitleHeader {
                 font-size: 2em;
             }
@@ -599,7 +603,10 @@
                 font-size: 0.7em;
             }
             .addressInput {
-                min-width: 96%;
+                min-width: 70%;
+            }
+            .block-line-div {
+                display: block;
             }
         }
 
@@ -609,6 +616,10 @@
             }
             input {
                 margin: 0.3em 0.3em;
+            }
+            input[type="checkbox"] {
+                width: 1.2em;
+                height: 1.2em;
             }
             .formTitleHeader {
                 font-size: 3em;
@@ -623,8 +634,14 @@
             .addressInput {
                 max-width: 55%;
             }
+            .block-line-div {
+                display: inline;
+            }
         }
 
+        hr {
+            height: 0.1em;
+        }
         textarea {
             width: 96%;
         }
@@ -633,9 +650,9 @@
             list-style-type: none;
         }
 
-        .aidStnSpan {
+        /* .aidStnSpan {
             width: 51%;
-        }
+        } */
 
         .formTitleHeader {
             text-align: center;
@@ -645,11 +662,11 @@
       
         .msgHeaderTitle {
             color: rgb(0,0,255);
-            text-align:center;
+            text-align: center;
         }
 
         .maxSizeInputWidth {
-            min-width: 85%;
+            min-width: 75%;
         }
 
         .readOnlyText {
@@ -767,7 +784,7 @@
       textarea, select {
         padding: 0.3em 0.3em;
         border: rgb(0,0,0) solid 0.15em;
-        border-radius: 1rem;
+        border-radius: 0.5rem;
       }
 
     input:hover, textarea:hover, select:hover {
@@ -790,37 +807,36 @@
     <form 
         onsubmit="return confirm('To complete your form submission, click OK and close the browser tab. You will return to the new message window so you can post your message to the outbox.');"
         method="post" id="myform" enctype="multipart/form-data" action="http://{FormServer}:{FormPort}">
-        <div>
-            <span><div class="formTitleHeader">Bigfoot Bib Report</div></span>
-            <span style="text-align: center; margin: auto;">
+            <div style="text-align: center;">
+                <label class="formTitleHeader">Bigfoot Bib Report</label>
+            </div>
+            <div style="text-align: center;">
                 <input type="button" value="Form Information - READ" onclick="location.href='#pop1'" />
-            <label id="thisVersion">v1.2.3</label>
-            </span>
-        </div>
+                <label id="thisVersion">v1.2.3</label>
+            </div>
         <hr />
 
-        <div>
-            <div class="msgHeaderTitle">Message Header</div>
-            <span>
+        <div class="msgHeaderTitle">Message Header</div>
+        <div style="width:100%; margin:auto; text-align:center;">
+            <div class="block-line-div">
                 <label for="EventTitle">Event Name:</label>
-                <input name="EventTitle" type="text" id="EventTitle" maxlength="40"
-                    onchange="store();" placeholder="Race or Event Name" required />
-            </span>
-            <span>
+                <input name="EventTitle" type="text" id="EventTitle" maxlength="40" onchange="store();" placeholder="Race or Event Name" required />
+            </div>
+            <div class="block-line-div">
                 <label for="MessageNumber">Message #</label>
                 <input name="MessageNumber" type="text" id="MessageNumber" maxlength="3" style="max-width: 3em;" onchange="store();" placeholder="1" />    
-            </span>
+            </div>
         </div>
 
-        <div>
-            <span>
+        <div style="width:100%; margin:auto; text-align:center;">
+            <div class="block-line-div">
                 <label for="address">Send to:</label>
                 <input name="address" type="text" id="address" class="addressInput" maxlength="40" onchange="store();"
                     title="Separate multiple calls or addresses with a semicolon;" placeholder="Winlink Radio Call or Email"
-                    required />    
-            </span>
+                    required />
+            </div>
 
-            <span class="aidStnSpan">
+            <div class="aidStnSpan block-line-div">
                 <label for="Location">Aid Station:</label>
                 <select name="Location" id="Location" onchange="store();" required>
                     <option value="MM_Marble Mountain SnoPark">Marble Mountain SnoPark</option>
@@ -841,7 +857,7 @@
                     <option value="OC_Owens Creek">Owen&acute;s Creek</option>
                     <option value="FN_Finish Line">Finish (Bigfoot Base)</option>
                 </select>
-            </span>
+            </div>
         </div>
 
         <!-- hidden elements -->
@@ -854,7 +870,7 @@
         <textarea name="parseme" id="parseme" style="display: none"></textarea>
         <!-- end hidden elements -->
 
-        <div>
+        <div style="width:100%; margin:auto; text-align:center;">
             <label for="msgsubject">Subject:</label>
             <input name="msgsubject" type="text" id="msgsubject" readonly="readonly" maxlength="40" class="maxSizeInputWidth readOnlyText" />
         </div>
@@ -862,60 +878,65 @@
         <hr />
         <div class="msgHeaderTitle">Bib Data Entry</div>
 
-        <div>
-            <label for="RiderNum">Bib Number:</label>
-            <input name="RiderNum" type="text" id="RiderNum" maxlength="15" style="max-width: 6em;"
+        <div style="width:100%; margin:auto; text-align:center;">
+            <div class="block-line-div">
+                <label for="RiderNum">Bib Number:</label>
+                <input name="RiderNum" type="text" id="RiderNum" maxlength="15" style="max-width: 6em;"
                 onkeypress="if(event.keyCode==13){a=setfocus(); return false;}"
                 onblur="javascript:this.value=this.value.trim();this.value=this.value.toUpperCase(); putTime();" />
-            <label for="Timefld">Time:</label>
-            <input name="Timefld" type="text" id="Timefld" maxlength="6" style="max-width: 6em;"
-                onkeypress="if(event.keyCode==13){alert('Click: IN - OUT - DROP');return false;}"
-                onblur=" this.value=this.value.trim(); " />
-            <label for="yesterday">Yesterday:</label>
-            <input type="checkbox" id="yesterday" name="yesterday" value="Yesterday" />
+            </div>
+            <div class="block-line-div">
+                <label for="Timefld">Time:</label>
+                <input name="Timefld" type="text" id="Timefld" maxlength="6" style="max-width: 6em;"
+                    onkeypress="if(event.keyCode==13){alert('Click: IN - OUT - DROP');return false;}"
+                    onblur=" this.value=this.value.trim(); " />
+                <input type="checkbox" id="yesterday" name="yesterday" value="Yesterday" />    
+                <label for="yesterday">Yesterday</label>
+            </div>
         </div>
 
-        <div id="inOutDropBtns">
-            <label for="inOutDropBtns">Click an Action button to create a record:</label>
-            <input name="Inbtn" type="button" id="Inbtn" onclick="AddIn();" value="In"
+        <div id="inOutDropBtns"  style="width:100%; margin:auto; text-align:center;">
+            <div class="block-line-div">
+                <label for="inOutDropBtns">Click an Action button to create a record:</label>
+            </div>
+            <div class="block-line-div">
+                <input name="Inbtn" type="button" id="Inbtn" onclick="AddIn();" value="In"
                 title="Participant arrived at this station." />
-            <input name="Outbtn" type="button" id="Outbtn" onclick="AddOut();" value="Out"
+                <input name="Outbtn" type="button" id="Outbtn" onclick="AddOut();" value="Out"
                 title="Participant departed from this station." />
-            <input name="Dropbtn" type="button" id="Dropbtn" onclick="AddDrop()" value="Drop"
+                <input name="Dropbtn" type="button" id="Dropbtn" onclick="AddDrop()" value="Drop"
                 title="Participant dropped from race." />
+            </div>
         </div>
 
         <hr />
 
-        <div id="saveLoadRaceDataBtns">
-            <input name="savebtn" type="button" class="saveDataButton" id="savebtn" onclick="SaveData()"
-                value="Save Race data" title="Save data to a file." />
-            <input name="loadbtn" type="button" class="loadDataButton" id="loadbtn"
-                onclick="document.getElementById('txtfiletoread').click();" value="Load Race data"
-                title="Load data from a file." />
-        </div>
-
-        <hr />
-
-        <div>
-            <div>
+            <div style="width:100%; margin:auto; text-align:center;">
                 <label for="numlines">Number of Entries:</label>
                 <input name="numlines" type="text" id="numlines" maxlength="3" style="max-width: 4em;" readonly title="Number of bib entries submitted." />
-                <input name="doclear" type="button" id="doclear" onclick="Docleardata()" value="Clear Entries"
-                    title="Clear all runner entries." class="clearDataButton" />
             </div>
             <textarea name="TheData" placeholder="Limit to a sensible number of entries." id="TheData" class="bibEntries" maxlength="1000"
                 onkeypress="if(event.keyCode==13){countLines2() }" onblur="countLines2()"></textarea>
-            <div>
+            <div style="width:100%; margin:auto; text-align:center;">
                 <label for="Comment">Comments:</label>
                 <textarea name="Comment" id="Comment" onkeyup="AutoGrowTextArea(this)"
                     placeholder="Enter a short comment up to 110 characters."></textarea>
             </div>
-        </div>
 
-        <div align="left">
+        <div style="width:100%; margin:auto; text-align:center;">
+            <div class="block-line-div">
             <input title="After submitting, close browser, then address message for posting" class="SubmitBtn"
                 enctype="multipart/form-data" id="Submit" method="Post" name="Submit" value="SUBMIT" type="submit" />
+            <input name="savebtn" type="button" class="saveDataButton" id="savebtn" onclick="SaveData()"
+                value="Save Race data" title="Save data to a file." />
+            </div>            
+            <div class="block-line-div">
+            <input name="loadbtn" type="button" class="loadDataButton" id="loadbtn"
+                onclick="document.getElementById('txtfiletoread').click();" value="Load Race data"
+                title="Load data from a file." />
+            <input name="doclear" type="button" id="doclear" onclick="Docleardata()" value="Clear Entries"
+                    title="Clear all runner entries." class="clearDataButton" />
+            </div>
         </div>
     </form>
     </section>
