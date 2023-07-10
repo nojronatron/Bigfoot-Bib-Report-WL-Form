@@ -14,10 +14,6 @@
 
     <script language="javascript" type="text/javascript">
       function store() {
-        var formVer = '0.2.0';
-        document.getElementById('thisVersion').innerHTML = formVer.toString();
-        document.getElementById('Theversion').value = formVer.toString();
-        localStorage.setItem('BFVersion', formVer);
         var addressFormatted = document.getElementById('address');
         localStorage.setItem('RTrackeradd', addressFormatted.value);
         var locationFormatted = document.getElementById('Location');
@@ -523,6 +519,11 @@
       }
 
       window.onload = function () {
+        const formVersion = '1.0.6';
+        localStorage.setItem('BFVersion', formVersion);
+        document.getElementById('thisVersion').innerText=`Version ${formVersion}`;
+        document.getElementById('Theversion').value = formVersion;
+
         //Check the support for the File API support
         if (
           window.File &&
