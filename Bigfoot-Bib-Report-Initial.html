@@ -439,9 +439,21 @@
 
       // stores each form element value in a JSON object and stores it in hidden element 'parseme'
       function storeFormValuesToHiddenElement() {
-        const thisVersion = document.getElementById('thisVersion').value ?
-          document.getElementById('thisVersion').value : 
-          'null';
+        let thisVersion = '';
+        const theVersionTemp = document.getElementById('Theversion').value;
+        const thisVersionTemp = document.getElementById('thisVersion').value;
+        const bfVersionTemp = localStorage.getItem('BFVersion');
+        if (theVersionTemp.length >= 5) {
+            thisVersion = theVersionTemp;
+        } else
+        if (thisVersionTemp.length >= 5) {
+            thisVersion = thisVersionTemp;
+        } else
+        if (bfVersionTemp.length >= 5) {
+            thisVersion = bfVersionTemp;
+        } else {
+            thisVersion = 'null';
+        }
         const EventTitle = document.getElementById('EventTitle').value;
         const MessageNumber = document.getElementById('MessageNumber').value;
         const address = document.getElementById('address').value;
