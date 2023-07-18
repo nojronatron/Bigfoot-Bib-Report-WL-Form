@@ -530,6 +530,18 @@
         saveTextAsFile();
       }
 
+      function incrementMsgNum() {
+        console
+        const formMsgNum = Number.parseInt(document.getElementById('MessageNumber').value, 10);
+        const lsMsgNum = Number.parseInt(localStorage.getItem('RTrackermsgNum'), 10);
+        const incrMsgNum = formMsgNum ? formMsgNum + 1 : 1;
+        document.getElementById('MessageNumber').value = incrMsgNum;
+
+        if (lsMsgNum && lsMsgNum < incrMsgNum) {
+          localStorage.setItem('RTrackermsgNum', incrMsgNum);
+        }
+      }
+
       window.onload = function () {
         const formVersion = '1.0.6';
         localStorage.setItem('BFVersion', formVersion);
@@ -654,6 +666,7 @@
 
         hr {
             height: 0.1em;
+            width: 90%;
         }
         textarea {
             width: 96%;
@@ -661,6 +674,16 @@
 
         ul {
             list-style-type: none;
+        }
+
+        .screen-reader {
+            /* only screen readers see this element */
+            position: absolute;
+            left: -500px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
         }
 
         .div-across-auto-align {
@@ -813,10 +836,6 @@
     input:focus, textarea:focus, select:focus {
         outline: rgb(255, 153, 0) solid 3px;
     }
-
-      hr {
-        width: 90%;
-      }
     </style>
   </head>
 
@@ -842,7 +861,10 @@
             </div>
             <div class="block-line-div">
                 <label for="MessageNumber">Message #</label>
-                <input name="MessageNumber" type="text" id="MessageNumber" maxlength="3" style="max-width: 3em;" onchange="store();" placeholder="1" />    
+                <input name="MessageNumber" type="text" id="MessageNumber" maxlength="3" style="max-width: 3em;" onchange="store();" placeholder="1" />
+                <input name="incrMsgNum" type="button" id="incrMsgNum" value="increment" onclick="incrementMsgNum();" />
+                <!-- invisible label that screen readers can still use -->
+                <label for="incrMsgNum" class="screen-reader">Increment</label>
             </div>
         </div>
 
