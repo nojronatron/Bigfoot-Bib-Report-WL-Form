@@ -67,8 +67,8 @@
 
       }
 
-      // set form elements with values stored in local storage
-      function getit() {
+      // set form elements with the values stored in local storage
+      function setFormElementsWithLsValues() {
         var storedAddress = localStorage.getItem('RTrackeradd');
         document.forms[0].address.value = storedAddress;
         var storedLocation = localStorage.getItem('RTrackerloc');
@@ -97,6 +97,16 @@
         var formatNoteText =
           '* The entries in this email are TAB delimited. This allows you to copy and paste into a spreadsheet.';
         document.getElementById('FormatNote').value = formatNoteText;
+        copyPreviousRecordFromLsToElement();
+      }
+
+      function copyPreviousRecordFromLsToElement() {
+        // if previous record key exists in local storage populate the element with string formatted value
+        if (localStorage.getItem('previousRecord')) {
+            const previousItem = JSON.parse(localStorage.getItem('previousRecord'));
+            const previousRecordString = `${previousItem.runner}, ${previousItem.action}, ${previousItem.time}, ${previousItem.dayOfMonth}, ${previousItem.location}`;
+            document.getElementById('endOfPriorBatch').value = previousRecordString;
+        }
       }
 
       function ClearParticipantData() {
@@ -344,7 +354,25 @@
         }
       }
 
+      function storePreviousRecord(bibNumber, action, timestamp, dayOfMonth, location) {
+      // initialize a new object and store bibNumber, action, timestamp, dayOfMonth, and location variables as properties
+      var previousRecord = {
+        runner: bibNumber,
+        action: action,
+        time: timestamp,
+        dayOfMonth: dayOfMonth,
+        location: location,
+      };
+
+      // store this object into localStorage
+      localStorage.setItem('previousRecord', JSON.stringify(previousRecord));
+      // update the end of prior batch textarea field with the previous record
+      const previousRecordString = `${bibNumber}, ${action}, ${timestamp}, ${dayOfMonth}, ${location}`;
+      document.getElementById('endOfPriorBatch').value = previousRecordString;
+      }
+
       function FormatBibRecord(pTime, tRunner, action, tTime, doM, loc) {
+        storePreviousRecord(tRunner, action, tTime, doM, loc);
         newTime = String(tTime);
 
         if (tTime.indexOf(':') > -1) {
@@ -437,7 +465,7 @@
         return thisyear + '-' + thismonth + '-' + thisday + ' ' + h + '_' + m;
       }
 
-      // stores each form element value in a JSON object and stores it in hidden element 'parseme'
+      // captures each form element value in a JSON object and stores it in hidden element 'parseme'
       function storeFormValuesToHiddenElement() {
         let thisVersion = '';
         const theVersionTemp = document.getElementById('Theversion').value;
@@ -462,6 +490,7 @@
         const numlines = document.getElementById('numlines').value;
         const TheData = document.getElementById('TheData').value;
         const Comment = document.getElementById('Comment').value;
+        const previousRecord = JSON.parse(localStorage.getItem('previousRecord'));
 
         const formObject = JSON.stringify({
           thisVersion,
@@ -473,6 +502,7 @@
           numlines,
           TheData,
           Comment,
+          previousRecord,
         });
 
         console.log('formObject to be stored in hidden element', formObject);
@@ -493,8 +523,8 @@
           var el =
             document.getElementById(i) ||
             document.querySelector('[name=' + i + ']');
-          if (el.type === 'radio')
-            el = document.querySelectorAll('[name=' + i + ']');
+        //   if (el.type === 'radio')
+        //     el = document.querySelectorAll('[name=' + i + ']');
 
           switch (typeof parseMeValue[i]) {
             case 'number':
@@ -514,9 +544,12 @@
                   if (el[j].value === parseMeValue[i]) el[j].checked = true;
                 }
               } else {
+                console.log('switch case default else result parseMeValue[i]:', parseMeValue[i]);
                 el.value = parseMeValue[i];
               }
           }
+          // call the function that sets the previous record to the element as a string
+          copyPreviousRecordFromLsToElement();
         }
 
         // getit();
@@ -585,7 +618,7 @@
           alert('Files are not supported');
         }
 
-        getit();
+        setFormElementsWithLsValues();
         Fixfields();
       };
 
@@ -953,7 +986,9 @@
 
             <div class="div-across-auto-align">
                 <label for="numlines">Number of Entries:</label>
-                <input name="numlines" type="text" id="numlines" maxlength="3" style="max-width: 4em;" class="readOnlyText" readonly title="Number of bib entries submitted." />
+                <input name="numlines" type="text" id="numlines" maxlength="3" style="max-width: 3em;" class="readOnlyText" readonly title="Number of bib entries submitted." />
+                <label for="endOfPriorBatch">End Of Prior Batch:</label>
+                <input name="endOfPriorBatch" type="text" id="endOfPriorBatch" style="max-width: 16em;" class="readOnlyText" readonly title="The last saved bib record."></input>
             </div>
             <div class="div-across-auto-align">
                 <textarea name="TheData" placeholder="Limit to a sensible number of entries." id="TheData" class="bibEntries" maxlength="1000"
