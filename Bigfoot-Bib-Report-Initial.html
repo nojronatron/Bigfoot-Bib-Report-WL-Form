@@ -355,20 +355,17 @@
       }
 
       function storePreviousRecord(bibNumber, action, timestamp, dayOfMonth, location) {
-      // initialize a new object and store bibNumber, action, timestamp, dayOfMonth, and location variables as properties
-      var previousRecord = {
-        runner: bibNumber,
-        action: action,
-        time: timestamp,
-        dayOfMonth: dayOfMonth,
-        location: location,
-      };
+        // initialize a new object and store bibNumber, action, timestamp, dayOfMonth, and location variables as properties
+        var previousRecord = {
+            runner: bibNumber,
+            action: action,
+            time: timestamp,
+            dayOfMonth: dayOfMonth,
+            location: location,
+        };
 
-      // store this object into localStorage
-      localStorage.setItem('previousRecord', JSON.stringify(previousRecord));
-      // update the end of prior batch textarea field with the previous record
-      const previousRecordString = `${bibNumber}, ${action}, ${timestamp}, ${dayOfMonth}, ${location}`;
-      document.getElementById('endOfPriorBatch').value = previousRecordString;
+        // store this object into localStorage
+        localStorage.setItem('previousRecord', JSON.stringify(previousRecord));
       }
 
       function FormatBibRecord(pTime, tRunner, action, tTime, doM, loc) {
