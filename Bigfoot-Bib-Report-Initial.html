@@ -527,11 +527,11 @@
         }
 
         for (var i in parseMeValue) {
-          var el =
-            document.getElementById(i) ||
-            document.querySelector('[name=' + i + ']');
-        //   if (el.type === 'radio')
-        //     el = document.querySelectorAll('[name=' + i + ']');
+            var el =
+                document.getElementById(i) ||
+                document.querySelector('[name=' + i + ']');
+            //   if (el.type === 'radio')
+            //     el = document.querySelectorAll('[name=' + i + ']');
             try {
                 if (i === 'previousRecord') {
                     console.log('processing previousRecord.');
@@ -549,35 +549,35 @@
                 console.log('continuing...');
             }
 
-          switch (typeof parseMeValue[i]) {
-            case 'number':
-              el.checked = parseMeValue[i];
-              break;
-            case 'object':
-                try{
-              if (el.options && parseMeValue[i] instanceof Array) {
-                for (var j = 0, jmax = el.options.length; j < jmax; ++j) {
-                  if (parseMeValue[i].indexOf(el.options[j].value) > -1)
-                    el.options[j].selected = true;
-                }
-            } 
-              }
-              catch (err) {
-                console.log('error reading an element:', err);
-            }
+            switch (typeof parseMeValue[i]) {
+                case 'number':
+                    el.checked = parseMeValue[i];
+                    break;
+                case 'object':
+                    try {
+                        if (el.options && parseMeValue[i] instanceof Array) {
+                            for (var j = 0, jmax = el.options.length; j < jmax; ++j) {
+                                if (parseMeValue[i].indexOf(el.options[j].value) > -1)
+                                    el.options[j].selected = true;
+                            }
+                        }
+                    }
+                    catch (err) {
+                        console.log('error reading an element:', err);
+                    }
 
-              break;
-            default:
-              if (el instanceof NodeList) {
-                for (var j = 0, jmax = el.length; j < jmax; ++j) {
-                  if (el[j].value === parseMeValue[i]) el[j].checked = true;
-                }
-              } else {
-                el.value = parseMeValue[i];
-              }
-          }
-          // call the function that sets the previous record to the element as a string
-          copyPreviousRecordFromLsToElement();
+                    break;
+                default:
+                    if (el instanceof NodeList) {
+                        for (var j = 0, jmax = el.length; j < jmax; ++j) {
+                            if (el[j].value === parseMeValue[i]) el[j].checked = true;
+                        }
+                    } else {
+                        el.value = parseMeValue[i];
+                    }
+            }
+            // call the function that sets the previous record to the element as a string
+            copyPreviousRecordFromLsToElement();
         }
 
         // getit();
