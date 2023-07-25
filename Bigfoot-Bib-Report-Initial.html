@@ -109,7 +109,7 @@
             const prevTime = previousItem.time || 'none';
             const prevDOM = previousItem.dayOfMonth || 'none';
             const prevMsgNum = previousItem.messageNumber || 'none';
-            console.log('previousItem:',previousItem);
+            // console.log('previousItem:',previousItem);
             console.log('previous Runner, Action, Time, DOM, MsgNum',prevRunner,prevAction,prevTime,prevDOM,prevMsgNum);
             const previousRecordString = `#${previousItem.runner}, ${previousItem.action}, ${previousItem.time}, D:${previousItem.dayOfMonth}, M#${previousItem.messageNumber}`;
             document.getElementById('endOfPriorBatch').value = previousRecordString;
@@ -415,7 +415,7 @@
 
       function saveTextAsFile() {
         var textToWrite = document.getElementById('parseme').value; // missing JSON.parse?
-        console.log('data copied from hidden element before saving to disk', document.getElementById('parseme').value);
+        // console.log('data copied from hidden element before saving to disk', document.getElementById('parseme').value);
         var fileNameToSaveAs = 'Bigfoot Bib Data ' + DateforFile() + '.txt';
         fileNameToSaveAs = prompt('', fileNameToSaveAs);
 
@@ -512,7 +512,7 @@
           previousRecord,
         });
 
-        console.log('formObject to be stored in hidden element', formObject);
+        // console.log('formObject to be stored in hidden element', formObject);
         document.getElementById('parseme').value = formObject;
       }
 
@@ -543,7 +543,7 @@
                 } else {
                     console.log('i did not match previousRecord, it is actually:', i);
                 }
-                console.log('i:', i);
+                // console.log('i:', i);
             } catch (err) {
                 console.log('error in previousRecord block:', err);
                 console.log('continuing...');
@@ -604,7 +604,7 @@
       }
 
       window.onload = function () {
-        const formVersion = '1.0.6';
+        const formVersion = '1.1.6';
         localStorage.setItem('BFVersion', formVersion);
         document.getElementById('thisVersion').innerText=`Version ${formVersion}`;
         document.getElementById('Theversion').value = formVersion;
@@ -632,7 +632,7 @@
 
                 fileReader.onload = function (e) {
                   document.getElementById('parseme').value = fileReader.result; // missing JSON.parse?
-                  console.log('json parsed data stored in hidden element', document.getElementById('parseme').value);
+                //   console.log('json parsed data stored in hidden element', document.getElementById('parseme').value);
                   populateForm();
                 };
                 fileReader.readAsText(fileTobeRead);
