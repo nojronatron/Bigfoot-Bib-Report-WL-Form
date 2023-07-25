@@ -104,7 +104,7 @@
         // if previous record key exists in local storage populate the element with string formatted value
         if (localStorage.getItem('previousRecord')) {
             const previousItem = JSON.parse(localStorage.getItem('previousRecord'));
-            const previousRecordString = `${previousItem.runner}, ${previousItem.action}, ${previousItem.time}, ${previousItem.dayOfMonth}, ${previousItem.location}`;
+            const previousRecordString = `#${previousItem.runner}, ${previousItem.action}, ${previousItem.time}, D:${previousItem.dayOfMonth}, M#${previousItem.messageNumber}`;
             document.getElementById('endOfPriorBatch').value = previousRecordString;
         }
       }
@@ -355,6 +355,8 @@
       }
 
       function storePreviousRecord(bibNumber, action, timestamp, dayOfMonth, location) {
+        // capture the current message number to store with the previous record
+        const messageNumber = document.getElementById('MessageNumber').value;
         // initialize a new object and store bibNumber, action, timestamp, dayOfMonth, and location variables as properties
         var previousRecord = {
             runner: bibNumber,
@@ -362,6 +364,7 @@
             time: timestamp,
             dayOfMonth: dayOfMonth,
             location: location,
+            messageNumber: messageNumber,
         };
 
         // store this object into localStorage
@@ -662,6 +665,9 @@
             }
             .block-line-div {
                 display: block;
+            }
+            .readOnlyText {
+                font-size: 0.6em;
             }
         }
 
@@ -982,10 +988,10 @@
         <hr />
 
             <div class="div-across-auto-align">
-                <label for="numlines">Number of Entries:</label>
-                <input name="numlines" type="text" id="numlines" maxlength="3" style="max-width: 3em;" class="readOnlyText" readonly title="Number of bib entries submitted." />
-                <label for="endOfPriorBatch">End Of Prior Batch:</label>
-                <input name="endOfPriorBatch" type="text" id="endOfPriorBatch" style="max-width: 16em;" class="readOnlyText" readonly title="The last saved bib record."></input>
+                <label for="numlines">Entry Count:</label>
+                <input name="numlines" type="text" id="numlines" size="3" class="readOnlyText" readonly title="Number of bib entries submitted." />
+                <label for="endOfPriorBatch">End Of Prior:</label>
+                <input name="endOfPriorBatch" type="text" id="endOfPriorBatch" size="24" class="readOnlyText" readonly title="The last saved bib record."></input>
             </div>
             <div class="div-across-auto-align">
                 <textarea name="TheData" placeholder="Limit to a sensible number of entries." id="TheData" class="bibEntries" maxlength="1000"
