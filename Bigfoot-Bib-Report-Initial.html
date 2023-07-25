@@ -104,6 +104,13 @@
         // if previous record key exists in local storage populate the element with string formatted value
         if (localStorage.getItem('previousRecord')) {
             const previousItem = JSON.parse(localStorage.getItem('previousRecord'));
+            const prevRunner = previousItem.runner || 'none';
+            const prevAction = previousItem.action || 'none';
+            const prevTime = previousItem.time || 'none';
+            const prevDOM = previousItem.dayOfMonth || 'none';
+            const prevMsgNum = previousItem.messageNumber || 'none';
+            console.log('previousItem:',previousItem);
+            console.log('previous Runner, Action, Time, DOM, MsgNum',prevRunner,prevAction,prevTime,prevDOM,prevMsgNum);
             const previousRecordString = `#${previousItem.runner}, ${previousItem.action}, ${previousItem.time}, D:${previousItem.dayOfMonth}, M#${previousItem.messageNumber}`;
             document.getElementById('endOfPriorBatch').value = previousRecordString;
         }
@@ -525,18 +532,40 @@
             document.querySelector('[name=' + i + ']');
         //   if (el.type === 'radio')
         //     el = document.querySelectorAll('[name=' + i + ']');
+            try {
+                if (i === 'previousRecord') {
+                    console.log('processing previousRecord.');
+                    const msgNumber = parseMeValue[i].messageNumber || 'none';
+                    // display to the screen
+                    document.getElementById('endOfPriorBatch').value = `#${parseMeValue[i].runner}, ${parseMeValue[i].action}, ${parseMeValue[i].time}, D:${parseMeValue[i].dayOfMonth}, M#${msgNumber}`;
+                    // no further processing necessary
+                    continue;
+                } else {
+                    console.log('i did not match previousRecord, it is actually:', i);
+                }
+                console.log('i:', i);
+            } catch (err) {
+                console.log('error in previousRecord block:', err);
+                console.log('continuing...');
+            }
 
           switch (typeof parseMeValue[i]) {
             case 'number':
               el.checked = parseMeValue[i];
               break;
             case 'object':
+                try{
               if (el.options && parseMeValue[i] instanceof Array) {
                 for (var j = 0, jmax = el.options.length; j < jmax; ++j) {
                   if (parseMeValue[i].indexOf(el.options[j].value) > -1)
                     el.options[j].selected = true;
                 }
+            } 
               }
+              catch (err) {
+                console.log('error reading an element:', err);
+            }
+
               break;
             default:
               if (el instanceof NodeList) {
@@ -544,7 +573,6 @@
                   if (el[j].value === parseMeValue[i]) el[j].checked = true;
                 }
               } else {
-                console.log('switch case default else result parseMeValue[i]:', parseMeValue[i]);
                 el.value = parseMeValue[i];
               }
           }
@@ -991,7 +1019,7 @@
                 <label for="numlines">Entry Count:</label>
                 <input name="numlines" type="text" id="numlines" size="3" class="readOnlyText" readonly title="Number of bib entries submitted." />
                 <label for="endOfPriorBatch">End Of Prior:</label>
-                <input name="endOfPriorBatch" type="text" id="endOfPriorBatch" size="24" class="readOnlyText" readonly title="The last saved bib record."></input>
+                <input name="endOfPriorBatch" type="text" id="endOfPriorBatch" size="25" class="readOnlyText" readonly title="The last saved bib record."></input>
             </div>
             <div class="div-across-auto-align">
                 <textarea name="TheData" placeholder="Limit to a sensible number of entries." id="TheData" class="bibEntries" maxlength="1000"
