@@ -162,7 +162,7 @@ This functionality will help you store all of the form field data in the form in
 1. Click the SAVE RACE DATA button.
 1. A pop-up will appear with a filename.
 1. Optional: Rename the file something that represents your aid station such as "Chain of Lakes WL Form Header.txt".
-1. Click OK and the file will be stored in the directory that your browser is set to download files to, usually `Downloads`.
+1. Click OK and the file will be saved to your `Downloads`` directory (by default).
 
 #### Load Existing Race Data
 
@@ -170,6 +170,10 @@ This functionality will help you store all of the form field data in the form in
 1. Click the LOAD RACE DATA button and a Windows Explorer view will appear. If you are lucky it will point to the correct directory where the data file lives.
 1. Select the ".txt" file you want to load data from. For example "Chain of Lakes WL Form Header.txt" to pre-load a partially completed form you may have saved previously.
 1. Continue entering bib data into the form and either Store the data again to a new ".txt" file, or click Submit.(#submit-completed-form-and-post-message-to-outbox) the data when done.
+
+_Note 1_: The last entry from the previously submitted batch will be displayed in the `End of Prior` textbox. This indicates the last bib entry from the last time the `Submit` button was pressed. This entry can be used in place of or supplement notations made on your source paperwork, for example, recording bib actions on paper and then relaying to this form.
+
+_Note 2_: Whenever you press `Save Race data` the form will store the last entered bib data to the file so that next time you `Load Race data`, the `End of Prior` field will be updated accordingly.
 
 ### Enter Bib Data Into The Form
 
@@ -184,15 +188,16 @@ The form allows you to click or tap on input fields to select them, and you can 
 
 The correctly formatted bib data will appear in the window below and the `Number of Entries` count will increase by `1` for every enty you complete.
 
-_Important_: All bib data inside the entries window will disappear without chance for recovery if you click the Clear Entries button. The only way to recover those entries is to have already used the [SAVE RACE DATA Button](#store-and-load-existing-race-data) as described above.
+_Important_: All bib data inside the entries window will disappear without chance for recovery if you click the Clear Entries button. The only way to recover those entries is to had previously pressed [SAVE RACE DATA Button](#store-and-load-existing-race-data) as described above.
 
 ### Submit Completed Form And Post Message To Outbox
 
 1. Check that the `Number of Entries` contains an accurrate count of entries.
+1. Double-check `Message Number` is actually incremented by one compared to the previous message _already posted to the outbox or sent successfully_.
 1. Add any free-form comments in the Comments box near the bottom of the form. _Do not include time-sensitive information!_ Use another mode of communication instead.
 1. Click `Save Race data` to store the completed data.
 1. Click `SUBMIT`.
-1. The browser tab will tell you it is safe to close it but _DO NOT CLOSE IT_. Try to leave one browser tab open to get a fully featured experience using the Form.
+1. The browser tab will tell you it is safe to close it but _I recommend you leave just 1 tab open_ to get a fully featured experience using this Form.
 1. Swith to the fully-populated message (`Alt + Tab` on the keyboard or select the Winlink Message icon on the Task Bar).
 1. Click `Post Message to Outbox` and follow appropriate procedures for transmitting the message at an appropriate time.
 
