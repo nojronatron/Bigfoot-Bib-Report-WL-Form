@@ -21,7 +21,7 @@
         var eventTitleFormatted = document.getElementById('EventTitle');
         localStorage.setItem('RTrackertitle', eventTitleFormatted.value);
         var msgNumFormatted = document.getElementById('MessageNumber');
-        localStorage.setItem('RTrackermsgNum', msgNumFormatted.value);
+        localStorage.setItem('MessageNumber', msgNumFormatted.value);
         var locationLong = lengthenLocation(locationFormatted.value);
         var regulartitle =
           document.getElementById('EventTitle').value +
@@ -50,7 +50,7 @@
         const storedAddress = localStorage.getItem('RTrackeradd');
         const storedLocation = localStorage.getItem('RTrackerloc');
         const storedTitle = localStorage.getItem('RTrackertitle');
-        const storedMsgNumber = localStorage.getItem('RTrackermsgNum');
+        const storedMsgNumber = localStorage.getItem('MessageNumber');
 
         if (document.getElementById('address').value == '' && storedAddress != '') {
           document.getElementById('address').value = storedAddress;
@@ -83,7 +83,7 @@
         // end suspected bug
         var storedTitle = localStorage.getItem('RTrackertitle');
         document.forms[0].EventTitle.value = storedTitle;
-        var storedMsgNumber = localStorage.getItem('RTrackermsgNum');
+        var storedMsgNumber = localStorage.getItem('MessageNumber');
         document.forms[0].MessageNumber.value = storedMsgNumber;
         var locationLong = lengthenLocation(storedLocation);
         var regulartitle =
@@ -592,19 +592,15 @@
       }
 
       function incrementMsgNum() {
-        console
         const formMsgNum = Number.parseInt(document.getElementById('MessageNumber').value, 10);
-        const lsMsgNum = Number.parseInt(localStorage.getItem('RTrackermsgNum'), 10);
+        const lsMsgNum = Number.parseInt(localStorage.getItem('MessageNumber'), 10);
         const incrMsgNum = formMsgNum ? formMsgNum + 1 : 1;
         document.getElementById('MessageNumber').value = incrMsgNum;
-
-        if (lsMsgNum && lsMsgNum < incrMsgNum) {
-          localStorage.setItem('RTrackermsgNum', incrMsgNum);
-        }
+        store();
       }
 
       window.onload = function () {
-        const formVersion = '1.1.6';
+        const formVersion = '1.1.7';
         localStorage.setItem('BFVersion', formVersion);
         document.getElementById('thisVersion').innerText=`Version ${formVersion}`;
         document.getElementById('Theversion').value = formVersion;
@@ -925,7 +921,7 @@
             </div>
             <div class="block-line-div">
                 <label for="MessageNumber">Message #</label>
-                <input name="MessageNumber" type="text" id="MessageNumber" maxlength="3" style="max-width: 3em;" onchange="store();" placeholder="1" />
+                <input name="MessageNumber" type="text" id="MessageNumber" maxlength="3" style="max-width: 3em;" onchange="store();" />
                 <input name="incrMsgNum" type="button" id="incrMsgNum" value="increment" onclick="incrementMsgNum();" />
                 <!-- invisible label that screen readers can still use -->
                 <label for="incrMsgNum" class="screen-reader">Increment</label>
