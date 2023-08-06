@@ -592,15 +592,11 @@
       }
 
       function incrementMsgNum() {
-        console
         const formMsgNum = Number.parseInt(document.getElementById('MessageNumber').value, 10);
         const lsMsgNum = Number.parseInt(localStorage.getItem('RTrackermsgNum'), 10);
         const incrMsgNum = formMsgNum ? formMsgNum + 1 : 1;
         document.getElementById('MessageNumber').value = incrMsgNum;
-
-        if (lsMsgNum && lsMsgNum < incrMsgNum) {
-          localStorage.setItem('RTrackermsgNum', incrMsgNum);
-        }
+        store();
       }
 
       window.onload = function () {
