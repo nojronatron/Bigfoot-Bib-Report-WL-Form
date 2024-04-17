@@ -95,7 +95,7 @@
         document.getElementById('msgsubject').value = regulartitle;
         document.getElementById('MessageNumber').value = storedMsgNumber;
         var formatNoteText =
-          '* The entries in this email are TAB delimited. This allows you to copy and paste into a spreadsheet.';
+          '* The entries in this email are comma delimited. This allows you to copy and paste into a spreadsheet.';
         document.getElementById('FormatNote').value = formatNoteText;
         copyPreviousRecordFromLsToElement();
       }
@@ -126,7 +126,7 @@
         document.getElementById('numlines').disabled = false;
         document.getElementById('numlines').value = '0';
         var formatNoteText =
-          '* The entries in this email are TAB delimited. This allows you to copy and paste into a spreadsheet.';
+          '* The entries in this email are comma delimited. This allows you to copy and paste into a spreadsheet.';
         document.getElementById('FormatNote').value = formatNoteText;
       }
 
@@ -388,13 +388,13 @@
 
         return (
           tRunner +
-          '\t' +
+          ', ' +
           action +
-          '\t' +
+          ', ' +
           newTime +
-          '\t' +
+          ', ' +
           doM +
-          '\t' +
+          ', ' +
           loc +
           '\n' +
           pTime
@@ -518,9 +518,9 @@
 
       // takes values stored in parseme hidden element, iterates through form elements and populates them with values
       function populateForm() {
-        console.log('entered populateForm function');
+        // console.log('entered populateForm function');
         const parseMeValue = JSON.parse(document.getElementById('parseme').value);
-        console.log('parseMeValue from hidden element', parseMeValue);
+        // console.log('parseMeValue from hidden element', parseMeValue);
         if (!Object.prototype.toString.call(parseMeValue) === '[object Object]') {
           console.log('parseme element value could not be parsed by JSON. Exiting function.');
           return;
@@ -963,7 +963,7 @@
         <!-- hidden elements -->
         <input name="Theversion" type="hidden" id="Theversion" />
         <input name="FormatNote" type="hidden" id="FormatNote"
-            value="* The entries in this email are TAB delimited. This allows you to copy and paste into a spreadsheet." />
+            value="* The entries in this email are comma delimited. This allows you to copy and paste into a spreadsheet." />
         <textarea name="beforeformatting" id="beforeformatting" style="display: none"></textarea>
         <input type="file" id="txtfiletoread" accept=".txt" style="display: none" />
         <input name="sendto" type="hidden" id="sendto" />
@@ -1154,7 +1154,7 @@
                 <p>
                     The information that is sent via WinLink can be copied and pasted directly into an excel
                     spreadsheet,
-                    or saved to a file and then imported as a &quot;Tab Delimited&quot; file.
+                    or saved to a file and then imported as a &quot;Comma-Delimited&quot; file.
                 </p>
                 <p>
                     The Subject Line will be formatted for you, for example:
