@@ -789,8 +789,7 @@
             <div class="block-line-div">
                 <label for="RiderNum">Bib Number:</label>
                 <input name="RiderNum" type="text" id="RiderNum" maxlength="15" style="max-width: 6em;"
-                onkeypress="if(event.keyCode==13){a=setFocus(); return false;}"
-                onblur="javascript:this.value=this.value.trim();this.value=this.value.toUpperCase(); putTime();" />
+                 />
             </div>
             <div class="block-line-div">
                 <label for="Timefld">Time:</label>
@@ -970,5 +969,22 @@
     </div>
 
     </section>
+
+    <script language="javascript" type="text/javascript">
+        // onkeypress="if(event.keyCode==13){a=setFocus(); return false;}"
+        // onblur="javascript:this.value=this.value.trim();this.value=this.value.toUpperCase(); putTime();"
+        var riderNumHandler = getElementById('RiderNum');
+        riderNumHandler.addEventListener('keypress', function (e) {
+            if (e.keyCode === 13 || e.key === 'Enter' || e.code === 'Enter') {
+                getElementById('Timefld').focus();
+                return false;
+            }
+        });
+        riderNumHandler.addEventListener('blur', function () {
+            this.value = this.value.trim();
+            this.value = this.value.toUpperCase();
+            putTime();
+        });
+    </script>
 </body>
 </html>
