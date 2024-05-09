@@ -15,7 +15,7 @@
     <script language="javascript" type="text/javascript">
     
     // gets an element by id
-    function getElementById(id) {
+    function GetElementById(id) {
         return document.getElementById(id);
     }
 
@@ -32,58 +32,58 @@
     
     function getDayOfMonth(date) {
         let day = date.getDate();
-        day = getElementById('yesterday').checked ? (day === 1 ? 31 : day - 1) : day;
+        day = GetElementById('yesterday').checked ? (day === 1 ? 31 : day - 1) : day;
         return day.toString().padStart(2, '0');
     }
     
-    function resetForm() {
-        ['RiderNum', 'Timefld'].forEach(id => getElementById(id).value = '');
-        getElementById('yesterday').checked = false;
-        getElementById('RiderNum').focus();
+    function ResetForm() {
+        ['RiderNum', 'Timefld'].forEach(id => GetElementById(id).value = '');
+        GetElementById('yesterday').checked = false;
+        GetElementById('RiderNum').focus();
     }
     
     function handleAddBib(bibAction) {
-        const riderNum = getElementById('RiderNum').value;
+        const riderNum = GetElementById('RiderNum').value;
         if (riderNum && bibAction != undefined && bibAction.length > 0) {
-            let timeElValue = formatTime(getElementById('Timefld').value);
+            let timeElValue = formatTime(GetElementById('Timefld').value);
             let time = timeElValue.replace(':', '');
             let dayOfMonth = getDayOfMonth(new Date());
-            let locationVal = getElementById('Location').value;
+            let locationVal = GetElementById('Location').value;
             let shortLoc = shortenLocation(locationVal);
-            let previousRecordsTab = getElementById('TheData').value;
-            getElementById('TheData').value = formatBibRecord(previousRecordsTab, riderNum, bibAction, time, dayOfMonth, shortLoc, '\t');
-            let previousRecordsComma = getElementById('TheCsvData').value;
-            getElementById('TheCsvData').value = formatBibRecord(previousRecordsComma, riderNum, bibAction, time, dayOfMonth, shortLoc, ', ');
-            resetForm();
+            let previousRecordsTab = GetElementById('TheData').value;
+            GetElementById('TheData').value = formatBibRecord(previousRecordsTab, riderNum, bibAction, time, dayOfMonth, shortLoc, '\t');
+            let previousRecordsComma = GetElementById('TheCsvData').value;
+            GetElementById('TheCsvData').value = formatBibRecord(previousRecordsComma, riderNum, bibAction, time, dayOfMonth, shortLoc, ', ');
+            ResetForm();
             countLines();
         } else {
             alert('Enter Runner/Bib number');
-            getElementById('RiderNum').focus();
+            GetElementById('RiderNum').focus();
         }
     }
     
     function storePreviousRecord(bibNumber, action, timestamp, dayOfMonth, location) {
-        const messageNumber = getElementById('MessageNumber').value;
+        const messageNumber = GetElementById('MessageNumber').value;
         // rest of the function...
     }
 
       function elementValuesToLocalStorage() {
-        let addressFormatted = getElementById('address');
+        let addressFormatted = GetElementById('address');
         localStorage.setItem('RTrackeradd', addressFormatted.value);
-        let locationFormatted= getElementById('Location');
+        let locationFormatted= GetElementById('Location');
         localStorage.setItem('RTrackerloc', locationFormatted.value);
-        let eventTitleFormatted = getElementById('EventTitle');
+        let eventTitleFormatted = GetElementById('EventTitle');
         localStorage.setItem('RTrackertitle', eventTitleFormatted.value);
-        let msgNumFormatted = getElementById('MessageNumber');
+        let msgNumFormatted = GetElementById('MessageNumber');
         localStorage.setItem('MessageNumber', msgNumFormatted.value);
         let locationLong = lengthenLocation(locationFormatted.value);
         let regulartitle =
-          getElementById('EventTitle').value +
+          GetElementById('EventTitle').value +
           ' ' +
           locationLong +
           ' Message #' +
           msgNumFormatted.value;
-        getElementById('msgsubject').value = regulartitle;
+        GetElementById('msgsubject').value = regulartitle;
       }
 
       function shortenLocation(locationVal) {
@@ -102,24 +102,24 @@
       // set form elements with the values stored in local storage
       function setFormElementsWithLsValues() {
         let storedAddress = localStorage.getItem('RTrackeradd');
-        getElementById('address').value = storedAddress;
+        GetElementById('address').value = storedAddress;
         let storedLocation = localStorage.getItem('RTrackerloc');
 
         if (storedLocation !== '') {
-            getElementById('Location').value = storedLocation;
+            GetElementById('Location').value = storedLocation;
         } else {
-            getElementById('location').value = '--Choose a station--';
+            GetElementById('location').value = '--Choose a station--';
         }
 
         let storedTitle = localStorage.getItem('RTrackertitle');
-        getElementById('EventTitle').value = storedTitle;
+        GetElementById('EventTitle').value = storedTitle;
         let storedMsgNumber = localStorage.getItem('MessageNumber');
-        getElementById('MessageNumber').value = storedMsgNumber;
+        GetElementById('MessageNumber').value = storedMsgNumber;
         let locationLong = lengthenLocation(storedLocation);
         let regulartitle = `${storedTitle} ${locationLong} Message #${storedMsgNumber}`;
-        getElementById('msgsubject').value = regulartitle;
-        getElementById('MessageNumber').value = storedMsgNumber;
-        getElementById('FormatNote').value = '* The entries in the message will be TAB delimited, allowing copy/paste into a spreadsheet.';
+        GetElementById('msgsubject').value = regulartitle;
+        GetElementById('MessageNumber').value = storedMsgNumber;
+        GetElementById('FormatNote').value = '* The entries in the message will be TAB delimited, allowing copy/paste into a spreadsheet.';
         copyPreviousRecordFromLsToElement();
       }
 
@@ -134,36 +134,35 @@
             const prevMsgNum = previousItem.messageNumber || 'none';
             console.log('previous Runner, Action, Time, DOM, MsgNum', prevRunner, prevAction, prevTime, prevDOM, prevMsgNum);
             const previousRecordString = `#${previousItem.runner}, ${previousItem.action}, ${prevTime}, D:${previousItem.dayOfMonth}, M#${previousItem.messageNumber}`;
-            getElementById('endOfPriorBatch').value = previousRecordString;
+            GetElementById('endOfPriorBatch').value = previousRecordString;
         }
       }
 
       function ClearParticipantData() {
-        getElementById('TheData').value = '';
-        getElementById('TheCsvData').value = '';
-        getElementById('RiderNum').focus();
-        getElementById('Inbtn').disabled = false;
-        getElementById('Outbtn').disabled = false;
-        getElementById('Dropbtn').disabled = false;
-        getElementById('RiderNum').disabled = false;
-        getElementById('numlines').disabled = false;
-        getElementById('numlines').value = '0';
+        GetElementById('TheData').value = '';
+        GetElementById('TheCsvData').value = '';
+        GetElementById('Inbtn').disabled = false;
+        GetElementById('Outbtn').disabled = false;
+        GetElementById('Dropbtn').disabled = false;
+        GetElementById('numlines').disabled = false;
+        GetElementById('numlines').value = '0';
         let formatNoteText =
           '* The entries in this email are TAB delimited. This allows you to copy and paste into a spreadsheet.';
-        getElementById('FormatNote').value = formatNoteText;
+        GetElementById('FormatNote').value = formatNoteText;
+        ResetForm();
       }
 
       function countLines() {
         delBlankLines();
-        let theDataText = getElementById('TheData').value;
+        let theDataText = GetElementById('TheData').value;
         let theDataTextUpdate = theDataText.replace(/\s+$/, '');
         let theDataTextUpdSplit = theDataTextUpdate.split('\n');
-        getElementById('numlines').value = theDataTextUpdSplit.length;
-        getElementById('numlines').disabled = false;
+        GetElementById('numlines').value = theDataTextUpdSplit.length;
+        GetElementById('numlines').disabled = false;
       }
 
       function delBlankLines() {
-        let stringArray = getElementById('TheData').value.split('\n');
+        let stringArray = GetElementById('TheData').value.split('\n');
         const tempStringArray = [''];
         let x = 0;
 
@@ -177,7 +176,7 @@
         let joinedStringArray = tempStringArray.join('\n');
         let lookfor = '//';
         let resultValue = joinedStringArray.replace(/lookfor/gm, '/');
-        getElementById('TheData').value = resultValue + '\n';
+        GetElementById('TheData').value = resultValue + '\n';
       }
 
       function Docleardata() {
@@ -192,7 +191,7 @@
         let minutes = currentTime.getMinutes();
         let formattedMinutes = (minutes < 10 ? '0' : '') + minutes; // Add leading zero if minutes is less than 10
         let currentTimeString = `${hours}:${formattedMinutes}`;
-        getElementById('Timefld').value = currentTimeString;
+        GetElementById('Timefld').value = currentTimeString;
     }
 
       function addIn() {
@@ -209,7 +208,7 @@
 
       function storePreviousRecord(bibNumber, action, timestamp, dayOfMonth, location) {
         // capture the current message number to store with the previous record
-        const messageNumber = getElementById('MessageNumber').value;
+        const messageNumber = GetElementById('MessageNumber').value;
         // initialize a new object and store bibNumber, action, timestamp, dayOfMonth, and location variables as properties
         let previousRecord = {
             runner: bibNumber,
@@ -260,13 +259,13 @@
       }
 
       function setFocus() {
-        getElementById('Timefld').focus();
+        GetElementById('Timefld').focus();
         return false;
       }
 
       // converts bib records in TheData element from tab-separated to comma-separated values
     function convertRawBibRecordsToArray() {
-        let bibRecordsRaw = getElementById('TheData').value;
+        let bibRecordsRaw = GetElementById('TheData').value;
         const bibRecordsArray = bibRecordsRaw.split('\n');
         const cleanBibRecordsArray = [];
         
@@ -282,13 +281,13 @@
 
     function createJsonObjectFromFormElements(cleanBibRecordsArray) {
         const jsonObject = {
-            EventTitle: getElementById('EventTitle').value,
-            MessageNumber: getElementById('MessageNumber').value,
-            address: getElementById('address').value,
-            Location: getElementById('Location').value,
-            msgsubject: getElementById('msgsubject').value,
-            numlines: getElementById('numlines').value,
-            Comment: getElementById('Comment').value,
+            EventTitle: GetElementById('EventTitle').value,
+            MessageNumber: GetElementById('MessageNumber').value,
+            address: GetElementById('address').value,
+            Location: GetElementById('Location').value,
+            msgsubject: GetElementById('msgsubject').value,
+            numlines: GetElementById('numlines').value,
+            Comment: GetElementById('Comment').value,
             TheCsvData: cleanBibRecordsArray
         };
 
@@ -343,15 +342,15 @@
       // captures each form element value in a JSON object and stores it in hidden element 'parseme'
       function storeFormValuesToHiddenElement() {
         let thisVersion = '2.0.0';
-        const theVersionTemp = getElementById('Theversion').value;
-        const EventTitle = getElementById('EventTitle').value;
-        const MessageNumber = getElementById('MessageNumber').value;
-        const address = getElementById('address').value;
-        const Location = getElementById('Location').value;
-        const msgsubject = getElementById('msgsubject').value;
-        const numlines = getElementById('numlines').value;
-        const TheData = getElementById('TheData').value;
-        const Comment = getElementById('Comment').value;
+        const theVersionTemp = GetElementById('Theversion').value;
+        const EventTitle = GetElementById('EventTitle').value;
+        const MessageNumber = GetElementById('MessageNumber').value;
+        const address = GetElementById('address').value;
+        const Location = GetElementById('Location').value;
+        const msgsubject = GetElementById('msgsubject').value;
+        const numlines = GetElementById('numlines').value;
+        const TheData = GetElementById('TheData').value;
+        const Comment = GetElementById('Comment').value;
         const previousRecord = JSON.parse(localStorage.getItem('previousRecord'));
 
         const formObject = JSON.stringify({
@@ -367,7 +366,7 @@
           previousRecord,
         });
 
-        getElementById('parseme').value = formObject;
+        GetElementById('parseme').value = formObject;
       }
 
     // takes values stored in parseme hidden element, iterates through form elements and populates them with values
@@ -375,18 +374,18 @@
         if (jsonStringData === undefined || jsonStringData.length < 1) {
             console.log('jsonStringData is empty. Exiting function.');
         } else {
-            getElementById('EventTitle').value = jsonStringData.EventTitle;
-            getElementById('MessageNumber').value = jsonStringData.MessageNumber ? jsonStringData.MessageNumber : 1;
-            getElementById('address').value = jsonStringData.address ? jsonStringData.address : '';
-            getElementById('Location').value = jsonStringData.Location ? jsonStringData.Location : '';
-            getElementById('msgsubject').value = jsonStringData.msgsubject ? jsonStringData.msgsubject : '';
-            getElementById('numlines').value = jsonStringData.numlines ? jsonStringData.numlines : 0;
-            getElementById('Comment').value = jsonStringData.Comment ? jsonStringData.Comment : '';
-            getElementById('endOfPriorBatch').value = jsonStringData.previousRecord ? jsonStringData.previousRecord : '';
+            GetElementById('EventTitle').value = jsonStringData.EventTitle;
+            GetElementById('MessageNumber').value = jsonStringData.MessageNumber ? jsonStringData.MessageNumber : 1;
+            GetElementById('address').value = jsonStringData.address ? jsonStringData.address : '';
+            GetElementById('Location').value = jsonStringData.Location ? jsonStringData.Location : '';
+            GetElementById('msgsubject').value = jsonStringData.msgsubject ? jsonStringData.msgsubject : '';
+            GetElementById('numlines').value = jsonStringData.numlines ? jsonStringData.numlines : 0;
+            GetElementById('Comment').value = jsonStringData.Comment ? jsonStringData.Comment : '';
+            GetElementById('endOfPriorBatch').value = jsonStringData.previousRecord ? jsonStringData.previousRecord : '';
             
             const theCsvDataRaw = jsonStringData.TheCsvData;
             let csvData = theCsvDataRaw.join('\n');
-            getElementById('TheCsvData').value = csvData;
+            GetElementById('TheCsvData').value = csvData;
 
             let tabbedData = theCsvDataRaw.map(item => {
                 if (item !== undefined && item.length > 0) {
@@ -394,7 +393,7 @@
                 }
             }).join('\n');
 
-            getElementById('TheData').value = tabbedData;
+            GetElementById('TheData').value = tabbedData;
             copyPreviousRecordFromLsToElement();
         }
     }
@@ -406,10 +405,10 @@
     }
 
     function incrementMsgNum() {
-        const formMsgNum = Number.parseInt(getElementById('MessageNumber').value, 10);
+        const formMsgNum = Number.parseInt(GetElementById('MessageNumber').value, 10);
         const lsMsgNum = Number.parseInt(localStorage.getItem('MessageNumber'), 10);
         const incrMsgNum = formMsgNum ? formMsgNum + 1 : 1;
-        getElementById('MessageNumber').value = incrMsgNum;
+        GetElementById('MessageNumber').value = incrMsgNum;
         elementValuesToLocalStorage();
     }
 
@@ -420,7 +419,7 @@
 
         // Check the support for the File API
         if (window.File && window.FileReader && window.FileList && window.Blob) {
-            let fileSelected = getElementById('txtfiletoread');
+            let fileSelected = GetElementById('txtfiletoread');
 
             // begin fileSelected Change Event Listener
             fileSelected.addEventListener('change', function (e) {
@@ -460,7 +459,7 @@
     });
 
     function fixFields() {
-        autoGrowTextArea(getElementById('TheCsvData'));
+        autoGrowTextArea(GetElementById('TheCsvData'));
     }
     </script>
 
@@ -973,10 +972,10 @@
     <script language="javascript" type="text/javascript">
         // onkeypress="if(event.keyCode==13){a=setFocus(); return false;}"
         // onblur="javascript:this.value=this.value.trim();this.value=this.value.toUpperCase(); putTime();"
-        var riderNumHandler = getElementById('RiderNum');
+        var riderNumHandler = GetElementById('RiderNum');
         riderNumHandler.addEventListener('keypress', function (e) {
             if (e.keyCode === 13 || e.key === 'Enter' || e.code === 'Enter') {
-                getElementById('Timefld').focus();
+                GetElementById('Timefld').focus();
                 return false;
             }
         });
