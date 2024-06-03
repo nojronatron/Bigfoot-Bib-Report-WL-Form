@@ -22,7 +22,7 @@
     }
 
     // updates both csv and tabbed bib records into their respective elements
-    function updateCsvAndTabRecordsElements(riderNum, bibAction, time, dayOfMonth, shortLoc){
+    function updateCsvAndTabRecordsElement(riderNum, bibAction, time, dayOfMonth, shortLoc){
         // format the csv bib records first in case they were edited
         let previousRecordsComma = GetElementById('TheCsvData').value;
         let previousRecordsTab = convertCsvRecordsToTabbed();
@@ -866,7 +866,7 @@
             </div>
             <div class="div-across-auto-align">
                 <textarea name="TheCsvData" placeholder="Limit to a sensible number of entries." id="TheCsvData" class="bibEntries" maxlength="1200"
-                onkeypress="if(event.keyCode==13){countLines()}" onblur="countLines()"></textarea> <!-- visible, put csv items here -->
+                onkeypress="if(event.keyCode==13){countLines()}" onblur="handleCsvDataEdited()"></textarea> <!-- visible, put csv items here -->
                 <textarea name="TheData" id="TheData" class="bibEntries" maxlength="1200" style="display:none"></textarea> <!-- style display:none, put tab delim data here -->
             </div>
             <div class="div-across-auto-align">
