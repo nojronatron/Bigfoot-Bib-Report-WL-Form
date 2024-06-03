@@ -14,6 +14,50 @@
 
     <script language="javascript" type="text/javascript">
     
+    // converts bib records from csv-delimited and returns tab-delimited version
+    function convertCsvRecordsToTabbed() {
+        let csvData = GetElementById('TheCsvData').value;
+        let tabbedData = csvData.replace(/, /g, '\t');
+        return tabbedData;
+    }
+
+    // updates both csv and tabbed bib records into their respective elements
+    function updateCsvAndTabRecordsElements(riderNum, bibAction, time, dayOfMonth, shortLoc){
+        // format the csv bib records first in case they were edited
+        let previousRecordsComma = GetElementById('TheCsvData').value;
+        let previousRecordsTab = convertCsvRecordsToTabbed();
+
+        // format the comma-separated bib records
+        GetElementById('TheCsvData').value = formatBibRecord(previousRecordsComma, riderNum, bibAction, time, dayOfMonth, shortLoc, ', ');
+
+        // format the tabbed bib records
+        GetElementById('TheData').value = formatBibRecord(previousRecordsTab, riderNum, bibAction, time, dayOfMonth, shortLoc, '\t');
+    }
+
+    // pluck the top record from the csv data and return to the caller
+    function getTopRecordFromCsvData() {
+        let csvData = GetElementById('TheCsvData').value;
+        let csvDataArray = csvData.split('\n');
+        let topRecord = csvDataArray[0];
+        return topRecord;
+    }
+
+    // copy csv data and convert it to tabbed then set tabbed data to tabbed data element
+    function handleCsvDataEdited() {
+        let csvData = GetElementById('TheCsvData').value;
+        console.log('handleCsvDataEdited, csvData is: ', csvData);
+        let tabbedData = convertCsvRecordsToTabbed();
+        console.log('handleCsvDataEdited, tabbedData is: ', tabbedData);
+        GetElementById('TheData').value = tabbedData;
+        let lastEnteredBibRecord = getTopRecordFromCsvData();
+        console.log('handleCsvDataEdited, lastEnteredBibRecord value is: ', lastEnteredBibRecord);
+        console.log('handleCsvDataEdited, lastEnteredBibRecord in localStorage is: ', localStorage.getItem('previousRecord'));
+        // force a comma-space delimiter for readability
+        let lastEnteredBibRecordParts = lastEnteredBibRecord.split(', '); 
+        storePreviousRecord(lastEnteredBibRecordParts[0], lastEnteredBibRecordParts[1], lastEnteredBibRecordParts[2], lastEnteredBibRecordParts[3], lastEnteredBibRecordParts[4]);
+        console.log('handleCsvDataEdited, lastEnteredBibRecord in localStorage is now: ', localStorage.getItem('previousRecord'));
+    }
+
     // gets an element by id
     function GetElementById(id) {
         return document.getElementById(id);
@@ -42,6 +86,7 @@
         GetElementById('RiderNum').focus();
     }
     
+    // validate bib number and time then add bib record to csv and tab record elements
     function handleAddBib(bibAction) {
         const riderNum = GetElementById('RiderNum').value;
         if (riderNum && bibAction != undefined && bibAction.length > 0) {
@@ -50,21 +95,18 @@
             let dayOfMonth = getDayOfMonth(new Date());
             let locationVal = GetElementById('Location').value;
             let shortLoc = shortenLocation(locationVal);
-            let previousRecordsTab = GetElementById('TheData').value;
-            GetElementById('TheData').value = formatBibRecord(previousRecordsTab, riderNum, bibAction, time, dayOfMonth, shortLoc, '\t');
-            let previousRecordsComma = GetElementById('TheCsvData').value;
-            GetElementById('TheCsvData').value = formatBibRecord(previousRecordsComma, riderNum, bibAction, time, dayOfMonth, shortLoc, ', ');
+            storePreviousRecord(riderNum, bibAction, time, dayOfMonth, shortLoc);
+            updateCsvAndTabRecordsElement(riderNum, bibAction, time, dayOfMonth, shortLoc);
+            // let previousRecordsTab = GetElementById('TheData').value;
+            // GetElementById('TheData').value = formatBibRecord(previousRecordsTab, riderNum, bibAction, time, dayOfMonth, shortLoc, '\t');
+            // let previousRecordsComma = GetElementById('TheCsvData').value;
+            // GetElementById('TheCsvData').value = formatBibRecord(previousRecordsComma, riderNum, bibAction, time, dayOfMonth, shortLoc, ', ');
             ResetForm();
             countLines();
         } else {
             alert('Enter Runner/Bib number');
             GetElementById('RiderNum').focus();
         }
-    }
-    
-    function storePreviousRecord(bibNumber, action, timestamp, dayOfMonth, location) {
-        const messageNumber = GetElementById('MessageNumber').value;
-        // rest of the function...
     }
 
       function elementValuesToLocalStorage() {
