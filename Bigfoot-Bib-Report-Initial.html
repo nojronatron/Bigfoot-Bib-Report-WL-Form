@@ -45,17 +45,12 @@
     // copy csv data and convert it to tabbed then set tabbed data to tabbed data element
     function handleCsvDataEdited() {
         let csvData = GetElementById('TheCsvData').value;
-        console.log('handleCsvDataEdited, csvData is: ', csvData);
         let tabbedData = convertCsvRecordsToTabbed();
-        console.log('handleCsvDataEdited, tabbedData is: ', tabbedData);
         GetElementById('TheData').value = tabbedData;
         let lastEnteredBibRecord = getTopRecordFromCsvData();
-        console.log('handleCsvDataEdited, lastEnteredBibRecord value is: ', lastEnteredBibRecord);
-        console.log('handleCsvDataEdited, lastEnteredBibRecord in localStorage is: ', localStorage.getItem('previousRecord'));
         // force a comma-space delimiter for readability
         let lastEnteredBibRecordParts = lastEnteredBibRecord.split(', '); 
         storePreviousRecord(lastEnteredBibRecordParts[0], lastEnteredBibRecordParts[1], lastEnteredBibRecordParts[2], lastEnteredBibRecordParts[3], lastEnteredBibRecordParts[4]);
-        console.log('handleCsvDataEdited, lastEnteredBibRecord in localStorage is now: ', localStorage.getItem('previousRecord'));
     }
 
     // gets an element by id
@@ -64,15 +59,15 @@
     }
 
     // Formats the supplied time as a string in the format HH:MM
-        function formatTime(theTime) {
-            if (!theTime || typeof theTime !== 'string') {
-                return '';
-            } else {
-                // copy timeString to a new variable as a for-sure string
-                var timeString = theTime.toString();
-                return `${timeString.slice(0, 2)}:${timeString.slice(2)}`;
-            }
+    function formatTime(theTime) {
+        if (!theTime || typeof theTime !== 'string') {
+            return '';
+        } else {
+            // copy timeString to a new variable as a for-sure string
+            var timeString = theTime.toString();
+            return `${timeString.slice(0, 2)}:${timeString.slice(2)}`;
         }
+    }
     
     function getDayOfMonth(date) {
         let day = date.getDate();
@@ -97,10 +92,6 @@
             let shortLoc = shortenLocation(locationVal);
             storePreviousRecord(riderNum, bibAction, time, dayOfMonth, shortLoc);
             updateCsvAndTabRecordsElement(riderNum, bibAction, time, dayOfMonth, shortLoc);
-            // let previousRecordsTab = GetElementById('TheData').value;
-            // GetElementById('TheData').value = formatBibRecord(previousRecordsTab, riderNum, bibAction, time, dayOfMonth, shortLoc, '\t');
-            // let previousRecordsComma = GetElementById('TheCsvData').value;
-            // GetElementById('TheCsvData').value = formatBibRecord(previousRecordsComma, riderNum, bibAction, time, dayOfMonth, shortLoc, ', ');
             ResetForm();
             countLines();
         } else {
@@ -323,6 +314,7 @@
 
     function createJsonObjectFromFormElements(cleanBibRecordsArray) {
         const jsonObject = {
+            FormVersion: GetElementById('FormVersion').value,
             EventTitle: GetElementById('EventTitle').value,
             MessageNumber: GetElementById('MessageNumber').value,
             address: GetElementById('address').value,
@@ -383,8 +375,7 @@
 
       // captures each form element value in a JSON object and stores it in hidden element 'parseme'
       function storeFormValuesToHiddenElement() {
-        let thisVersion = '2.0.0';
-        const theVersionTemp = GetElementById('Theversion').value;
+        const FormVersion = GetElementById('FormVersion').value;
         const EventTitle = GetElementById('EventTitle').value;
         const MessageNumber = GetElementById('MessageNumber').value;
         const address = GetElementById('address').value;
@@ -396,7 +387,7 @@
         const previousRecord = JSON.parse(localStorage.getItem('previousRecord'));
 
         const formObject = JSON.stringify({
-          thisVersion,
+          FormVersion,
           EventTitle,
           MessageNumber,
           address,
@@ -455,9 +446,10 @@
     }
 
     window.addEventListener('load', function () {
-        const formVersion = '2.0.0';
+        const formVersion = '2.0.1';
         document.getElementById('thisVersion').innerText = `Version ${formVersion}`;
-        document.getElementById('Theversion').value = formVersion;
+        document.getElementById('FormVersion').value = formVersion;
+        localStorage.setItem('Form Version', formVersion);
 
         // Check the support for the File API
         if (window.File && window.FileReader && window.FileList && window.Blob) {
@@ -810,7 +802,7 @@
         </div>
 
         <!-- hidden elements -->
-        <input name="Theversion" type="hidden" id="Theversion" />
+        <input name="FormVersion" type="hidden" id="FormVersion" />
         <input name="FormatNote" type="hidden" id="FormatNote"
             value="* The entries in this email are TAB delimited. This allows you to copy and paste into a spreadsheet." />
         <input type="file" id="txtfiletoread" accept=".txt" style="display: none" />
