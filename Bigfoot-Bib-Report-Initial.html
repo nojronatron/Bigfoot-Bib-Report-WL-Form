@@ -14,23 +14,34 @@
 
     <script language="javascript" type="text/javascript">
     
+    function cleanAndCountCsvData() {
+        let csvData = GetElementById('TheCsvData').value;
+        let csvDataArray = csvData.split('\n');
+        let nonEmptyLinesCount = 0;
+
+        let cleanCsvDataArray = csvDataArray.map(item => {
+            if (item !== undefined && item.length > 0) {
+                nonEmptyLinesCount++;
+                return item.replace(/ *\, */g, ', ');
+            }
+        });
+
+        let rejoinedCsvData = cleanCsvDataArray.join('\n');
+        GetElementById('TheCsvData').value = rejoinedCsvData;
+        GetElementById('entryCount').value = nonEmptyLinesCount;
+    }
+
     // converts bib records from csv-delimited and returns tab-delimited version
     function convertCsvRecordsToTabbed() {
         let csvData = GetElementById('TheCsvData').value;
-        let tabbedData = csvData.replace(/, /g, '\t');
-        return tabbedData;
+        return csvData.replace(/, /g, '\t');
     }
 
     // updates both csv and tabbed bib records into their respective elements
     function updateCsvAndTabRecordsElement(riderNum, bibAction, time, dayOfMonth, shortLoc){
-        // format the csv bib records first in case they were edited
         let previousRecordsComma = GetElementById('TheCsvData').value;
         let previousRecordsTab = convertCsvRecordsToTabbed();
-
-        // format the comma-separated bib records
         GetElementById('TheCsvData').value = formatBibRecord(previousRecordsComma, riderNum, bibAction, time, dayOfMonth, shortLoc, ', ');
-
-        // format the tabbed bib records
         GetElementById('TheData').value = formatBibRecord(previousRecordsTab, riderNum, bibAction, time, dayOfMonth, shortLoc, '\t');
     }
 
@@ -76,7 +87,7 @@
     }
     
     function ResetForm() {
-        ['RiderNum', 'Timefld'].forEach(id => GetElementById(id).value = '');
+        ['RiderNum', 'TimeField'].forEach(id => GetElementById(id).value = '');
         GetElementById('yesterday').checked = false;
         GetElementById('RiderNum').focus();
     }
@@ -85,7 +96,7 @@
     function handleAddBib(bibAction) {
         const riderNum = GetElementById('RiderNum').value;
         if (riderNum && bibAction != undefined && bibAction.length > 0) {
-            let timeElValue = formatTime(GetElementById('Timefld').value);
+            let timeElValue = formatTime(GetElementById('TimeField').value);
             let time = timeElValue.replace(':', '');
             let dayOfMonth = getDayOfMonth(new Date());
             let locationVal = GetElementById('Location').value;
@@ -93,7 +104,7 @@
             storePreviousRecord(riderNum, bibAction, time, dayOfMonth, shortLoc);
             updateCsvAndTabRecordsElement(riderNum, bibAction, time, dayOfMonth, shortLoc);
             ResetForm();
-            countLines();
+            cleanAndCountCsvData();
         } else {
             alert('Enter Runner/Bib number');
             GetElementById('RiderNum').focus();
@@ -177,39 +188,12 @@
         GetElementById('Inbtn').disabled = false;
         GetElementById('Outbtn').disabled = false;
         GetElementById('Dropbtn').disabled = false;
-        GetElementById('numlines').disabled = false;
-        GetElementById('numlines').value = '0';
+        GetElementById('entryCount').disabled = false;
+        GetElementById('entryCount').value = '0';
         let formatNoteText =
-          '* The entries in this email are TAB delimited. This allows you to copy and paste into a spreadsheet.';
+          '* Entries in the email will be tab-delimited, allowing copy/paste into a spreadsheet.';
         GetElementById('FormatNote').value = formatNoteText;
         ResetForm();
-      }
-
-      function countLines() {
-        delBlankLines();
-        let theDataText = GetElementById('TheData').value;
-        let theDataTextUpdate = theDataText.replace(/\s+$/, '');
-        let theDataTextUpdSplit = theDataTextUpdate.split('\n');
-        GetElementById('numlines').value = theDataTextUpdSplit.length;
-        GetElementById('numlines').disabled = false;
-      }
-
-      function delBlankLines() {
-        let stringArray = GetElementById('TheData').value.split('\n');
-        const tempStringArray = [''];
-        let x = 0;
-
-        for (let i = 0; i < stringArray.length; i++) {
-          if (stringArray[i].trim() != '') {
-            tempStringArray[x] = stringArray[i];
-            x++;
-          }
-        }
-
-        let joinedStringArray = tempStringArray.join('\n');
-        let lookfor = '//';
-        let resultValue = joinedStringArray.replace(/lookfor/gm, '/');
-        GetElementById('TheData').value = resultValue + '\n';
       }
 
       function Docleardata() {
@@ -224,7 +208,7 @@
         let minutes = currentTime.getMinutes();
         let formattedMinutes = (minutes < 10 ? '0' : '') + minutes; // Add leading zero if minutes is less than 10
         let currentTimeString = `${hours}:${formattedMinutes}`;
-        GetElementById('Timefld').value = currentTimeString;
+        GetElementById('TimeField').value = currentTimeString;
     }
 
       function addIn() {
@@ -291,11 +275,6 @@
         }
       }
 
-      function setFocus() {
-        GetElementById('Timefld').focus();
-        return false;
-      }
-
       // converts bib records in TheData element from tab-separated to comma-separated values
     function convertRawBibRecordsToArray() {
         let bibRecordsRaw = GetElementById('TheData').value;
@@ -320,7 +299,7 @@
             address: GetElementById('address').value,
             Location: GetElementById('Location').value,
             msgsubject: GetElementById('msgsubject').value,
-            numlines: GetElementById('numlines').value,
+            entryCount: GetElementById('entryCount').value,
             Comment: GetElementById('Comment').value,
             TheCsvData: cleanBibRecordsArray
         };
@@ -381,7 +360,7 @@
         const address = GetElementById('address').value;
         const Location = GetElementById('Location').value;
         const msgsubject = GetElementById('msgsubject').value;
-        const numlines = GetElementById('numlines').value;
+        const entryCount = GetElementById('entryCount').value;
         const TheData = GetElementById('TheData').value;
         const Comment = GetElementById('Comment').value;
         const previousRecord = JSON.parse(localStorage.getItem('previousRecord'));
@@ -393,7 +372,7 @@
           address,
           Location,
           msgsubject,
-          numlines,
+          entryCount,
           TheData,
           Comment,
           previousRecord,
@@ -412,7 +391,7 @@
             GetElementById('address').value = jsonStringData.address ? jsonStringData.address : '';
             GetElementById('Location').value = jsonStringData.Location ? jsonStringData.Location : '';
             GetElementById('msgsubject').value = jsonStringData.msgsubject ? jsonStringData.msgsubject : '';
-            GetElementById('numlines').value = jsonStringData.numlines ? jsonStringData.numlines : 0;
+            GetElementById('entryCount').value = jsonStringData.entryCount ? jsonStringData.entryCount : 0;
             GetElementById('Comment').value = jsonStringData.Comment ? jsonStringData.Comment : '';
             GetElementById('endOfPriorBatch').value = jsonStringData.previousRecord ? jsonStringData.previousRecord : '';
             
@@ -804,7 +783,7 @@
         <!-- hidden elements -->
         <input name="FormVersion" type="hidden" id="FormVersion" />
         <input name="FormatNote" type="hidden" id="FormatNote"
-            value="* The entries in this email are TAB delimited. This allows you to copy and paste into a spreadsheet." />
+            value="* Entries in the email will be tab-delimited, allowing copy/paste into a spreadsheet." />
         <input type="file" id="txtfiletoread" accept=".txt" style="display: none" />
         <input name="sendto" type="hidden" id="sendto" />
         <textarea name="parseme" id="parseme" style="display: none"></textarea>
@@ -821,14 +800,11 @@
         <div class="div-across-auto-align">
             <div class="block-line-div">
                 <label for="RiderNum">Bib Number:</label>
-                <input name="RiderNum" type="text" id="RiderNum" maxlength="15" style="max-width: 6em;"
-                 />
+                <input name="RiderNum" type="text" id="RiderNum" maxlength="15" style="max-width: 6em;" required />
             </div>
             <div class="block-line-div">
-                <label for="Timefld">Time:</label>
-                <input name="Timefld" type="text" id="Timefld" maxlength="6" style="max-width: 6em;"
-                    onkeypress="if(event.keyCode==13){alert('Click: IN - OUT - DROP');return false;}"
-                    onblur=" this.value=this.value.trim(); " />
+                <label for="TimeField">Time:</label>
+                <input name="TimeField" type="text" id="TimeField" maxlength="6" style="max-width: 6em;" required />
                 <input type="checkbox" id="yesterday" name="yesterday" value="Yesterday" />    
                 <label for="yesterday">Yesterday</label>
             </div>
@@ -851,14 +827,13 @@
         <hr />
 
             <div class="div-across-auto-align">
-                <label for="numlines">Entry Count:</label>
-                <input name="numlines" type="text" id="numlines" size="3" class="readOnlyText" readonly title="Number of bib entries submitted." />
+                <label for="entryCount">Entry Count:</label>
+                <input name="entryCount" type="text" id="entryCount" size="3" class="readOnlyText" readonly title="Number of bib entries submitted." />
                 <label for="endOfPriorBatch">End Of Prior:</label>
                 <input name="endOfPriorBatch" type="text" id="endOfPriorBatch" size="25" class="readOnlyText" readonly title="The last saved bib record."></input>
             </div>
             <div class="div-across-auto-align">
-                <textarea name="TheCsvData" placeholder="Limit to a sensible number of entries." id="TheCsvData" class="bibEntries" maxlength="1200"
-                onkeypress="if(event.keyCode==13){countLines()}" onblur="handleCsvDataEdited()"></textarea> <!-- visible, put csv items here -->
+                <textarea name="TheCsvData" placeholder="Limit to a sensible number of entries." id="TheCsvData" class="bibEntries" maxlength="1200"></textarea> <!-- visible, put csv items here -->
                 <textarea name="TheData" id="TheData" class="bibEntries" maxlength="1200" style="display:none"></textarea> <!-- style display:none, put tab delim data here -->
             </div>
             <div class="div-across-auto-align">
@@ -1004,17 +979,34 @@
     </section>
 
     <script language="javascript" type="text/javascript">
-        // onkeypress="if(event.keyCode==13){a=setFocus(); return false;}"
-        // onblur="javascript:this.value=this.value.trim();this.value=this.value.toUpperCase(); putTime();"
-        var riderNumHandler = GetElementById('RiderNum');
-        riderNumHandler.addEventListener('keypress', function (e) {
-            if (e.keyCode === 13 || e.key === 'Enter' || e.code === 'Enter') {
-                GetElementById('Timefld').focus();
-                return false;
+        // USE THIS SECTION to add event listeners to form elements
+        let defaultBibValue = "000";
+        let minFieldLength = 1;
+        let timeFieldElement = GetElementById('TimeField');
+        let riderNumberElement = GetElementById('RiderNum');
+        let csvDataElement = GetElementById('TheCsvData');
+
+        csvDataElement.addEventListener('blur', function() {
+            // countLines();
+            cleanAndCountCsvData();
+            handleCsvDataEdited();
+        });
+
+        timeFieldElement.addEventListener('blur', function() {
+            this.value = this.value.trim();
+            // set default to current time if field is empty
+            if (this.value.length < minFieldLength) {
+                putTime();
             }
         });
-        riderNumHandler.addEventListener('blur', function () {
+
+        riderNumberElement.addEventListener('blur', function() {
             this.value = this.value.trim();
+            // set default value if field is empty
+            if (this.value < minFieldLength) {
+                this.value = defaultBibValue;
+            }
+
             this.value = this.value.toUpperCase();
             putTime();
         });
