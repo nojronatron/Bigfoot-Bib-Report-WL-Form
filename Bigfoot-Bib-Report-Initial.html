@@ -556,6 +556,10 @@
             list-style-type: none;
         }
 
+        li {
+            padding: 0.2rem;
+        }
+
         .screen-reader {
             /* only screen readers see this element */
             position: absolute;
@@ -873,12 +877,12 @@
                 <h2>Topics</h2>
                 <p>This form is broken up into three sections:</p>
                 <ul>
-                    <li>Top: Form header information with event, location, and message information.</li>
+                    <li>Top: Form header with event, location, and message information.</li>
                     <li>Middle: Entering and viewing bib data.</li>
-                    <li>Bottom: Add comments, save and restore bib data to or from a file, and submit the data for posting a new Winlink Express message.</li>
+                    <li>Bottom: Add comments, save and restore bib data, and submit the data for posting a new Winlink Express message.</li>
                 </ul>
 
-                <p>Note: THis form provides <em>limited keyboard-only support</em>.</p>
+                <p>Note: This form provides <em>limited keyboard-only support</em>.</p>
                 <ul>
                     <li>
                         <kbd>Tab</kbd> key to move between screen elements.
@@ -886,42 +890,43 @@
                     <li>
                         <kbd>Spacebar</kbd> or <kbd>Enter</kbd> to activate a highlighted element.
                     </li>
+                    <li>
+                        <kbd>Enter</kbd> will try to press the <button>Submit</button> button if required fields have data in them.
+                    </li>
                 </ul>
                 <p>If you have suggestions for how to improve keyboard-only mode support, please talk with Jon K7RMZ or see the <a href="https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form">GitHub Project</a> for more information.</p>
 
-                <h2 id="#Header-and-Message-Information">Top section: Header and Message Information</h2>
+                <h2>Top section: Header and Message Information</h2>
 
                 <ol>
                     <li>Enter this Event Name for example &quot;Bigfoot 2024&quot;.</li>
-                    <li>Enter a Message Number starting with 1. Increment it for each time you create a new message for
-                        the
-                        current Aid Station.</li>
-                    <li>Enter the recipient's amateur call sign in Send To field.</li>
-                    <li>Aid Station: Click it, or press the Spacebar to see a list and click or select the Aid Station for which the bib data applies using arrows and the Enter key.</li>
-                    <li>Subject Line: It will be entered automagically for you. Resist the urge to change it.
-                    </li>
+                    <li>Enter a Message Number starting with 1. You can use the <button>Increment</button> once or just enter a number.</li>
+                    <li>Enter the recipient's amateur call sign in Send To field. You can add other recipients in the Winlink Message <em>after submitting</em>.</li>
+                    <li>Aid Station: Click or press the <kbd>Spacebar</kbd> to see the list. Click or use <kbd>arrows</kbd> and <kbd>Enter</kbd> key to select the Aid Station for which the bib data applies.</li>
+                    <li>Subject Line: It will be entered automagically for you. Resist the urge to change it.</li>
                 </ol>
 
                 <h2>Middle section: Entering and Viewing Bib Data</h2>
 
-                <p>Enter one Bib Number for each action associated with that Bib such as entering or leaving the Aid Station, or bowing out of the event:</p>
+                <p>Enter one Bib Number for Runner that arrives (IN), leaves (OUT), or bows-out of the event (DROP):</p>
 
                 <ol>
-                    <li>Enter Bib Number: Limited to 15 digits (should be more than enough for any event).</li>
-                    <li>Enter The Time: This should be 24hr time like <em>HH:MM</em>. Your browser might suggest the current time.</li>
-                    <li>Check This Box If Time Was Yesterday: Runners come and go from Aid Stations all time of day and
-                        night. You might have a list of runners that arrived yesterday and left (or dropped) today.</li>
-                    <li>Click IN (arrived), OUT (departed), or DROP (bowed out of event) once to enter that bib into the text field below.</li>
+                    <li>Enter Bib Number: Limited to 15 characters (should be more than enough for any event).</li>
+                    <li>Enter The Time: This should be 24hr time like <em>HH:MM</em> although the colon is optional. Your browser might suggest the current time.</li>
+                    <li>Yesterday: Check this box to set the day of the month to yesterday.</li>
+                    <li>Click IN (arrived), OUT (exited), or DROP (bowed out of event) once to enter that bib into the text field below.</li>
+                    <li>Entry Count: A read-only field shows the number of bib records you have entered.</li>
+                    <li>End Of Prior: A read-only field that displays the last-submitted entry in a prior message created with this Form. Must leave browser open to use this. Format is `bib, action, time, day of month, message number`</li>
                 </ol>
 
-                <h3>IN, OUT, and DROP Actions</h3>
+                <h3>About IN, OUT, and DROP Actions</h3>
 
                 <ul>
                     <li>
                         IN: The runner (bib) arrived at the Aid Station.
                     </li>
                     <li>
-                        OUT: The runner left the Aid Station.
+                        OUT: The runner exited the Aid Station.
                     </li>
                     <li>
                         DROP: Use if the runner has notified Aid Station Staff that they are bowing out of the race, or
@@ -929,8 +934,14 @@
                     </li>
                 </ul>
 
-                <p>Number of Entries: This accurately counts the number of bib entries currently in the form.
-                    Try to limit the total number of bib records to about 50.</p>
+                <p>Each runner can only have one Action set per entry. If you know that Bib 123 entered at 12:34 today and exited at 14:34 today, you would record 123 12:34 IN, and then record 123 14:34 OUT, totally 2 entries.</p>
+
+                <p>If you don't know the <em>exact time</em> of the bib event ask the Aid Station captain and volunteers. You could also try to locate the runner's crew and ask if they know. If you don't find an answer, chances are you have a better idea than anyone else nearby, so make a fair estimate based on your experience, enter that time, and add a concise note in the Comment field about that bib number.</p>
+               
+                <p>Stay on top of your runner records lists. Even if you cannot send data via Winlink for some reason, keep entering data into this Form and click <button>Save Race data</button> to store a list on your device. Start a new Form and repeat this process until you can send the data via Winlink using the <button>Load Race data</button> or by other means. You will have an easier time keeping track of runners this way by viewing files stored on your device.</p>
+                <p>Having said that, the sooner you get valid data to Bigfoot Base, the better the hams and the event organizers understand the status of all runners. Since runners come and go from Aid Stations both day and night, you will end up with a list of runners that arrived, exited, or dropped yesterday! If you get behind by more than 48 hours you will find the record-keeping duty much more challenging than it needs to be.</p>
+
+                <h3>Number of Entries: This accurately counts the number of bib entries currently in the form.</h3>
 
                 <h2>Bottom Section: Comment, Save, Restore, and Submit Bib Data</h2>
 
@@ -941,32 +952,36 @@
 
                 <h3>Save and Load buttons</h3>
                 <p>Use the Save Data Race Data button to store the bib entries into a plain text file.</p>
-                <p>The file will be named with the current date and time with a &quot;txt&quot; file extension so any text editor can open it.</p>
-                <p>The file will be stored in your browser's download folder (default, see Browser Settings to confirm or change this).</p>
-                <p>You can rename the downloaded file to something more meaningful without harming the operation of this Form or Winlink Express.</p>
-                <p><em>Idea</em>: Load this Form on a tablet or laptop computer and track runners until you have several dozen. Use the <code>Save Race data</code> button to save the data to a thumbdrive and provide the thumbdrive to the Winlink Operator. They will <code>Load Race data</code> and click Submit, then start a Winlink Session to send the data to Bigfoot Base. This will save you time, and will not require taking pictures of the Aid Station Lead's bib log, or manually copying bib records using pen and paper.</p>
+
+                <ul>
+                    <li>The file will be named with the current date and time with a &quot;txt&quot; file extension so any text editor can open it.</li>
+                    <li>The file will be stored in your browser's download folder (default, see Browser Settings to confirm or change this).</li>
+                    <li>You can rename the downloaded file to something more meaningful without harming the data or the operation of this Form.</li>
+                </ul>
+
+                <h3>Idea</h3>
+                <p>Load this Form on a tablet or laptop computer and track runners until you have several dozen. Use the <button>Save Race data</button> button to save the data to a thumbdrive and provide the thumbdrive to the Winlink Operator. They will <button>Load Race data</button> and click Submit, then start a Winlink Session to send the data to Bigfoot Base. This will save you time, and will not require taking pictures of the Aid Station Lead's bib log, or manually copying bib records using pen and paper.</p>
 
                 <h3>Submit Button</h3>
-                <p>If you launched this form using Winlink Express, use the Submit button to have Winlink Express automatically create a new, well formatted message.</p>
-                <p>Some on-screen information will guide you through the submission process.</p>
+                <p>If you launched this form using Winlink Express, use the <button>Submit</button> button to have Winlink Express automatically create a new, well formatted message. On-screen information will guide you through the submission process.</p>
                 <p>The information that is sent in the new Message via WinLink can be copied and pasted directly into an excel spreadsheet or other database software. This is what Bigfoot Base does when they receive the message. If it is not formatted exactly as this Form does it, they might call you on the radio and ask for you to resubmit or clarify information. This is not a good use of your time, so refrain from editing the "posted" Winlink Message after submitting this Form.</p>
                 <p>The Subject Line will be formatted for you, for example: <code>BigFoot 2023 Elk Pass Message #1</code>. Below is a breakdown of how the subject line is created:</p>
 
                 <ul>
                     <li>BigFoot 2023: The Race or Event Name entered at the top of the form.</li>
-                    <li>Marble Mountain SnoPark: The Aid Station selected at the top of the form.</li>
+                    <li>Elk Pass: The Aid Station selected at the top of the form.</li>
                     <li>Message #1: The Message Number entered at the top of the form.</li>
                 </ul>
 
                 <p>The &quot;Send To&quot; data is used to address the Winlink Message to the intended recipient and is not included in the subject line.</p>
 
                 <h3>Clear Entries button</h3>
-                <p>Use the &quot;Clear Entries&quot; button to remove <em>all bib record entries</em>.
-                    Use wisely <em>there is no undo button</em>. See <a href=#Comment-Save-Restore-Submit>Saving and Loading Race Data</a> for more information.</p>
+                <p>Use the <button>Clear Entries</button> button to remove <em>all bib record entries</em>. USE WITH CAUTION <em>there is no undo button</em>.
+                    See the above sub-section &quot;Saving and Loading Race Data&quot; for more information.</p>
                 <hr />
 
                 <h2>Credits and Thanks</h2>
-                <p>The original form was designed by Greg KG6SJT, a member of the <a href="https://winlink.org">Winlink Development Team</a>.</p>
+                <p>The original form was designed by Greg KG6SJT, a member of the <a href="https://winlink.org">Winlink Development Team</a></p>
                 <p>Custom redesign and ongoing development: Jon K7RMZ (<a href="https://github.com/nojronatron">GitHub</a>)</p>
                 <p>Design and code assistance: Mark K7TUM</p>
                 <p>Feature and dev-ops assistance: Jason KI7TYU</p>
