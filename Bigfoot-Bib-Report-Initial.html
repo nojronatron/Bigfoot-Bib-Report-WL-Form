@@ -111,7 +111,7 @@
         }
     }
 
-      function elementValuesToLocalStorage() {
+    function elementValuesToLocalStorage() {
         let addressFormatted = GetElementById('address');
         localStorage.setItem('RTrackeradd', addressFormatted.value);
         let locationFormatted= GetElementById('Location');
@@ -121,30 +121,25 @@
         let msgNumFormatted = GetElementById('MessageNumber');
         localStorage.setItem('MessageNumber', msgNumFormatted.value);
         let locationLong = lengthenLocation(locationFormatted.value);
-        let regulartitle =
-          GetElementById('EventTitle').value +
-          ' ' +
-          locationLong +
-          ' Message #' +
-          msgNumFormatted.value;
+        let regulartitle = GetElementById('EventTitle').value + ' ' + locationLong + ' Message #' + msgNumFormatted.value;
         GetElementById('msgsubject').value = regulartitle;
-      }
+    }
 
-      function shortenLocation(locationVal) {
+    function shortenLocation(locationVal) {
         let underscoreIdx = locationVal.indexOf('_');
         return locationVal.slice(0, underscoreIdx);
-      }
+    }
 
-      function lengthenLocation(locationVal) {
+    function lengthenLocation(locationVal) {
         if (!locationVal) {
-          return ' ';
+            return ' ';
         }
         let underscoreIdx = locationVal.indexOf('_') + 1;
         return locationVal.slice(underscoreIdx);
-      }
+    }
 
-      // set form elements with the values stored in local storage
-      function setFormElementsWithLsValues() {
+    // set form elements with the values stored in local storage
+    function setFormElementsWithLsValues() {
         let storedAddress = localStorage.getItem('RTrackeradd');
         GetElementById('address').value = storedAddress;
         let storedLocation = localStorage.getItem('RTrackerloc');
@@ -165,9 +160,9 @@
         GetElementById('MessageNumber').value = storedMsgNumber;
         GetElementById('FormatNote').value = '* The entries in the message will be TAB delimited, allowing copy/paste into a spreadsheet.';
         copyPreviousRecordFromLsToElement();
-      }
+    }
 
-      function copyPreviousRecordFromLsToElement() {
+    function copyPreviousRecordFromLsToElement() {
         // if previous record key exists in local storage populate the element with string formatted value
         if (localStorage.getItem('previousRecord')) {
             const previousItem = JSON.parse(localStorage.getItem('previousRecord'));
@@ -180,27 +175,23 @@
             const previousRecordString = `#${previousItem.runner}, ${previousItem.action}, ${prevTime}, D:${previousItem.dayOfMonth}, M#${previousItem.messageNumber}`;
             GetElementById('endOfPriorBatch').value = previousRecordString;
         }
-      }
+    }
 
-      function ClearParticipantData() {
-        GetElementById('TheData').value = '';
-        GetElementById('TheCsvData').value = '';
-        GetElementById('Inbtn').disabled = false;
-        GetElementById('Outbtn').disabled = false;
-        GetElementById('Dropbtn').disabled = false;
-        GetElementById('entryCount').disabled = false;
-        GetElementById('entryCount').value = '0';
-        let formatNoteText =
-          '* Entries in the email will be tab-delimited, allowing copy/paste into a spreadsheet.';
-        GetElementById('FormatNote').value = formatNoteText;
-        ResetForm();
-      }
-
-      function Docleardata() {
+    function clearParticipantData() {
         if (confirm('Clear all participant data?')) {
-          ClearParticipantData();
+            GetElementById('TheData').value = '';
+            GetElementById('TheCsvData').value = '';
+            GetElementById('Inbtn').disabled = false;
+            GetElementById('Outbtn').disabled = false;
+            GetElementById('Dropbtn').disabled = false;
+            GetElementById('entryCount').disabled = false;
+            GetElementById('entryCount').value = '0';
+            let formatNoteText =
+            '* Entries in the email will be tab-delimited, allowing copy/paste into a spreadsheet.';
+            GetElementById('FormatNote').value = formatNoteText;
+            ResetForm();
         }
-      }
+    }
 
     function putTime() {
         let currentTime = new Date();
@@ -468,12 +459,9 @@
         }
 
         setFormElementsWithLsValues();
-        fixFields();
+        autoGrowTextArea(GetElementById('TheCsvData'));
     });
 
-    function fixFields() {
-        autoGrowTextArea(GetElementById('TheCsvData'));
-    }
     </script>
 
     <style type="text/css">
@@ -856,7 +844,7 @@
             <input name="loadbtn" type="button" class="loadDataButton" id="loadbtn"
                 onclick="document.getElementById('txtfiletoread').click();" value="Load Race data"
                 title="Load data from a file." />
-            <input name="doclear" type="button" id="doclear" onclick="Docleardata()" value="Clear Entries"
+            <input name="doclear" type="button" id="doclear" onclick="clearParticipantData()" value="Clear Entries"
                     title="Clear all runner entries." class="clearDataButton" />
             </div>
         </div>
