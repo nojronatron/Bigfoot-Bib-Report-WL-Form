@@ -28,14 +28,32 @@ For more information about Destination Trail and their ultra trail running marat
 
 ## Form and Template Version
 
-This version of the form was built from a prior version using these files:
+Current: v2.0.1 - June 2024
+
+- Updates Template file variable names.
+- Updates Form to use CSV on UI, submit Tab-delimited on Submit.
+- Update README with latest instructions, images, and depictions.
+- Update Form Information to match current UI and functionality.
+- Bugfix Save Race data output.
+- Remove and factor-out unused or unnecessary code, consolidate other code paths.
+- Enforce CRLF in git operations.
+- Updates code to support major desktop and mobile browsers from March 2010 forward.
+
+6-Aug-2023: v1.1.7
+
+- Bugfix 'increment' button updates subject field.
+- Message number saved to browser storage.
+- Remove unnecessary code.
+- Remove default message number.
+
+Prior versions:
+
+Prior versions were built from original form files created by the Winlink Development Team:
 
 - "Race Tracker Initial.html" aka The Form. This is a single-page website built with html, javascript, and css.
 - "Race Tracker.txt" aka The Template. A plain-text file with special keywords elements to receive data produced by the Form.
 
 These files have been customized to meet the needs of the Bigfoot 200 ultramarathon specifically.
-
-The latest version of the Form and Template will always be published to the [GitHub Releases page](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/tags).
 
 ## How Winlink Forms Work
 
@@ -88,13 +106,13 @@ The Two Files you will need are:
 - Bigfoot-Bib-Report-Initial.html
 - Bigfoot-Bib-Report.txt
 
-When downloading from the [GitHub Releases page](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/releases) ignore the zip files they are not necessary.
+When downloading from the [GitHub Releases page](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/releases) the files will be inside of a `.zip` file. After downloading, either right-click and select "Extract All..." and follow the wizard screen to unzip the files, or use your favorite "unzipping" utility (there are many to choose from, free and paid).
 
 ## How to Install This Form and Template
 
 1. Download the Template and Form files (as indicated above).
 2. Copy `Bigfoot-Bib-Report-Initial.html` and `Bigfoot-Bib-Report.txt` to your Winlink Express installation within the directory named `{your callsign}\Templates`.
-3. Optional: Create a new folder within the Templates directory for these files.
+3. Optional: Create a new directory within the Templates directory for these files.
 4. Open Winlink Express.
 5. Click the Messages menu and select `New Message`.
 6. In the New Message window click `Select Template`.
@@ -102,7 +120,9 @@ When downloading from the [GitHub Releases page](https://github.com/nojronatron/
 8. Click `Bigfoot-Bib-Report-txt` and then click `Select`.
 9. The Form opens in your default Web Browser.
 
-Note: Winlink Express might be installed in folder `C:\RMS Express` or `C:\Winlink Express`. Either way, these are the base directories, and the callsign and Templates sub-folders will be within.
+Note: Winlink Express might be installed in either `C:\RMS Express` or `C:\Winlink Express`. Either way, navigate to your callsign directory, then the Templates directory, and place the files there.
+
+![Template files directory example](./images/explorer-winlink-templates-folder-snippet.png)
 
 ## Form Usage in Winlink Express
 
@@ -122,8 +142,26 @@ The overall steps to use this form are:
 ### Open The Form
 
 1. Open a new message and then click Select Template.
-1. Drill down into the Templates Tree to find this Form and select it with the mouse.
-1. Click the Select menu item. The form opens in a new browser tab (or window).
+2. Drill down into the Templates Tree to find this Form and select it with the mouse.
+3. Click the Select menu item. The form opens in a new browser window (or new tab if default browser is already open).
+
+![Bigfoot Bib Report Form appearance when first opened](./images/bib-report-form-first-launch-600x600.png)
+
+Explore the form a little to get familiar with its behavior:
+
+1. Hover your mouse over each field and see their backgrounds change slightly.
+2. Hover your mouse over a button like "increment" but don't click it, and notice the background changes slightly.
+3. Click on the Event Name field and it will display an orange outline so you can easily find the currently selected field.
+4. Press the `Tab` key and the orange outline will move to the Message # field.
+5. Press `Tab` again and the "increment" button becomes highlighted with the orange outline.
+
+Use that orange outline to help you quickly find where the "focus" is on the form.
+
+If you click into a field and the orange highlight does not appear, that means the field is _read only_ and you are not allowed to input or change anything within that field.
+
+Also try this: Click on `Form Information - READ` and a pop-up screen will appear with additional instructions about the form and how to use it. Read This Friendly Manual. When done, click the white-on-black text "Click To Close This" and you will be allowed to edit the form again.
+
+![popup help screen image with green arrow pointing to the close button](./images/popup-help-screen-green-arrow.png)
 
 ### Prepare Common Form Data
 
@@ -205,7 +243,13 @@ The form allows you to click or tap on input fields to select them, and you can 
 
 The correctly formatted bib data will appear in the window below and the `Number of Entries` count will increase by `1` for every enty you complete.
 
-_Important_: All bib data inside the entries window will disappear without chance for recovery if you click the Clear Entries button. The only way to recover those entries is to had previously pressed [SAVE RACE DATA Button](#store-and-load-existing-race-data) as described above.
+_Important_: All bib data inside the entries window will disappear without a chance for recovery if you click the Clear Entries button. The only way to recover those entries is to had previously pressed [SAVE RACE DATA Button](#store-and-load-existing-race-data) as described above.
+
+#### Feature: Edit Entry Data
+
+There are times when a bib number is mis-keyed, or 'OUT' was clicked instead of 'DROP', etc. In previous versions this was very difficult to fix, and occasionally those fixes caused data issues at Bigfoot Base. With this version you _can edit data after clicking IN, OUT, or DROP_ to make an important fix, and it is simpler than it was before because the data is in comma-separated format now.
+
+Simply click on the data you need to edit, type-over it, and then press the `Tab` key and the entries will auto-reformat, ready for submission.
 
 ### Submit Completed Form And Post Message To Outbox
 
@@ -237,7 +281,9 @@ Other data is also populated into the new Message, including:
 - Winlink Express Sender.
 - Template Version.
 
-_Refrain_ from editing the Winlink Message once it is created, instead try to stick to using the Form to save you time and effort.
+![sample winlink message after clicking Submit button](./images/winlink-message-after-submit.png)
+
+It is best practice to _refrain_ from editing the Winlink Message once it is created. Instead, stick to using the Form, it will save time and effort.
 
 ### Set As Favorite Template (optional)
 
@@ -250,6 +296,8 @@ You can set up to 3 Forms as _Favorites_ following these steps:
 5. Click `Save`.
 
 Whenever you start a new message, a button named `BF Bib Report` will be along the top of the New Message window (as you named it). Click it to launch the Form.
+
+![Bigfoot Form set as favorite appears in New Message menus](./images/new-message-favorite-form-in-green.png)
 
 For detailed instructions on the installation of Winlink Forms and Templates see [Winlink.org](https://www.winlink.org).
 
