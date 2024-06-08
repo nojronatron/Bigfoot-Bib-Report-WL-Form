@@ -477,7 +477,7 @@
     }
 
     window.addEventListener('load', function () {
-        const formVersion = '2.1.2';
+        const formVersion = '2.1.3';
         document.getElementById('thisVersion').innerText = `Version ${formVersion}`;
         document.getElementById('FormVersion').value = formVersion;
         localStorage.setItem('Form Version', formVersion);
@@ -960,16 +960,16 @@
                     </li>
                 </ul>
 
-                <p>If you have suggestions for how to improve keyboard-only mode support, please talk with Jon K7RMZ or see the <a href="https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form">GitHub Project</a> for more information.</p>
+                <p>If you have questions or suggestions about keyboard-only mode support, please talk with Jon K7RMZ or see the <a href="https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form">GitHub Project</a> for more information.</p>
 
                 <h2>Top section: Header and Message Information</h2>
 
                 <ol>
                     <li>Enter this Event Name for example &quot;Bigfoot 2024&quot;.</li>
-                    <li>Enter a Message Number starting with 1. You can use the <button>Increment</button> once or just enter a number.</li>
+                    <li>Enter a Message Number starting with 1. You can use the <button>Increment</button> button once or just enter a number.</li>
                     <li>Enter the recipient's amateur call sign in Send To field. You can add other recipients in the Winlink Message <em>after submitting</em>.</li>
-                    <li>Aid Station: Click or press the <kbd>Spacebar</kbd> to see the list. Click or use <kbd>arrows</kbd> and <kbd>Enter</kbd> key to select the Aid Station for which the bib data applies.</li>
-                    <li>Subject Line: It will be entered automagically for you. Resist the urge to change it.</li>
+                    <li>Aid Station: Click or press the <kbd>Spacebar</kbd> to display the list, then use your mouse or keyboard <kbd>arrows</kbd> and <kbd>Enter</kbd> key to select the Aid Station for which the bib data applies.</li>
+                    <li>Subject Line: This is filled-in automagically. Resist the urge to change it.</li>
                 </ol>
 
                 <h2>Middle section: Entering and Viewing Bib Data</h2>
@@ -977,13 +977,16 @@
                 <p>Enter one Bib Number for Runner that arrives (IN), leaves (OUT), or bows-out of the event (DROP):</p>
 
                 <ol>
-                    <li>Enter Bib Number: Limited to 15 characters (should be more than enough for any event).</li>
-                    <li>Enter The Time: This should be 24hr time like <em>HH:MM</em> although the colon is optional. Your browser might suggest the current time.</li>
-                    <li>Yesterday: Check this box to set the day of the month to yesterday.</li>
-                    <li>Click IN (arrived), OUT (exited), or DROP (bowed out of event) once to enter that bib into the text field below.</li>
+                    <li>Enter Bib Number: Limited to 15 characters, max.</li>
+                    <li>Enter The Time: This should be 24hr time like <em>HHMM</em> (colon character is optional). Your browser might suggest the current time.</li>
+                    <li>Yesterday: Click/tap this checkbox to set the day of the month back one day.</li>
+                    <li>Click IN (arrived), or OUT (exited), or DROP (bowed out of event). Doing so adds the bib information to the Entries Field, below.</li>
                     <li>Entry Count: A read-only field shows the number of bib records you have entered.</li>
                     <li>End Of Prior: A read-only field that displays the last-submitted entry in a prior message created with this Form. Must leave browser open to use this. Format is `bib, action, time, day of month, message number`</li>
+                    <li>Entries Field: Displays the list of entries complete with bib number, time, action, day of month, and Aid Station abbreviation.</li>
                 </ol>
+
+                <p>Bib Number and Bib Time fields will auto-populate if you forget to edit them, or mis-key certain characters while typing. If you find '0000' values in the Entries textbox, you can go into the entries field and update them, or delete entire entries. <em> Be very careful editing items in the entries field because changes are not reversable!</em></p>
 
                 <h3>About IN, OUT, and DROP Actions</h3>
 
@@ -992,21 +995,27 @@
                         IN: The runner (bib) arrived at the Aid Station.
                     </li>
                     <li>
-                        OUT: The runner exited the Aid Station.
+                        OUT: The runner exited the Aid Station, continuing forward course.
                     </li>
                     <li>
-                        DROP: Use if the runner has notified Aid Station Staff that they are bowing out of the race, or
-                        they have been disqualified by race officials.
+                        DROP: The runner is bowing out of the race or has been disqualified by Destination Trail.
                     </li>
                 </ul>
 
-                <p>Each runner can only have one Action set per entry. If you know that Bib 123 entered at 12:34 today and exited at 14:34 today, you would record 123 12:34 IN, and then record 123 14:34 OUT, totally 2 entries.</p>
+                <p>Each runner can only have one Action per entry. If you know that Bib 123 entered at 12:34 today and exited at 14:34 today, you would follow the instructions to enter each one at a time in this order:</p>
+
+                <ol>
+                    <li>Bib Number</li>
+                    <li>Bib Time</li>
+                    <li>Optionally click the &quot;yesterday&quot; checkbox</li>
+                    <li>One of the buttons &quot;IN&quot;, &quot;OUT&quot;, &quot;DROP&quot;</li>
+                </ol>
 
                 <p>If you don't know the <em>exact time</em> of the bib event ask the Aid Station captain and volunteers. You could also try to locate the runner's crew and ask if they know. If you don't find an answer, chances are you have a better idea than anyone else nearby, so make a fair estimate based on your experience, enter that time, and add a concise note in the Comment field about that bib number.</p>
                
                 <p>Stay on top of your runner records lists. Even if you cannot send data via Winlink for some reason, keep entering data into this Form and click <button>Save Race data</button> to store a list on your device. Start a new Form and repeat this process until you can send the data via Winlink using the <button>Load Race data</button> or by other means. You will have an easier time keeping track of runners this way by viewing files stored on your device.</p>
 
-                <p>The sooner you get valid data to Bigfoot Base, the better the hams and the event organizers understand the status of all runners and Aid Stations. Since runners come and go from Aid Stations both day and night, you will end up with a list of runners that arrived, exited, or dropped sometime in the past. If you get behind by more than a day or so, you will find the record-keeping duty much more challenging than it needs to be.</p>
+                <p>The sooner you get valid data to Bigfoot Base, the better the hams and the event organizers understand the status of all runners and Aid Stations. Since runners come and go from Aid Stations both day and night, you will end up with a list of runners that arrived, exited, or dropped, sometime in the past. If you get behind by more than a day or so, you will find the record-keeping duty much more challenging than it needs to be.</p>
 
                 <h3>Number of Entries</h3>
 
@@ -1016,9 +1025,11 @@
 
                 <h3>Comment Field</h3>
 
-                <p>For any bib entries that need additional explanation (like DROP) use the &quot;Comments&quot; area to free-form a <em>short and to the point</em> statement.</p>
+                <p>For any bib entries that need additional explanation (especially DROP) use the &quot;Comments&quot; area to free-form a <em>short and to the point</em> statement.</p>
 
                 <p>If the message is too long or complex for the Comment field, contact Bigfoot Base via a separate Winlink Message, voice radio, or cellphone to relay the information to them.</p>
+
+                <p>One last note about runners that &quot;DROP&quot;: It is usually a good idea to radio-in to Bigfoot Base by voice after adding a DROP to the list. Have the bib number, time, and the reason form dropping ready when you call.</p>
 
                 <h3>Save and Load buttons</h3>
 
@@ -1026,8 +1037,8 @@
 
                 <ul>
                     <li>The file will be named with the current date and time with a &quot;txt&quot; file extension so any text editor can open it.</li>
-                    <li>The file will be stored in your browser's download folder (default, see Browser Settings to confirm or change this).</li>
-                    <li>You can rename the downloaded file to something more meaningful without harming the data or the operation of this Form.</li>
+                    <li>The file will be stored in your browser's download folder (the default). Check your Browser Settings to configure this.</li>
+                    <li>You can rename the downloaded file to something more meaningful without harming the data, or interfering with the operation of this Form.</li>
                 </ul>
 
                 <h3>Submit Button</h3>
@@ -1048,7 +1059,7 @@
 
                 <h3>Clear Entries button</h3>
                 
-                <p>Use the <button>Clear Entries</button> button to remove <em>all bib record entries</em>. USE WITH CAUTION <em>there is no undo button</em>.
+                <p>Use the <button>Clear Entries</button> button to remove <em>all bib record entries</em>. USE WITH CAUTION <em>there is no undo</em>!
                     See the above sub-section &quot;Saving and Loading Race Data&quot; for more information.</p>
                 <hr />
                 
