@@ -70,14 +70,47 @@
     }
 
     // Formats the supplied time as a string in the format HH:MM
-    function formatTime(theTime) {
+    function formatCurrentTime(theTime) {
         if (!theTime || typeof theTime !== 'string') {
-            return '';
-        } else {
-            // copy timeString to a new variable as a for-sure string
-            var timeString = theTime.toString();
-            return `${timeString.slice(0, 2)}:${timeString.slice(2)}`;
+            return '0000';
         }
+
+        if (theTime.length < 1) {
+            return '0000';
+        }
+
+        // copy timeString to a new variable as a for-sure string
+        var timeString = theTime.toString();
+        // return `${timeString.slice(0, 2)}:${timeString.slice(2)}`;
+        var colonIndex = timeString.indexOf(':');
+
+        if (colonIndex > -1) {
+            var trimmedHours = timeString.slice(0, colonIndex);
+            var sanitizedHours = sanitizeAndPadTime(trimmedHours, 2);
+            var trimmedMinutes = timeString.slice(colonIndex, timeString.length);
+            var sanitizedMinutes = sanitizeAndPadTime(trimmedMinutes, 2);
+            var result = sanitizedHours.toString();
+            result = result + sanitizedMinutes;
+            return result;
+        } else {
+            return sanitizeAndPadTime(timeString, 4);
+        }
+    }
+
+    // sanitize the input time and pad with leading zeros only if needed
+    function sanitizeAndPadTime(inputTime, desiredLength) {
+        let sanitizedInputTime = inputTime.replaceAll(/[^0-9]/g, '');
+        
+        if (sanitizedInputTime.length > desiredLength) {
+            let result = sanitizedInput.slice(0, desiredLength);
+            return result;
+        }
+
+        while (sanitizedInputTime.length < desiredLength) {
+            sanitizedInputTime = '0' + sanitizedInputTime;
+        }
+
+        return sanitizedInputTime;
     }
     
     function getDayOfMonth(date) {
@@ -91,13 +124,40 @@
         GetElementById('yesterday').checked = false;
         GetElementById('RiderNum').focus();
     }
+
+    // return a 4-character time string with leading zeros or trimmed from the right
+    function formatPaddedTime(inputTime) {
+        let hhmmTimeLen = inputTime.length;
+
+        if (hhmmTimeLen === 4) {
+            return inputTime;
+        }
+
+        if (hhmmTimeLen < 4) {
+            let resultTime = inputTime;
+            let lenDiff = 4 - hhmmTimeLen;
+
+            for (let i = 0; i < lenDiff; i++) {
+                // prefix with leading zeros until length is 4
+                resultTime = '0' + resultTime;
+            }
+            return resultTime;
+        }
+
+        // keep only the first 4 characters
+        return inputTime.substring(0, 4);
+    }
     
     // validate bib number and time then add bib record to csv and tab record elements
     function handleAddBib(bibAction) {
         const riderNum = GetElementById('RiderNum').value;
         if (riderNum && bibAction != undefined && bibAction.length > 0) {
-            let timeElValue = formatTime(GetElementById('TimeField').value);
-            let time = timeElValue.replace(':', '');
+            // let timeElValue = formatCurrentTime(GetElementById('TimeField').value);
+            // let hhmmTime = timeElValue.replace(':', ''); // could be a problem for older browsers
+            console.log('TimeField value:', GetElementById('TimeField').value);
+            let time = formatCurrentTime(GetElementById('TimeField').value);
+            console.log('sanitized time value in hhmm: ', time);
+            // let time = hhmmTime;
             let dayOfMonth = getDayOfMonth(new Date());
             let locationVal = GetElementById('Location').value;
             let shortLoc = shortenLocation(locationVal);
@@ -193,12 +253,13 @@
         }
     }
 
+    // updates the bib time field with the current time in HHMM format
     function putTime() {
         let currentTime = new Date();
         let hours = currentTime.getHours();
         let minutes = currentTime.getMinutes();
         let formattedMinutes = (minutes < 10 ? '0' : '') + minutes; // Add leading zero if minutes is less than 10
-        let currentTimeString = `${hours}:${formattedMinutes}`;
+        let currentTimeString = `${hours}${formattedMinutes}`;
         GetElementById('TimeField').value = currentTimeString;
     }
 
@@ -1034,6 +1095,9 @@
             // set default to current time if field is empty
             if (this.value.length < minFieldLength) {
                 putTime();
+            } else {
+                let sanitizedTimeString = sanitizeAndPadTime(this.value, 4);
+                GetElementById('TimeField').value = sanitizedTimeString;
             }
         });
 
