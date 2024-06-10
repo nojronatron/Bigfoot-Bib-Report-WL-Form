@@ -102,7 +102,7 @@
         let sanitizedInputTime = inputTime.replaceAll(/[^0-9]/g, '');
         
         if (sanitizedInputTime.length > desiredLength) {
-            let result = sanitizedInput.slice(0, desiredLength);
+            let result = sanitizedInputTime.slice(0, desiredLength);
             return result;
         }
 
