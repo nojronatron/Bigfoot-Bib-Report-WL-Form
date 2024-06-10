@@ -14,6 +14,7 @@
 
     <script language="javascript" type="text/javascript">
     
+    // get data in TheCsvData and clean it up and set the count of entries
     function cleanAndCountCsvData() {
         let csvData = GetElementById('TheCsvData').value;
         let csvDataArray = csvData.split('\n');
@@ -69,8 +70,10 @@
         return document.getElementById(id);
     }
 
-    // Formats the supplied time as a string in the format HH:MM
+    // Formats the supplied time as a string in the format HHMM and returns it
     function formatCurrentTime(theTime) {
+        console.log('formatCurrentTime -> received:', theTime);
+
         if (!theTime || typeof theTime !== 'string') {
             return '0000';
         }
@@ -79,9 +82,7 @@
             return '0000';
         }
 
-        // copy timeString to a new variable as a for-sure string
         var timeString = theTime.toString();
-        // return `${timeString.slice(0, 2)}:${timeString.slice(2)}`;
         var colonIndex = timeString.indexOf(':');
 
         if (colonIndex > -1) {
@@ -99,6 +100,7 @@
 
     // sanitize the input time and pad with leading zeros only if needed
     function sanitizeAndPadTime(inputTime, desiredLength) {
+        console.log('sanitizeAndPadTime -> inputTime, desiredLength: ', inputTime, desiredLength);
         let sanitizedInputTime = inputTime.replaceAll(/[^0-9]/g, '');
         
         if (sanitizedInputTime.length > desiredLength) {
@@ -225,14 +227,13 @@
         }
     }
 
-    // updates the bib time field with the current time in HHMM format
-    function putTime() {
-        let currentTime = new Date();
-        let hours = currentTime.getHours();
-        let minutes = currentTime.getMinutes();
-        let formattedMinutes = (minutes < 10 ? '0' : '') + minutes; // Add leading zero if minutes is less than 10
-        let currentTimeString = `${hours}${formattedMinutes}`;
-        GetElementById('TimeField').value = currentTimeString;
+    // gets, formats, and returns the current clock time in HHMM format
+    function getCurrentTime() {
+        var currentTime = new Date();
+        var hours = currentTime.getHours();
+        var minutes = currentTime.getMinutes();
+        var timeString = '' + hours + ':' + minutes + '';
+        return formatCurrentTime(timeString);
     }
 
       function addIn() {
@@ -1062,28 +1063,32 @@
 
     <script language="javascript" type="text/javascript">
         // USE THIS SECTION to add event listeners to form elements
+        var defaultTimeString = '00:00';
         let defaultBibValue = "000";
         let minFieldLength = 1;
         let timeFieldElement = GetElementById('TimeField');
         let riderNumberElement = GetElementById('RiderNum');
         let csvDataElement = GetElementById('TheCsvData');
 
+        // add event listener to csvDataElement: call functions to clean and handle existing csv data
         csvDataElement.addEventListener('blur', function() {
             cleanAndCountCsvData();
             handleCsvDataEdited();
         });
 
+        // add event listener to Bib Time field: call functions to sanitize and pad user input
         timeFieldElement.addEventListener('blur', function() {
+            var timeValueToSanitize = '';
             this.value = this.value.trim();
-            // set default to current time if field is empty
             if (this.value.length < minFieldLength) {
-                putTime();
+                timeValueToSanitize = defaultTimeString;
             } else {
-                let sanitizedTimeString = sanitizeAndPadTime(this.value, 4);
-                GetElementById('TimeField').value = sanitizedTimeString;
+                timeValueToSanitize = this.value;
             }
+            GetElementById('TimeField').value = sanitizeAndPadTime(timeValueToSanitize, 4);
         });
 
+        // add event listener to Rider Number field: set default value if empty or set current clock time to Time field
         riderNumberElement.addEventListener('blur', function() {
             this.value = this.value.trim();
             // set default value if field is empty
@@ -1092,7 +1097,8 @@
             }
 
             this.value = this.value.toUpperCase();
-            putTime();
+            var currTime = getCurrentTime();
+            GetElementById('TimeField').value = sanitizeAndPadTime(currTime, 4);
         });
     </script>
 </body>
