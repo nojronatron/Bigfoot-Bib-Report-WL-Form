@@ -28,7 +28,14 @@ For more information about Destination Trail and their ultra trail running marat
 
 ## Form and Template Version
 
-Current: v2.0.1 - June 2024
+8-June-2024: v2.1.3
+
+- Add sanitization to bib number and bib time inputs.
+- Format bib time input as 'HHMM' (4 characters, no colon, no non-number characters).
+- Format CSV entries  as 'HHMM' etc (same as above).
+- Update Form Information (help) text.
+
+5-June-2024: v2.0.1
 
 - Updates Template file variable names.
 - Updates Form to use CSV on UI, submit Tab-delimited on Submit.
@@ -38,6 +45,7 @@ Current: v2.0.1 - June 2024
 - Remove and factor-out unused or unnecessary code, consolidate other code paths.
 - Enforce CRLF in git operations.
 - Updates code to support major desktop and mobile browsers from March 2010 forward.
+- Update in-form help documentation to bring up-to-date.
 
 6-Aug-2023: v1.1.7
 
