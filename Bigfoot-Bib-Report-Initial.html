@@ -70,49 +70,101 @@
         return document.getElementById(id);
     }
 
-    // Formats the supplied time as a string in the format HHMM and returns it
-    function formatCurrentTime(theTime) {
-        console.log('formatCurrentTime -> received:', theTime);
+    // calculate most likely hours characters returning a best-effort hours value
+    function getHours(timeString) {
+        var ghColonIndex = timeString.indexOf(':');
+        var ghHoursValue = "00";
 
-        if (!theTime || typeof theTime !== 'string') {
-            return '0000';
+        // if there is a colon, take character(s) just before it
+        if (ghColonIndex > -1) {
+            if (ghColonIndex > 2) {
+                var ghHourIndex = ghColonIndex - 2;
+                ghHoursValue = timeString.slice(ghHourIndex, ghColonIndex);
+            }
+
+            if (ghColonIndex > 0 && ghColonIndex <= 2) {
+                ghHoursValue = timeString.slice(0, ghColonIndex);
+            }
+        
+            return ghHoursValue;
         }
 
-        if (theTime.length < 1) {
-            return '0000';
+        // if there is no colon take up to 2 leftmost characters depending on timeString size
+        if (timeString.length > 2) {
+            var ghHoursValue = timeString.slice(0, 2);
+            return ghHoursValue;
         }
 
-        var timeString = theTime.toString();
-        var colonIndex = timeString.indexOf(':');
-
-        if (colonIndex > -1) {
-            var trimmedHours = timeString.slice(0, colonIndex);
-            var sanitizedHours = sanitizeAndPadTime(trimmedHours, 2);
-            var trimmedMinutes = timeString.slice(colonIndex, timeString.length);
-            var sanitizedMinutes = sanitizeAndPadTime(trimmedMinutes, 2);
-            var result = sanitizedHours.toString();
-            result = result + sanitizedMinutes;
-            return result;
-        } else {
-            return sanitizeAndPadTime(timeString, 4);
+        if (timeString.length <= 2) {
+            return "00";
         }
     }
 
-    // sanitize the input time and pad with leading zeros only if needed
-    function sanitizeAndPadTime(inputTime, desiredLength) {
-        console.log('sanitizeAndPadTime -> inputTime, desiredLength: ', inputTime, desiredLength);
-        let sanitizedInputTime = inputTime.replaceAll(/[^0-9]/g, '');
+    // calculate most likely minutes characters returning a best-effort minutes value
+    function getMinutes(gmTimeString) {
+        var gmColonIndex = gmTimeString.indexOf(':');
+        //console.log('getMinutes timeString -> ', gmTimeString, 'colonIndex -> ', gmColonIndex);
         
-        if (sanitizedInputTime.length > desiredLength) {
-            let result = sanitizedInputTime.slice(0, desiredLength);
-            return result;
+        // if there is a colon, take up to 2 characters after it, adding zero(s) to get 2 characters total
+        if (gmColonIndex > -1) {
+            if (gmColonIndex === gmTimeString.length - 1) {
+                return "00";
+            } else {
+                var minutesVal = gmTimeString.slice(gmColonIndex + 1, gmColonIndex + 3);
+
+                while (minutesVal.length < 2) {
+                    minutesVal = minutesVal + '0';
+                }
+                return minutesVal;
+            }
         }
 
-        while (sanitizedInputTime.length < desiredLength) {
-            sanitizedInputTime = '0' + sanitizedInputTime;
+        if (gmTimeString.length == 1) {
+            return "0" + gmTimeString;
+        }
+        if (gmTimeString.length == 2) {
+            return gmTimeString;
+        }
+        if (gmTimeString.length > 2) {
+            return gmTimeString.slice(2, 4);
+        }
+        
+        return "00";
+    }
+
+    // return a valid value for hours or minutes based on maxValue
+    function sanitizeTimeUnits(stuTimeString, maxValue) {
+        var stuTimeNum = Number.parseInt(stuTimeString, 10);
+
+        if (stuTimeNum === undefined || Number.isNaN(stuTimeNum) || stuTimeNum < 0) {
+            stuTimeNum == '00';
         }
 
-        return sanitizedInputTime;
+        if (stuTimeNum > maxValue) {
+            stuTimeNum = maxValue;
+        }
+
+        var stuResult = stuTimeNum.toString();
+
+        while (stuResult.length < 2) {
+            stuResult = '0' + stuResult;
+        }
+
+        // console.log('sanitizedTimeUnits timeString -> ', stuTimeString , 'maxValue -> ', maxValue, 'parsed timeString -> ', stuTimeNum, 'result -> ', stuResult);
+        return stuResult;
+    }
+
+    // take a string and attempt to format it as HHMM using helper methods
+    function formatTimeValue(ftvTimeString) {
+        // eliminate common non-time characters from the string maintaining only numbers and colon character
+        var ftvHoursMins = ftvTimeString.replaceAll(/(?:[a-zA-Z]|[,;\!\@\#\$\%\^\&\*\(\)\-\_])/gm, '');
+        // console.log('timeString -> ', ftvTimeString, ' has been transformed to -> ', ftvHoursMins);
+
+        var ftvHours = getHours(ftvHoursMins);
+        var ftvMinutes = getMinutes(ftvHoursMins);
+        var ftvSanitizedHours = sanitizeTimeUnits(ftvHours, 23);
+        var ftvSanitizedMinutes = sanitizeTimeUnits(ftvMinutes, 59);
+        return ftvSanitizedHours + ftvSanitizedMinutes;
     }
     
     function getDayOfMonth(date) {
@@ -131,7 +183,8 @@
     function handleAddBib(bibAction) {
         const riderNum = GetElementById('RiderNum').value;
         if (riderNum && bibAction != undefined && bibAction.length > 0) {
-            let time = formatCurrentTime(GetElementById('TimeField').value);
+            // let time = formatCurrentTime(GetElementById('TimeField').value);
+            var time = formatTimeValue(GetElementById('TimeField').value);
             let dayOfMonth = getDayOfMonth(new Date());
             let locationVal = GetElementById('Location').value;
             let shortLoc = shortenLocation(locationVal);
@@ -181,7 +234,7 @@
         if (storedLocation !== '') {
             GetElementById('Location').value = storedLocation;
         } else {
-            GetElementById('location').value = '--Choose a station--';
+            GetElementById('Location').value = '--Choose a station--';
         }
 
         let storedTitle = localStorage.getItem('RTrackertitle');
@@ -189,7 +242,7 @@
         let storedMsgNumber = localStorage.getItem('MessageNumber');
         GetElementById('MessageNumber').value = storedMsgNumber;
         let locationLong = lengthenLocation(storedLocation);
-        let regulartitle = `${storedTitle} ${locationLong} Message #${storedMsgNumber}`;
+        let regulartitle = '' + storedTitle + ' ' + locationLong + ' Message #' + storedMsgNumber;
         GetElementById('msgsubject').value = regulartitle;
         GetElementById('MessageNumber').value = storedMsgNumber;
         GetElementById('FormatNote').value = '* The entries in the message will be TAB delimited, allowing copy/paste into a spreadsheet.';
@@ -206,7 +259,7 @@
             const prevDOM = previousItem.dayOfMonth || 'none';
             const prevMsgNum = previousItem.messageNumber || 'none';
             console.log('previous Runner, Action, Time, DOM, MsgNum', prevRunner, prevAction, prevTime, prevDOM, prevMsgNum);
-            const previousRecordString = `#${previousItem.runner}, ${previousItem.action}, ${prevTime}, D:${previousItem.dayOfMonth}, M#${previousItem.messageNumber}`;
+            const previousRecordString = '#' + previousItem.runner + ', ' + previousItem.action + ', ' + prevTime + ', D:' + previousItem.dayOfMonth + ', M#' + previousItem.messageNumber;
             GetElementById('endOfPriorBatch').value = previousRecordString;
         }
     }
@@ -229,11 +282,11 @@
 
     // gets, formats, and returns the current clock time in HHMM format
     function getCurrentTime() {
-        var currentTime = new Date();
-        var hours = currentTime.getHours();
-        var minutes = currentTime.getMinutes();
-        var timeString = '' + hours + ':' + minutes + '';
-        return formatCurrentTime(timeString);
+        var gctCurrentTime = new Date();
+        var gctHours = gctCurrentTime.getHours();
+        var gctMinutes = gctCurrentTime.getMinutes();
+        var gctTimeString = '' + gctHours + ':' + gctMinutes + '';
+        return gctTimeString;
     }
 
       function addIn() {
@@ -374,7 +427,7 @@
             thisday = '0' + thisday;
         }
 
-        return `${thisyear}-${thismonth}-${thisday} ${h}_${m}`;
+        return '' + thisyear + '-' + thismonth + '-' + thisday + ' ' + h + '_' + m;
     }
 
       // captures each form element value in a JSON object and stores it in hidden element 'parseme'
@@ -451,7 +504,7 @@
 
     window.addEventListener('load', function () {
         const formVersion = '2.1.3';
-        document.getElementById('thisVersion').innerText = `Version ${formVersion}`;
+        document.getElementById('thisVersion').innerText = 'Version ' + formVersion;
         document.getElementById('FormVersion').value = formVersion;
         localStorage.setItem('Form Version', formVersion);
 
@@ -898,17 +951,19 @@
 
                 <h2>About This Form</h2>
                 
-                <p>This form has been coded using technologies available to desktop browsers all the way back to March of 2010, including Chrome, Firefox, IE 11, Opera, and Safari iOS. Support for Edge (released in 2015) is also included.</p>
+                <p>This form has been coded using technologies available to desktop browsers all the way back to March of 2010. Chrome, Firefox, IE 11, Opera, and Safari are supported. You can also use Edge (released in 2015), although the later versions that include the Chromium Engine will be most reliably compatible.</p>
 
-                <p>Mobile device browsers are supported, including Chrome, Samsung Internet, Opera Mobile, and Android Firefox. You can rotate your device to change the view and the form will adjust its layout to accommodate the new screen dimensions (try it now!)</p>
+                <p>Mobile device-based web browsers are also supported! This includes Chrome, Samsung Internet, Opera Mobile, and Android Firefox. You can rotate your device to change the view and the form will adjust its layout to accommodate the new screen dimensions (try it now!)</p>
                 
                 <p>Some mobile device browsers have quirks:</p>
                 
                 <ul>
-                    <li>The on-screen keyboard will definitely get in your way while adding data on smaller devices. Use a compatible external keyboard if you have one.</li>
+                    <li>The on-screen keyboard will definitely get in your way. Use a compatible external keyboard if you have one.</li>
                     <li>Tab-order is not always correct. Just tap the field you want to change/fill-in to work around the problem.</li>
                 </ul>
 
+                <p>NEW FEATURE for 2024: Users now have the ability to edit Bib Data in the Entries Field after entering them using the IN, OUT, or DROP buttons. <em>Using the form to enter data is a better choice than entering or editing the data manually</em>, so use this feature with care and precision.</p>
+                
                 <h2>Topics</h2>
                 
                 <p>The form is broken up into three sections:</p>
@@ -916,7 +971,7 @@
                 <ul>
                     <li>Top: Form header with event, location, and message information.</li>
                     <li>Middle: Entering and viewing bib data.</li>
-                    <li>Bottom: Add comments, save and restore bib data, and submit the data for posting a new Winlink Express message.</li>
+                    <li>Bottom: A Comments field and buttons for saving, restoring, and clearing bib data, and submitting data for posting a new Winlink Express message.</li>
                 </ul>
 
                 <p>Note: This form provides <em>limited keyboard-only support</em>.</p>
@@ -933,62 +988,95 @@
                     </li>
                 </ul>
 
-                <p>If you have questions or suggestions about keyboard-only mode support, please talk with Jon K7RMZ or see the <a href="https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form">GitHub Project</a> for more information.</p>
+                <p>If you have questions or suggestions about keyboard-only mode support, talk with Jon K7RMZ or see the <a href="https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form">GitHub Project</a> for more information.</p>
 
                 <h2>Top section: Header and Message Information</h2>
 
                 <ol>
                     <li>Enter this Event Name for example &quot;Bigfoot 2024&quot;.</li>
                     <li>Enter a Message Number starting with 1. You can use the <button>Increment</button> button once or just enter a number.</li>
-                    <li>Enter the recipient's amateur call sign in Send To field. You can add other recipients in the Winlink Message <em>after submitting</em>.</li>
+                    <li>Enter the recipient's amateur call sign in the Send To field. You can add other recipients in the Winlink Message <em>after submitting</em>.</li>
                     <li>Aid Station: Click or press the <kbd>Spacebar</kbd> to display the list, then use your mouse or keyboard <kbd>arrows</kbd> and <kbd>Enter</kbd> key to select the Aid Station for which the bib data applies.</li>
                     <li>Subject Line: This is filled-in automagically. Resist the urge to change it.</li>
                 </ol>
 
+                <p><em>Note</em>: Be certain to select <em>the Aid Station you are reporting for</em>. This is critically important information.</p>
+
+                                
+                <p>The Subject Line will be formatted for you. As an example, a Subject Line of <code>BigFoot 2023 Elk Pass Message #1</code> is composed from the following information:</p>
+
+                <ul>
+                    <li>BigFoot 2023: The Race or Event Name entered at the top of the form.</li>
+                    <li>Elk Pass: The Aid Station selected at the top of the form.</li>
+                    <li>Message #1: The Message Number entered at the top of the form.</li>
+                </ul>
+
+                <p>The &quot;Send To&quot; data is used to address the Winlink Message to the intended recipient and is not included in the subject line.</p>
+
                 <h2>Middle section: Entering and Viewing Bib Data</h2>
 
-                <p>Enter one Bib Number for Runner that arrives (IN), leaves (OUT), or bows-out of the event (DROP):</p>
+                <p>Enter the Bib Number and time that a Runner arrived (IN), exited (OUT), or bowed-out of the event (DROP):</p>
 
                 <ol>
-                    <li>Enter Bib Number: Limited to 15 characters, max.</li>
-                    <li>Enter The Time: This should be 24hr time like <em>HHMM</em> (colon character is optional). Your browser might suggest the current time.</li>
+                    <li>Enter Bib Number: Limited to 15 characters.</li>
+                    <li>Enter The 24-hour time that the runner entered, exited, or bowed-out. Limited to 6 characters.</li>
                     <li>Yesterday: Click/tap this checkbox to set the day of the month back one day.</li>
-                    <li>Click IN (arrived), or OUT (exited), or DROP (bowed out of event). Doing so adds the bib information to the Entries Field, below.</li>
-                    <li>Entry Count: A read-only field shows the number of bib records you have entered.</li>
-                    <li>End Of Prior: A read-only field that displays the last-submitted entry in a prior message created with this Form. Must leave browser open to use this. Format is `bib, action, time, day of month, message number`</li>
-                    <li>Entries Field: Displays the list of entries complete with bib number, time, action, day of month, and Aid Station abbreviation.</li>
+                    <li>Click IN (arrived), or OUT (exited forward course), or DROP (bowed out of event). Doing so adds the bib information to the Entries Field, below.</li>
                 </ol>
 
-                <p>Bib Number and Bib Time fields will auto-populate if you forget to edit them, or mis-key certain characters while typing. If you find '0000' values in the Entries textbox, you can go into the entries field and update them, or delete entire entries. <em> Be very careful editing items in the entries field because changes are not reversable!</em></p>
+                <p>The following items will get updated after clicking IN, OUT, or DROP buttons.</p>
 
+                <ul>
+                    <li>Entry Count: A read-only field shows the number of bib records that have been entered.</li>
+                    <li>End Of Prior: A read-only field that displays the last-submitted entry in a prior message created with this Form. Leave the web browser open to use this feature. The format is &quot;Bib Number, Action, Time, &quot;D:&quot; Day of month, and &quot;M#&quot; Message number&quot;</li>
+                    <li>Entries Field: Displays the list of entries complete with bib number, time, action, day of month, and Aid Station abbreviation.</li>
+                    <li>Bib Number, Time, and Yesterday fields will be cleared.</li>
+                </ul>
+
+                <p>Bib Number and Bib Time fields will auto-populate if you forget to add data to them. Mis-keying certain characters will cause the form to attempt to correct the mistake (but it is not perfect). A common default &quot;fix&quot; is &quot;0000&quot; in the Bib Number or Time entry boxes, or in the Entries Field below. Watch for this while you are entering data and fix it before clicking IN, OUT, or DROP.</p>
+
+                <p><em>Note</em>: Be certain to enter Time in a 24-hour format like "0006" or "00:06" (for 6 minutes after midnight), and "2350" or "23:50" (for 11:30pm). <em>Avoid</em> using &quot;am&quot; and &quot;pm&quot;. Adding alpha characters will just take up space while typing, and will be removed before it is put into the Entries Field below. Other characters besides numbers and &quot;:&quot; will result in the form changing your entry, possibly in an unexpected way.</p>
+
+                <p><em>Pay attention while entering data</em>. Always verify data while entering it, and use the <button>Save</button> to save your place.</p>
+
+                <p>The Entries Field uses comma-separated-values. The Bib Record data fields are (from left to right): Bib Number, Bib Action, Action Time, Day Of Month, Aid Station (abbreviated). If you must edit an entry, be certain that all 5 fields exist for each entry (row), and the 5 fields are separated by a single comma. If you must edit data, it is probably a better choice to remove the row with &quot;bad data&quot; and then re-enter the data correctly using the Form Fields and buttons.</p>
                 <h3>About IN, OUT, and DROP Actions</h3>
+
+                <p>This is a trail-running event, not a timed competition. Use your best judgement when entering Bib Times, for the safety of registered participants, and for the well-being of their crew (knowing where their runner is).</p>
 
                 <ul>
                     <li>
                         IN: The runner (bib) arrived at the Aid Station.
                     </li>
                     <li>
-                        OUT: The runner exited the Aid Station, continuing forward course.
+                        OUT: The runner exited the Aid Station, continuing forward&dash;course.
                     </li>
                     <li>
                         DROP: The runner is bowing out of the race or has been disqualified by Destination Trail.
                     </li>
                 </ul>
 
-                <p>Each runner can only have one Action per entry. If you know that Bib 123 entered at 12:34 today and exited at 14:34 today, you would follow the instructions to enter each one at a time in this order:</p>
+                <p>Only one Action per Bib Record entry is allowed.</p>
+                
+                <p>Example: Bib 123 entered at about 12:34 today you would enter the data like this:</p>
 
                 <ol>
-                    <li>Bib Number</li>
-                    <li>Bib Time</li>
-                    <li>Optionally click the &quot;yesterday&quot; checkbox</li>
-                    <li>One of the buttons &quot;IN&quot;, &quot;OUT&quot;, &quot;DROP&quot;</li>
+                    <li>Bib Number: 123</li>
+                    <li>Bib Time: 1234</li>
+                    <li>Click &quot;IN&quot;</li>
                 </ol>
 
-                <p>If you don't know the <em>exact time</em> of the bib event ask the Aid Station captain and volunteers. You could also try to locate the runner's crew and ask if they know. If you don't find an answer, chances are you have a better idea than anyone else nearby, so make a fair estimate based on your experience, enter that time, and add a concise note in the Comment field about that bib number.</p>
-               
-                <p>Stay on top of your runner records lists. Even if you cannot send data via Winlink for some reason, keep entering data into this Form and click <button>Save Race data</button> to store a list on your device. Start a new Form and repeat this process until you can send the data via Winlink using the <button>Load Race data</button> or by other means. You will have an easier time keeping track of runners this way by viewing files stored on your device.</p>
+                <p>When a runner actually arrived <em>yesterday</em>, click the &quot;Yesterday&quot; checkbox before clicking the appropriate Action button.</p>
 
-                <p>The sooner you get valid data to Bigfoot Base, the better the hams and the event organizers understand the status of all runners and Aid Stations. Since runners come and go from Aid Stations both day and night, you will end up with a list of runners that arrived, exited, or dropped, sometime in the past. If you get behind by more than a day or so, you will find the record-keeping duty much more challenging than it needs to be.</p>
+                <p>If you don't know the <em>exact time</em> the runner entered the Aid Station:</p>
+                
+                <ol>
+                    <li>Check the Aid Station booklet and &quot;Bingo Board&quot; (assuming they are being updated).</li>
+                    <li>Ask the Aid Station captain and volunteers. They will sometimes have a good idea as to when a runner arrived or left.</li>
+                    <li>Locate the runner's crew and ask if they know.</li>
+                </ol> 
+                
+                <p>If you don't find an answer following the above steps, chances are <em>you have the best situational knowledge</em> to determine what time makes the most sense. Make a fair estimate based on your experience and enter that time. Add a concise note in the Comment field about that bib number if extra information will be helpful.</p>
 
                 <h3>Number of Entries</h3>
 
@@ -1000,9 +1088,9 @@
 
                 <p>For any bib entries that need additional explanation (especially DROP) use the &quot;Comments&quot; area to free-form a <em>short and to the point</em> statement.</p>
 
-                <p>If the message is too long or complex for the Comment field, contact Bigfoot Base via a separate Winlink Message, voice radio, or cellphone to relay the information to them.</p>
+                <p>If the message is too long or complex for the Comment field, contact Bigfoot Base via a separate Winlink Message, voice radio, or other means to relay the necessary information to them.</p>
 
-                <p>One last note about runners that &quot;DROP&quot;: It is usually a good idea to radio-in to Bigfoot Base by voice after adding a DROP to the list. Have the bib number, time, and the reason form dropping ready when you call.</p>
+                <p>One last note about runners that &quot;DROP&quot;: It is usually a good idea to radio-in to Bigfoot Base by voice after adding a DROP to the list. Have the bib number, time, and the reason (if known) ready before you call.</p>
 
                 <h3>Save and Load buttons</h3>
 
@@ -1019,30 +1107,27 @@
                 <p>If you launched this form using Winlink Express, use the <button>Submit</button> button to have Winlink Express automatically create a new, well formatted message. On-screen information will guide you through the submission process.</p>
                 
                 <p>The information that is sent in the new Message via WinLink can be copied and pasted directly into an excel spreadsheet or other database software. This is what Bigfoot Base does when they receive the message. If it is not formatted exactly as this Form does it, they might call you on the radio and ask for you to resubmit or clarify information. This is not a good use of your time, so refrain from editing the "posted" Winlink Message after submitting this Form.</p>
-                
-                <p>The Subject Line will be formatted for you, for example: <code>BigFoot 2023 Elk Pass Message #1</code>. Below is a breakdown of how the subject line is created:</p>
-
-                <ul>
-                    <li>BigFoot 2023: The Race or Event Name entered at the top of the form.</li>
-                    <li>Elk Pass: The Aid Station selected at the top of the form.</li>
-                    <li>Message #1: The Message Number entered at the top of the form.</li>
-                </ul>
-
-                <p>The &quot;Send To&quot; data is used to address the Winlink Message to the intended recipient and is not included in the subject line.</p>
 
                 <h3>Clear Entries button</h3>
                 
                 <p>Use the <button>Clear Entries</button> button to remove <em>all bib record entries</em>. USE WITH CAUTION <em>there is no undo</em>!
                     See the above sub-section &quot;Saving and Loading Race Data&quot; for more information.</p>
+
                 <hr />
                 
-                <h2>Consider This</h2>
-                
+                <h2>Considerations</h2>
+               
+                <p>Stay on top of your runner records lists. Even if you cannot send data via Winlink for some reason, keep entering data into this Form and click <button>Save Race data</button> to store a list on your device. Start a new Form and repeat this process until you can send the data via Winlink using the <button>Load Race data</button> or by other means. You will have an easier time keeping track of runners this way by viewing files stored on your device.</p>
+
+                <p>The sooner you get valid data to Bigfoot Base, the better the hams and the event organizers understand the status of all runners and Aid Stations. Since runners come and go from Aid Stations both day and night, you will end up with a list of runners that arrived, exited, or dropped, sometime in the past. If you get behind by more than a day or so, you will find the record-keeping duty much more challenging than it needs to be.</p>
+
                 <p>Load this Form on a tablet or laptop computer and track runners until you have several dozen. Use the <button>Save Race data</button> button to save the data to a thumbdrive to share the data with the Winlink Operator, who can then open a new message form and click <button>Load Race data</button> to load the collected data and send it. This will save you time and effort, and might even free-up your Winlink Operator to perform other duties while you collect bib records on your phone or tablet, instead of pen and paper.</p>
                 
                 <p>If you have a computer network savvy ham on your team, try networking your devices within a small WiFi, so you can just transfer the saved race data directly to the Winlink computer at any time.</p>
                 
                 <p>There are many possible ways to slice this cake. Use your imagination and allow this form to help you be efficient in tracking runners.</p>
+
+                <hr />
 
                 <h2>Credits and Thanks</h2>
                 
@@ -1078,14 +1163,7 @@
 
         // add event listener to Bib Time field: call functions to sanitize and pad user input
         timeFieldElement.addEventListener('blur', function() {
-            var timeValueToSanitize = '';
-            this.value = this.value.trim();
-            if (this.value.length < minFieldLength) {
-                timeValueToSanitize = defaultTimeString;
-            } else {
-                timeValueToSanitize = this.value;
-            }
-            GetElementById('TimeField').value = sanitizeAndPadTime(timeValueToSanitize, 4);
+            GetElementById('TimeField').value = formatTimeValue(this.value);
         });
 
         // add event listener to Rider Number field: set default value if empty or set current clock time to Time field
@@ -1098,7 +1176,7 @@
 
             this.value = this.value.toUpperCase();
             var currTime = getCurrentTime();
-            GetElementById('TimeField').value = sanitizeAndPadTime(currTime, 4);
+            GetElementById('TimeField').value = formatTimeValue(currTime);
         });
     </script>
 </body>
