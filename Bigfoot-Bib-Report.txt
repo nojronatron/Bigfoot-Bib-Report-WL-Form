@@ -1,5 +1,5 @@
 Form: Bigfoot-Bib-Report-Initial.html
-To: <var address>
+To:<var address>
 Subject:<var msgsubject>
 Msg:
 -
