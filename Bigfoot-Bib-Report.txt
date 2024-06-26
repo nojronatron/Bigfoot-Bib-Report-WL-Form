@@ -9,4 +9,4 @@ Msg:
 <var FormatNote>
 -----
 Winlink Express Sender <var MsgSender> 
-Template version <var Theversion>
+Template version <var FormVersion>
