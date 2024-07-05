@@ -9,7 +9,7 @@
       content="Race Tracker Form for Winlink Express created by KG6SJT, modified by K7RMZ for Bigfoot ultra marathon comms-support events."
     />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="favicon.png" />
+    <link rel="icon" href="" />
     <title>Bigfoot Bib Tracker</title>
 
     <script language="javascript" type="text/javascript">
@@ -626,11 +626,14 @@
       .close:link,
       .close:visited {
         position: absolute;
-        top: -0.75em;
+        top: -2rem;
         right: -0.75em;
         display: block;
         line-height: 1.8;
-        padding: 0em;
+        padding-left: 0.4rem;
+        padding-right: 0.4rem;
+        padding-top: 0.2rem;
+        padding-bottom: 0.2rem;
         text-align: center;
         text-decoration: none;
         background-color: rgb(0,0,0);
@@ -638,11 +641,6 @@
         color: rgb(255,255,255);
         border-radius: 1em;
         box-shadow: 0rem 0rem 0.5rem 0.5rem;
-      }
-
-      .close:before {
-        content: 'Click To Close This';
-        margin: 3em;
       }
 
       .close:hover,
@@ -712,7 +710,7 @@
   </head>
 
 <body>
-    <section>
+    <section id="close">
     <form 
         onsubmit="return confirm('To complete your form submission, click OK and close the browser tab. You will return to the new message window so you can post your message to the outbox.');"
         method="post" id="myform" enctype="multipart/form-data" action="http://{FormServer}:{FormPort}">
@@ -857,7 +855,7 @@
 
         <div class="popBox">
             <!-- If the content becomes larger than the pop-up this div will scroll the content -->
-            <a href="#close" class="close"></a>
+            <a href="#close" class="close">Click to close this help</a>
 
             <div class="popScroll">
                 <h1>Winlink Operator Instructions</h1>
