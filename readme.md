@@ -28,7 +28,14 @@ For more information about Destination Trail and their ultra trail running marat
 
 ## Form and Template Version
 
-Current: v2.0.1 - June 2024
+25-June-2024: v2.1.3
+
+- Add sanitization to bib number and bib time inputs.
+- Format bib time input as 'HHMM' (4 characters, no colon, no non-number characters).
+- Format CSV entries as 'HHMM' etc (same as above).
+- Update Form Information (help) text.
+
+5-June-2024: v2.0.1
 
 - Updates Template file variable names.
 - Updates Form to use CSV on UI, submit Tab-delimited on Submit.
@@ -38,6 +45,7 @@ Current: v2.0.1 - June 2024
 - Remove and factor-out unused or unnecessary code, consolidate other code paths.
 - Enforce CRLF in git operations.
 - Updates code to support major desktop and mobile browsers from March 2010 forward.
+- Update in-form help documentation to bring up-to-date.
 
 6-Aug-2023: v1.1.7
 
@@ -200,7 +208,7 @@ Here's a sample of what that saved data looks like:
 
 ```json
 {
-  "FormVersion": "2.0.1",
+  "FormVersion": "2.1.3",
   "EventTitle": "BF24 Test",
   "MessageNumber": "5",
   "address": "k7rmz",
@@ -237,7 +245,7 @@ The form allows you to click or tap on input fields to select them, and you can 
 1. Click the empty box next to `Bib or Rider`.
 1. Enter the bib number. For example `101`.
 1. Press Tab to move to the "Time" entry box and the current 24-hour time will appear in the box for the _current day_.
-1. _As necessary_ update the time to an accurate representation of the time the runner arrived, left, or dropped. Generally, this timestamp should be close to actual, but is _not an official record_.
+1. _As necessary_ update the time to an accurate representation of the time the runner arrived, left, or dropped. Generally, this timestamp should be close to actual but it is _not an official record_ so use your best judgement.
 1. Click the checkbox labeled `Yesterday` to tell the Form the time references _yesterday_.
 1. Click IN, OUT, DROP depending on what the runner `Action` was.
 
@@ -291,11 +299,11 @@ You can set up to 3 Forms as _Favorites_ following these steps:
 
 1. Open Winlink Express.
 2. Click the Messages menu and select `Set Favorite Templates`.
-3. Supply a display name, for example: `BF Bib Report`.
+3. Supply a display name, for example: `BF-Form`.
 4. Click `Browse` and locate `Bigfoot Bib Report Initial.html`.
 5. Click `Save`.
-
-Whenever you start a new message, a button named `BF Bib Report` will be along the top of the New Message window (as you named it). Click it to launch the Form.
+6. Start a new New Message in Winlink Express and notice a button named `BF-Form` has been added along the top of the New Message window (highlighted green in the example image below).
+7. Click the `BF-Form` button to launch the Form in your default web browser.
 
 ![Bigfoot Form set as favorite appears in New Message menus](./images/new-message-favorite-form-in-green.png)
 
@@ -373,8 +381,8 @@ A Pull Request should have helpful comments within it:
 
 Have fun!
 
-This is a personal effort of love for coding and ham radio, and I have made this project open to benefit the amateur community.
+This is a personal effort of love for coding and for the hobby and community of ham radio. This project open to benefit the amateur community.
 
-The original author might import restrictions or limitations on use of their source code. Please see [Winlink.org](https://winlink.org/) for details about the originating source code.
+The original author might assert restrictions or limitations on use of their source code. See [Winlink.org](https://winlink.org/) for details.
 
 [Back To Top](#bigfoot-bib-report-winlink-form)
