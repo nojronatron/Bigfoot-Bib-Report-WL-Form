@@ -71,65 +71,73 @@
     }
 
     // calculate most likely hours characters returning a best-effort hours value
-    function getHours(timeString) {
+    function getHoursFromTimeString(timeString) {
         var ghColonIndex = timeString.indexOf(':');
-        var ghHoursValue = "00";
+        var ghHoursResult = "00";
 
         // if there is a colon, take character(s) just before it
         if (ghColonIndex > -1) {
             if (ghColonIndex > 2) {
                 var ghHourIndex = ghColonIndex - 2;
-                ghHoursValue = timeString.slice(ghHourIndex, ghColonIndex);
+                ghHoursResult = timeString.slice(ghHourIndex, ghColonIndex);
             }
 
             if (ghColonIndex > 0 && ghColonIndex <= 2) {
-                ghHoursValue = timeString.slice(0, ghColonIndex);
+                ghHoursResult = timeString.slice(0, ghColonIndex);
             }
-        
-            return ghHoursValue;
+        }
+        else {
+            // if there is no colon take up to 2 leftmost characters depending on timeString size
+            if (timeString.length >= 4) {
+                ghHoursResult = timeString.slice(timeString.length - 4, timeString.length - 2);
+            }
+
+            if (timeString.length === 3) {
+                ghHoursResult = timeString.slice(0, 1);
+            }
+
+            if (timeString.length <= 2) {
+                console.log('Info: TIME value character cound is less than 3. No action required.');
+            }
         }
 
-        // if there is no colon take up to 2 leftmost characters depending on timeString size
-        if (timeString.length > 2) {
-            var ghHoursValue = timeString.slice(0, 2);
-            return ghHoursValue;
-        }
-
-        if (timeString.length <= 2) {
-            return "00";
-        }
+        return ghHoursResult;
     }
 
     // calculate most likely minutes characters returning a best-effort minutes value
-    function getMinutes(gmTimeString) {
+    function getMinutesFromTimeString(gmTimeString) {
         var gmColonIndex = gmTimeString.indexOf(':');
-        //console.log('getMinutes timeString -> ', gmTimeString, 'colonIndex -> ', gmColonIndex);
-        
+        var gmMinutesResult = "00";
+
         // if there is a colon, take up to 2 characters after it, adding zero(s) to get 2 characters total
         if (gmColonIndex > -1) {
-            if (gmColonIndex === gmTimeString.length - 1) {
-                return "00";
-            } else {
-                var minutesVal = gmTimeString.slice(gmColonIndex + 1, gmColonIndex + 3);
+            if (gmColonIndex < gmTimeString.length - 1) {
+                // if input :01 then result 01, if input :001 then result 00, etc
+                gmMinutesResult = gmTimeString.slice(gmColonIndex + 1, gmColonIndex + 3);
+            }
 
-                while (minutesVal.length < 2) {
-                    minutesVal = minutesVal + '0';
-                }
-                return minutesVal;
+            while (gmMinutesResult.length < 2) {
+                // if input was : then result 00, if :1 then result 10, if :2 then result 20, etc
+                gmMinutesResult = gmMinutesResult + '0';
             }
         }
-
-        if (gmTimeString.length == 1) {
-            return "0" + gmTimeString;
-        }
-        if (gmTimeString.length == 2) {
-            return gmTimeString;
-        }
-        if (gmTimeString.length > 2) {
-            return gmTimeString.slice(2, 4);
+        else {
+            // there is no colon in the input so best-effort to find minutes characters
+            if (gmTimeString.length == 2) {
+                // 11 is 11, 22 is 22 etc
+                gmMinutesResult = gmTimeString;
+            }
+            if (gmTimeString.length > 2) {
+                // just take the last two characters there is no way to tell user intent anymore
+                gmMinutesResult = gmTimeString.slice(gmTimeString.length - 2, gmTimeString.length);
+            }
+            if (gmTimeString.length == 1) {
+                // if no colon then 1 is 01 minutes, 2 is 02 minutes, etc
+                gmMinutesResult = "0" + gmTimeString;
+            }
         }
         
-        return "00";
+        return gmMinutesResult;
     }
 
     // return a valid value for hours or minutes based on maxValue
@@ -150,7 +158,6 @@
             stuResult = '0' + stuResult;
         }
 
-        // console.log('sanitizedTimeUnits timeString -> ', stuTimeString , 'maxValue -> ', maxValue, 'parsed timeString -> ', stuTimeNum, 'result -> ', stuResult);
         return stuResult;
     }
 
@@ -158,19 +165,23 @@
     function formatTimeValue(ftvTimeString) {
         // eliminate common non-time characters from the string maintaining only numbers and colon character
         var ftvHoursMins = ftvTimeString.replaceAll(/(?:[a-zA-Z]|[,;\!\@\#\$\%\^\&\*\(\)\-\_])/gm, '');
-        // console.log('timeString -> ', ftvTimeString, ' has been transformed to -> ', ftvHoursMins);
-
-        var ftvHours = getHours(ftvHoursMins);
-        var ftvMinutes = getMinutes(ftvHoursMins);
+        // get hours and minutes, sanitize the numbers, then concatenate and return
+        var ftvHours = getHoursFromTimeString(ftvHoursMins);
+        var ftvMinutes = getMinutesFromTimeString(ftvHoursMins);
         var ftvSanitizedHours = sanitizeTimeUnits(ftvHours, 23);
         var ftvSanitizedMinutes = sanitizeTimeUnits(ftvMinutes, 59);
         return ftvSanitizedHours + ftvSanitizedMinutes;
     }
     
     function getDayOfMonth(date) {
-        let day = date.getDate();
+        var day = date.getDate();
         day = GetElementById('yesterday').checked ? (day === 1 ? 31 : day - 1) : day;
-        return day.toString().padStart(2, '0');
+        // return day.toString().padStart(2, '0');
+        var result = "00";
+        if (day.toString().length < 2) {
+            result = "0" + day;
+        }
+        return result;
     }
     
     function ResetForm() {
@@ -282,78 +293,90 @@
 
     // gets, formats, and returns the current clock time in HHMM format
     function getCurrentTime() {
-        var gctCurrentTime = new Date();
-        var gctHours = gctCurrentTime.getHours();
-        var gctMinutes = gctCurrentTime.getMinutes();
-        var gctTimeString = '' + gctHours + ':' + gctMinutes + '';
-        return gctTimeString;
+        var currentDateResult = new Date();
+        var dateResultHoursOnly = currentDateResult.getHours();
+        var dateResultMinutesOnly = currentDateResult.getMinutes();
+        var currentHour = dateResultHoursOnly.toString();
+
+        while (currentHour.length < 2) {
+            currentHour = "0" + currentHour;
+        }
+
+        var currentMinute = dateResultMinutesOnly.toString();
+
+        while (currentMinute.length < 2) {
+            currentMinute = "0" + currentMinute;
+        }
+
+        var resultGctTime = currentHour + ':' + currentMinute;
+        return resultGctTime;
     }
 
-      function addIn() {
+    function addIn() {
         handleAddBib('IN');
-      }
+    }
 
-      function addOut() {
+    function addOut() {
         handleAddBib('OUT');
-      }
+    }
 
-      function addDrop() {
+    function addDrop() {
         handleAddBib('DROP');
-      }
+    }
 
-      function storePreviousRecord(bibNumber, action, timestamp, dayOfMonth, location) {
-        // capture the current message number to store with the previous record
-        const messageNumber = GetElementById('MessageNumber').value;
-        // initialize a new object and store bibNumber, action, timestamp, dayOfMonth, and location variables as properties
-        let previousRecord = {
-            runner: bibNumber,
-            action: action,
-            time: timestamp,
-            dayOfMonth: dayOfMonth,
-            location: location,
-            messageNumber: messageNumber,
-        };
+    function storePreviousRecord(bibNumber, action, timestamp, dayOfMonth, location) {
+    // capture the current message number to store with the previous record
+    const messageNumber = GetElementById('MessageNumber').value;
+    // initialize a new object and store bibNumber, action, timestamp, dayOfMonth, and location variables as properties
+    let previousRecord = {
+        runner: bibNumber,
+        action: action,
+        time: timestamp,
+        dayOfMonth: dayOfMonth,
+        location: location,
+        messageNumber: messageNumber,
+    };
 
-        // store this object into localStorage
-        localStorage.setItem('previousRecord', JSON.stringify(previousRecord));
-      }
+    // store this object into localStorage
+    localStorage.setItem('previousRecord', JSON.stringify(previousRecord));
+    }
 
-      // separator is either '\t' or ', ' depending on format needed
-      function formatBibRecord(pTime, tRunner, action, tTime, doM, loc, separator) {
+    // separator is either '\t' or ', ' depending on format needed
+    function formatBibRecord(pTime, tRunner, action, tTime, doM, loc, separator) {
         if (separator !== '\t' && separator !== ', ') {
-          separator = '\t';
+            separator = '\t';
         }
 
         storePreviousRecord(tRunner, action, tTime, doM, loc);
         newTime = String(tTime);
 
         if (tTime.indexOf(':') > -1) {
-          newTime = tTime.replace(':', '');
+            newTime = tTime.replace(':', '');
         }
 
         return (
-          tRunner +
-          separator +
-          action +
-          separator +
-          newTime +
-          separator +
-          doM +
-          separator +
-          loc +
-          '\n' +
-          pTime
+            tRunner +
+            separator +
+            action +
+            separator +
+            newTime +
+            separator +
+            doM +
+            separator +
+            loc +
+            '\n' +
+            pTime
         );
-      }
+    }
 
-      function autoGrowTextArea(textField) {
+    function autoGrowTextArea(textField) {
         if (textField.clientHeight < textField.scrollHeight) {
-          textField.style.height =
+            textField.style.height =
             textField.scrollHeight * 2 - textField.clientHeight + 'px';
         }
       }
 
-      // converts bib records in TheData element from tab-separated to comma-separated values
+    // converts bib records in TheData element from tab-separated to comma-separated values
     function convertRawBibRecordsToArray() {
         let bibRecordsRaw = GetElementById('TheData').value;
         const bibRecordsArray = bibRecordsRaw.split('\n');
@@ -430,8 +453,8 @@
         return '' + thisyear + '-' + thismonth + '-' + thisday + ' ' + h + '_' + m;
     }
 
-      // captures each form element value in a JSON object and stores it in hidden element 'parseme'
-      function storeFormValuesToHiddenElement() {
+    // captures each form element value in a JSON object and stores it in hidden element 'parseme'
+    function storeFormValuesToHiddenElement() {
         const FormVersion = GetElementById('FormVersion').value;
         const EventTitle = GetElementById('EventTitle').value;
         const MessageNumber = GetElementById('MessageNumber').value;
@@ -444,20 +467,20 @@
         const previousRecord = JSON.parse(localStorage.getItem('previousRecord'));
 
         const formObject = JSON.stringify({
-          FormVersion,
-          EventTitle,
-          MessageNumber,
-          address,
-          Location,
-          msgsubject,
-          entryCount,
-          TheData,
-          Comment,
-          previousRecord,
+            FormVersion,
+            EventTitle,
+            MessageNumber,
+            address,
+            Location,
+            msgsubject,
+            entryCount,
+            TheData,
+            Comment,
+            previousRecord,
         });
 
         GetElementById('parseme').value = formObject;
-      }
+    }
 
     // takes values stored in parseme hidden element, iterates through form elements and populates them with values
     function populateForm(jsonStringData) {
@@ -503,7 +526,7 @@
     }
 
     window.addEventListener('load', function () {
-        const formVersion = '2.1.3';
+        const formVersion = '2.1.4';
         document.getElementById('thisVersion').innerText = 'Version ' + formVersion;
         document.getElementById('FormVersion').value = formVersion;
         localStorage.setItem('Form Version', formVersion);
