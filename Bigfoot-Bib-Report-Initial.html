@@ -123,10 +123,6 @@
         }
         else {
             // there is no colon in the input so best-effort to find minutes characters
-            if (gmTimeString.length == 1) {
-                // if no colon then 1 is 01 minutes, 2 is 02 minutes, etc
-                gmMinutesResult = "0" + gmTimeString;
-            }
             if (gmTimeString.length == 2) {
                 // 11 is 11, 22 is 22 etc
                 gmMinutesResult = gmTimeString;
@@ -134,6 +130,10 @@
             if (gmTimeString.length > 2) {
                 // just take the last two characters there is no way to tell user intent anymore
                 gmMinutesResult = gmTimeString.slice(gmTimeString.length - 2, gmTimeString.length);
+            }
+            if (gmTimeString.length == 1) {
+                // if no colon then 1 is 01 minutes, 2 is 02 minutes, etc
+                gmMinutesResult = "0" + gmTimeString;
             }
         }
         
@@ -526,7 +526,7 @@
     }
 
     window.addEventListener('load', function () {
-        const formVersion = '2.1.3';
+        const formVersion = '2.1.4';
         document.getElementById('thisVersion').innerText = 'Version ' + formVersion;
         document.getElementById('FormVersion').value = formVersion;
         localStorage.setItem('Form Version', formVersion);
