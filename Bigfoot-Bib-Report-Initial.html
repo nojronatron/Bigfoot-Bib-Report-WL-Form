@@ -526,7 +526,7 @@
     }
 
     window.addEventListener('load', function () {
-        const formVersion = '2.1.4';
+        const formVersion = '2.2.4';
         document.getElementById('thisVersion').innerText = 'Version ' + formVersion;
         document.getElementById('FormVersion').value = formVersion;
         localStorage.setItem('Form Version', formVersion);
@@ -861,6 +861,7 @@
                 <select name="Location" id="Location" onchange="elementValuesToLocalStorage();" required>
                     <option value="MM_Marble Mountain SnoPark">Marble Mountain SnoPark</option>
                     <option value="BL_Blue Lake">Blue Lake</option>
+                    <option value="AC_Ape Canyon">Ape Canyon</option>
                     <option value="WR_Windy Ridge">Windy Ridge</option>
                     <option value="JR_Johnston Ridge">Johnston Ridge</option>
                     <option value="CW_Coldwater Lake">Coldwater Lake</option>
