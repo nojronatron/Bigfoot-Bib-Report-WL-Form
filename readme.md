@@ -10,6 +10,7 @@
 - [How To Use This Form](#how-to-use-this-form)
 - [Download Files To Use This Form](#download-files-to-use-this-form)
 - [How to Install This Form and Template](#how-to-install-this-form-and-template)
+- [Set A Favorite Form](#set-a-favorite-form)
 - [Form Usage in Winlink Express](#form-usage-in-winlink-express)
 - [Development](#development)
 - [Final Thoughts](#final-thoughts)
@@ -86,7 +87,7 @@ For more information about Winlink Express, the Winlink System, and Winlink Form
 
 ## How Bib Data Is Recorded At Aid Stations
 
-Aid Station volunteers should have a notebook of all the possible bib numbers that are registered for the race. As runners enter and leave each Aid Station (or drop from the event), their bib information is updated in that notebook. Hams take note of each bib number in/out/drop time and date, and enter them into this form. Some hams choose to record all runner events at their assigned Aid Station themselves, and will update the Aid Station Captain on semi-regular intervals, since the hams will have the most up-to-date runner information.
+Ideally, Aid Station volunteers should have a notebook of all the possible bib numbers that are registered for the race. As runners enter and leave each Aid Station, drop from the event (DNF), or are found to have not started (DNS), their bib information is updated in that notebook. Hams take note of each bib number in/out/drop time and date, and enter them into this form. Some hams choose to record all runner events at their assigned Aid Station themselves, sending Bib Reports to Bigfoot Base and updating their Aid Station Captain on some agreed-upon intervals about runners through the station, estimated number yet to arrive, etc.
 
 When the Form is launched from Winlink Express by selecting the template in a New Message window, the form can be submitted and the New Message will get populated with the form-entered data. The Winlink Operator can then transmit the message via whatever mode works to get the message through to its recipients, foro example Peer-to-peer direct to another station, or via the Winlink System using an RMS (Relay) station.
 
@@ -96,7 +97,7 @@ The latest release of Bigfoot Bib Report Form can be [interacted with online usi
 
 You can also view the Bib Report [plain text Template file](https://enchanting-pony-09ae40.netlify.app/bigfoot-bib-report.txt) and see how the Winlink Message is formulated using data entered in the Form, above.
 
-See [How to Install This Form and Template](#how-to-install-this-form-and-template) for details on integrating this form with your Winlink Express station.
+See [Set A Favorite Form](#set-a-favorite-form) for details on integrating this form with your Winlink Express station.
 
 ## How To Use This Form
 
@@ -108,35 +109,58 @@ Follow steps in these subsections:
 
 ## Download Files To Use This Form
 
-There are 2 files to download: "Bigfoot Bib Report Initial.html" and "Bigfoot Bib Report.txt".
-
-You have options as to where to get them (in preferential order):
-
-1. Download template and form files from [releases page](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/releases).
-2. The least-likely to be up-to-date: [Google Drive](https://drive.google.com/file/d/1xa1nm6opetl664bXLFhkogGXK54cXs3z/view)
-
-The Two Files you will need are:
+There are 2 files to download:
 
 - Bigfoot-Bib-Report-Initial.html
 - Bigfoot-Bib-Report.txt
+
+You have options as to where to get them (in preferential order):
+
+1. From this GitHub Repo's [releases page](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/releases).
+2. From the least-likely to be up-to-date [Google Drive]()
 
 When downloading from the [GitHub Releases page](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/releases) the files will be inside of a `.zip` file. After downloading, either right-click and select "Extract All..." and follow the wizard screen to unzip the files, or use your favorite "unzipping" utility (there are many to choose from, free and paid).
 
 ## How to Install This Form and Template
 
+Generally speaking, Winlink Forms and Templates are stored in a directory under your callsign in the Winlink Express installation directory tree:
+
 1. Download the Template and Form files (as indicated above).
 2. Copy `Bigfoot-Bib-Report-Initial.html` and `Bigfoot-Bib-Report.txt` to your Winlink Express installation within the directory named `{your callsign}\Templates`.
-3. Optional: Create a new directory within the Templates directory for these files.
-4. Open Winlink Express.
-5. Click the Messages menu and select `New Message`.
-6. In the New Message window click `Select Template`.
-7. In the Template Manager window double-click `{your callsign} Templates`.
-8. Click `Bigfoot-Bib-Report-txt` and then click `Select`.
-9. The Form opens in your default Web Browser.
+3. Open Winlink Express.
+4. Click the Messages menu and select `New Message`.
+5. In the New Message window click `Select Template`.
+6. In the Template Manager window double-click `{your callsign} Templates`.
+7. Click `Bigfoot-Bib-Report-txt` and then click `Select`.
+8. The Form opens in your default Web Browser.
 
-Note: Winlink Express might be installed in either `C:\RMS Express` or `C:\Winlink Express`. Either way, navigate to your callsign directory, then the Templates directory, and place the files there.
+If multiple operators will use this Winlink Express station, it might be better to install Forms and Templates to the `Global Folders\Templates` folder instead. Just adjust instructions above accordingly:
+
+- Step 2) Copy `Bigfoot-Bib-Report-Initial.html` and `Bigfoot-Bib-Report.txt` to the directory named `Global Folders\Templates`.
+- Step 6) In the Template Manager window double-click `Global Templates`.
+
+Notes:
+
+- Winlink Express might be installed in either `C:\RMS Express` or `C:\Winlink Express`. Either way, navigate to your callsign directory, then the Templates directory, and place the files there.
+- It is possible to create a new directory within the Templates directory for Forms and Templates files, so they can be organized to your liking.
 
 ![Template files directory example](./images/explorer-winlink-templates-folder-snippet.png)
+
+## Set A Favorite Form
+
+You might find it tedious to open a new message, then go through the Template Manager to find and select a Template that launches the Form.
+
+Simplify the process by making a Favorite:
+
+1. In Winlink Express, click the `Message` menu and select `Set Favorite Templates` to open a new window.
+2. Add a display name for the Template. Keep it very short to save screen real-estate. For this form try "BF-Form".
+3. Click `Browse` to open the Template Manager.
+4. Select the location where the Template is. For example `Global Templates`
+5. Select the Template file. For example `Bigfoot-Bib-Reports.txt`.
+6. Click `Select` at the top menu to set the Template and exit the Template Manager.
+7. Click `Save` on the `Set Favorite Templates` window to store the changes.
+
+Whenver you open a New Message, select the menu item named after your favorite template (for example: "BF-Form"), and Winlink Express will load the Form into your default browser window.
 
 ## Form Usage in Winlink Express
 
