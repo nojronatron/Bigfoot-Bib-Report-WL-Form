@@ -28,6 +28,12 @@ For more information about Destination Trail and their ultra trail running marat
 
 ## Form and Template Version
 
+1-Aug-2024: v2.4.x (in development)
+
+- Mouseless input: IN, OUT, DROP buttons activated using `+`, `-`, and `/` keys.
+- Clear Entries button now also removes Comment field.
+- Documentation updates covering the above features.
+
 25-June-2024: v2.1.3
 
 - Add sanitization to bib number and bib time inputs.
