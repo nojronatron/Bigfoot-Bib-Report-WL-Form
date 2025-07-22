@@ -820,9 +820,9 @@
     </style>
   </head>
 
-<body>
+  <body>
     <section id="close">
-    <form 
+      <form 
         onsubmit="return confirm('To complete your form submission, click OK and close the browser tab. You will return to the new message window so you can post your message to the outbox.');"
         method="post" id="myform" enctype="multipart/form-data" action="http://{FormServer}:{FormPort}">
             <div style="text-align: center;">
@@ -918,11 +918,11 @@
                 <label>Click an Action button to create a record:</label>
             </div>
             <div class="block-line-div">
-                <input name="Inbtn" type="button" id="Inbtn" onclick="addIn();" value="In"
+                <input name="Inbtn" type="button" id="Inbtn" value="In"
                 title="Participant arrived at this station." />
-                <input name="Outbtn" type="button" id="Outbtn" onclick="addOut();" value="Out"
+                <input name="Outbtn" type="button" id="Outbtn" value="Out"
                 title="Participant departed from this station." />
-                <input name="Dropbtn" type="button" id="Dropbtn" onclick="addDrop()" value="Drop"
+                <input name="Dropbtn" type="button" id="Dropbtn" value="Drop"
                 title="Participant dropped from race." />
             </div>
         </div>
@@ -959,11 +959,11 @@
                     title="Clear all runner entries." class="clearDataButton" />
             </div>
         </div>
-    </form>
+      </form>
     </section>
 
     <section>
-    <div id="pop1" class="pop-up">
+      <div id="pop1" class="pop-up">
         <!-- The pop-up block -->
 
         <div class="popBox">
@@ -1166,8 +1166,7 @@
             <!-- The close pop-up link correctly positioned at the end of the content block -->
 
         </div>
-    </div>
-
+      </div>
     </section>
 
     <script language="javascript" type="text/javascript">
@@ -1178,6 +1177,9 @@
         let timeFieldElement = GetElementById('TimeField');
         let riderNumberElement = GetElementById('RiderNum');
         let csvDataElement = GetElementById('TheCsvData');
+        let inBtnElement = GetElementById('Inbtn');
+        let outBtnElement = GetElementById('Outbtn');
+        let dropBtnElement = GetElementById('Dropbtn');
 
         // add event listener to csvDataElement: call functions to clean and handle existing csv data
         csvDataElement.addEventListener('blur', function() {
@@ -1202,6 +1204,34 @@
             var currTime = getCurrentTime();
             GetElementById('TimeField').value = formatTimeValue(currTime);
         });
+
+        // add an event listener to the '+' key that will call handleAddBib("IN") function
+        document.addEventListener('keydown', function(event) {
+            if (event.key === '+') {
+                event.preventDefault(); // prevent key character from being entered in the form
+                handleAddBib("IN");
+            } else if(event.key === '-') {
+                event.preventDefault(); // prevent key character from being entered in the form
+                handleAddBib("OUT");
+            } else if(event.key === '/') {
+                event.preventDefault(); // prevent key character from being entered in the form
+                handleAddBib("DROP");
+            }
+        });
+
+        // add event listeners to the IN, OUT, and DROP buttons
+        document.addEventListener('click', function(event) {
+            if (event.target === inBtnElement) {
+                event.preventDefault();
+                handleAddBib("IN");
+            } else if (event.target === outBtnElement) {
+                event.preventDefault();
+                handleAddBib("OUT");
+            } else if (event.target === dropBtnElement) {
+                event.preventDefault();
+                handleAddBib("DROP");
+            }
+        });
     </script>
-</body>
+  </body>
 </html>
