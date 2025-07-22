@@ -1207,7 +1207,7 @@
 
         // add an event listener to the '+' key that will call handleAddBib("IN") function
         document.addEventListener('keydown', function(event) {
-            if (event.key === '+') {
+            if (event.key === '+' || event.key === '=') {
                 event.preventDefault(); // prevent key character from being entered in the form
                 handleAddBib("IN");
             } else if(event.key === '-') {
