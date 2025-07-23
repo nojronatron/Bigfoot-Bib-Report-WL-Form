@@ -690,16 +690,6 @@
             margin: .3em auto;
         }
 
-        .screen-reader {
-            /* only screen readers see this element */
-            position: absolute;
-            left: -500px;
-            top: auto;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
-        }
-
         .div-across-auto-align {
             width:100%;
             margin:auto; 
@@ -875,9 +865,8 @@
             <div class="block-line-div">
                 <label for="MessageNumber">Message #</label>
                 <input name="MessageNumber" type="text" id="MessageNumber" maxlength="3" style="max-width: 3em;" onchange="elementValuesToLocalStorage();" />
+                <label for="incrMsgNum"></label>
                 <input name="incrMsgNum" type="button" id="incrMsgNum" value="increment" onclick="incrementMsgNum();" />
-                <!-- invisible label that screen readers can still use -->
-                <label for="incrMsgNum" class="screen-reader">Increment</label>
             </div>
         </div>
 
