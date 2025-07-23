@@ -32,6 +32,7 @@ Bigfoot-Bib-Report.txt
 - Use descriptive names for CSS classes and IDs.
 - Use let and const for variable declarations in JavaScript, avoiding var.
 - Do not use QuerySelector or QuerySelectorAll. Use GetElementById or GetElementsByClassName instead.
+- Prefer rgb() and rgba() over hex color values.
 
 ## Browser Compatibility
 
