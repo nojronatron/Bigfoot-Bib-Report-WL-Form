@@ -169,8 +169,8 @@
 
     // take a string and attempt to format it as HHMM using helper methods
     function formatTimeValue(ftvTimeString) {
-        // eliminate common non-time characters from the string maintaining only numbers and colon character
-        var ftvHoursMins = ftvTimeString.replaceAll(/(?:[a-zA-Z]|[,;\!\@\#\$\%\^\&\*\(\)\-\_])/gm, '');
+        // eliminate all non-time characters from the string maintaining only numbers and colon character
+        var ftvHoursMins = ftvTimeString.replace(/[^\d:]/g, '');
         // get hours and minutes, sanitize the numbers, then concatenate and return
         var ftvHours = getHoursFromTimeString(ftvHoursMins);
         var ftvMinutes = getMinutesFromTimeString(ftvHoursMins);
