@@ -615,7 +615,7 @@
                 font-size: 0.7em;
             }
             .addressInput {
-                min-width: 70%;
+                min-width: 65%;
             }
             .block-line-div {
                 display: block;
@@ -707,8 +707,9 @@
             text-align: center;
         }
 
-        .maxSizeInputWidth {
-            min-width: 75%;
+        .msgSubjElement {
+            width: 70vw;
+            outline-style: none !important;
         }
 
         .readOnlyText {
@@ -723,7 +724,7 @@
             position: absolute;
             top: 0em;
             left: -500em;
-            
+
         }
 
         .pop-up:target {
@@ -915,7 +916,7 @@
 
         <div class="div-across-auto-align">
             <label for="msgsubject">Subject:</label>
-            <input name="msgsubject" type="text" id="msgsubject" readonly="readonly" maxlength="40" class="maxSizeInputWidth" tabindex="-1" readOnlyText />
+            <input name="msgsubject" type="text" id="msgsubject" class="readOnlyText msgSubjElement" tabindex="-1" readonly />
         </div>
 
         <hr />
