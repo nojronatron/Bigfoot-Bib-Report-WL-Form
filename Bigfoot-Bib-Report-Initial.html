@@ -841,9 +841,9 @@
     </style>
   </head>
 
-<body>
+  <body>
     <section id="close">
-    <form 
+      <form 
         onsubmit="return confirm('To complete your form submission, click OK and close the browser tab. You will return to the new message window so you can post your message to the outbox.');"
         method="post" id="myform" enctype="multipart/form-data" action="http://{FormServer}:{FormPort}">
             <div style="text-align: center;">
@@ -939,11 +939,11 @@
                 <label>Click an Action button to create a record:</label>
             </div>
             <div class="block-line-div">
-                <input name="Inbtn" type="button" id="Inbtn" onclick="addIn();" value="In"
+                <input name="Inbtn" type="button" id="Inbtn" value="In"
                 title="Participant arrived at this station." />
-                <input name="Outbtn" type="button" id="Outbtn" onclick="addOut();" value="Out"
+                <input name="Outbtn" type="button" id="Outbtn" value="Out"
                 title="Participant departed from this station." />
-                <input name="Dropbtn" type="button" id="Dropbtn" onclick="addDrop()" value="Drop"
+                <input name="Dropbtn" type="button" id="Dropbtn" value="Drop"
                 title="Participant dropped from race." />
             </div>
         </div>
@@ -980,7 +980,7 @@
                     title="Clear all runner entries." class="clearDataButton" />
             </div>
         </div>
-    </form>
+      </form>
     </section>
 
     <section>
@@ -1062,12 +1062,13 @@
 
         <p>Enter the Bib Number and time that a Runner arrived (IN), exited (OUT), or bowed-out of the event (DROP):</p>
 
-        <ol>
-            <li>Enter Bib Number: Limited to 15 characters.</li>
-            <li>Enter The 24-hour time that the runner entered, exited, or bowed-out. Limited to 6 characters.</li>
-            <li>Yesterday: Click/tap this checkbox to set the day of the month back one day.</li>
-            <li>Click IN (arrived), or OUT (exited forward course), or DROP (bowed out of event). Doing so adds the bib information to the Entries Field, below.</li>
-        </ol>
+                <ol>
+                    <li>Enter Bib Number: Limited to 15 characters.</li>
+                    <li>Enter The 24-hour time that the runner entered, exited, or bowed-out. Limited to 6 characters.</li>
+                    <li>Yesterday: Click/tap this checkbox to set the day of the month back one day.</li>
+                    <li>Click IN (arrived), or OUT (exited forward course), or DROP (bowed out of event). Doing so adds the bib information to the Entries Field, below. Shortcuts are + (or =), -, and / respectively.</li>
+		    <li>Keyboard shortcut: IN is + or =, OUT is -, and DROP is /.</li>
+                </ol>
 
         <p>The following items will get updated after clicking IN, OUT, or DROP buttons.</p>
 
@@ -1197,6 +1198,9 @@
         let timeFieldElement = GetElementById('TimeField');
         let riderNumberElement = GetElementById('RiderNum');
         let csvDataElement = GetElementById('TheCsvData');
+        let inBtnElement = GetElementById('Inbtn');
+        let outBtnElement = GetElementById('Outbtn');
+        let dropBtnElement = GetElementById('Dropbtn');
 
         // add event listener to csvDataElement: call functions to clean and handle existing csv data
         csvDataElement.addEventListener('blur', function() {
@@ -1222,6 +1226,34 @@
             GetElementById('TimeField').value = formatTimeValue(currTime);
         });
 
+        // add an event listener to the '+' key that will call handleAddBib("IN") function
+        document.addEventListener('keydown', function(event) {
+            if (event.key === '+' || event.key === '=') {
+                event.preventDefault(); // prevent key character from being entered in the form
+                handleAddBib("IN");
+            } else if(event.key === '-') {
+                event.preventDefault(); // prevent key character from being entered in the form
+                handleAddBib("OUT");
+            } else if(event.key === '/') {
+                event.preventDefault(); // prevent key character from being entered in the form
+                handleAddBib("DROP");
+            }
+        });
+
+        // add event listeners to the IN, OUT, and DROP buttons
+        document.addEventListener('click', function(event) {
+            if (event.target === inBtnElement) {
+                event.preventDefault();
+                handleAddBib("IN");
+            } else if (event.target === outBtnElement) {
+                event.preventDefault();
+                handleAddBib("OUT");
+            } else if (event.target === dropBtnElement) {
+                event.preventDefault();
+                handleAddBib("DROP");
+            }
+        });
+
         // Add event listeners for "Form Information - READ" and "Close Pop-up" buttons
         document.getElementById('formInfoReadBtn').addEventListener('click', function() {
             getFocusableElements('pop1').forEach(el => {
@@ -1236,5 +1268,5 @@
             location.href = '#close';
         });
     </script>
-</body>
+  </body>
 </html>
