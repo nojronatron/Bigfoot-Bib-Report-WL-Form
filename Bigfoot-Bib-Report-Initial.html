@@ -668,7 +668,7 @@
         }
 
         textarea {
-            width: 96%;
+            width: 80%;
         }
 
         ul {
@@ -677,6 +677,17 @@
 
         li {
             padding: 0.2rem;
+        }
+
+        #comment {
+            width: 80%;
+            display: block;
+            margin: auto;
+        }
+
+        #commentLabel {
+            display: block;
+            margin: .3em auto;
         }
 
         .screen-reader {
@@ -712,7 +723,7 @@
 
         .readOnlyText {
             color: rgb(84, 84, 84) !important;
-            outline: none !important;
+            outline-style: none !important;
             cursor: default !important;
             opacity: unset !important;
         }
@@ -767,9 +778,9 @@
             padding-bottom: 0.2rem;
             text-align: center;
             text-decoration: none;
-            background-color: rgb(0,0,0);
-            border: 2px solid rgb(255,255,255);
-            color: rgb(255,255,255);
+            background-color: rgb(10, 10, 10);
+            border: 2px solid rgb(245, 245, 245);
+            color: rgb(245, 245, 245);
             border-radius: 1em;
             box-shadow: 0rem 0rem 0.5rem 0.5rem;
         }
@@ -779,7 +790,7 @@
         .close:focus {
             box-shadow: 0rem 0rem 0.5rem 0.5rem;
             background-color: rgb(192, 192, 192);
-            color: rgb(0,0,0);
+            color: rgb(10, 10, 10);
         }
 
         .close span {
@@ -796,7 +807,7 @@
             bottom: 1rem;
             overflow-y: auto;
             padding-right: 0.5em;
-            margin-top: 1.5rem;
+            margin-top: 1.7rem;
         }
 
         input {
@@ -805,7 +816,7 @@
         }
 
         input[type='submit'] {
-            color: rgb(0, 0, 0);
+            color: rgb(10, 10, 10);
             font-weight: bold;
             background-color: rgb(113, 169, 253);
             padding-left: 0.8em;
@@ -813,20 +824,20 @@
         }
 
         .clearDataButton {
-            color: black;
+            color: rgb(10, 10, 10);
             background-color: rgb(255, 153, 0);
             font-weight: bold;
         }
 
         input[type='button'] {
-            color: black;
+            color: rgb(10, 10, 10);
             padding-left: 0.8em;
             padding-right: 0.8em;
         }
 
         textarea, select {
             padding: 0.3em 0.3em;
-            border: rgb(0,0,0) solid 0.15em;
+            border: rgb(10, 10, 10) solid 0.15em;
             border-radius: 0.5rem;
         }
 
@@ -836,7 +847,7 @@
         }
 
         input:focus, textarea:focus, select:focus {
-            outline: rgb(255, 153, 0) solid 3px;
+            outline: solid 3px rgb(255, 153, 0);
         }
     </style>
   </head>
@@ -915,7 +926,7 @@
 
         <div class="div-across-auto-align">
             <label for="msgsubject">Subject:</label>
-            <input name="msgsubject" type="text" id="msgsubject" readonly="readonly" maxlength="40" class="maxSizeInputWidth readOnlyText" />
+            <input name="msgsubject" type="text" id="msgsubject" readonly="readonly" maxlength="40" class="maxSizeInputWidth" tabindex="-1" readOnlyText />
         </div>
 
         <hr />
@@ -952,17 +963,17 @@
 
             <div class="div-across-auto-align">
                 <label for="entryCount">Entry Count:</label>
-                <input name="entryCount" type="text" id="entryCount" size="3" class="readOnlyText" readonly title="Number of bib entries submitted." />
+                <input name="entryCount" type="text" id="entryCount" size="3" class="readOnlyText"  tabindex="-1" readonly title="Number of bib entries submitted." />
                 <label for="endOfPriorBatch">End Of Prior:</label>
-                <input name="endOfPriorBatch" type="text" id="endOfPriorBatch" size="25" class="readOnlyText" readonly title="The last saved bib record."></input>
+                <input name="endOfPriorBatch" type="text" id="endOfPriorBatch" size="25" class="readOnlyText"  tabindex="-1" readonly title="The last saved bib record."></input>
             </div>
             <div class="div-across-auto-align">
                 <textarea name="TheCsvData" placeholder="Limit to a sensible number of entries." id="TheCsvData" class="bibEntries" maxlength="1200"></textarea> <!-- visible, put csv items here -->
                 <textarea name="TheData" id="TheData" class="bibEntries" maxlength="1200" style="display:none"></textarea> <!-- style display:none, put tab delim data here -->
             </div>
             <div class="div-across-auto-align">
-                <label for="Comment">Comment:</label>
-                <textarea name="Comment" id="Comment" maxlength="340" placeholder="Enter a short comment, space is very limited!"></textarea>
+                <label for="comment" id="commentLabel">Optional Short Comment</label>
+                <textarea name="comment" id="comment" maxlength="340"></textarea>
             </div>
 
         <div class="div-across-auto-align">
