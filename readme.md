@@ -32,7 +32,9 @@ For more information about Destination Trail and their ultra trail running marat
 1-Aug-2024: v2.4.x (in development)
 
 - Mouseless input: IN, OUT, DROP buttons activated using `+`, `-`, and `/` keys.
-- Clear Entries button now also removes Comment field.
+- Clear Entries button also removes Comment field text.
+- Fix UI tabstops and selected highlight.
+- Code cleanup and refinements.
 - Documentation updates covering the above features.
 
 25-June-2024: v2.1.3
