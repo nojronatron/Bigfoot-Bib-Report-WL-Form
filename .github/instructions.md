@@ -31,6 +31,7 @@ Bigfoot-Bib-Report.txt
 - Use lowercase for CSS properties and values.
 - Use descriptive names for CSS classes and IDs.
 - Use let and const for variable declarations in JavaScript, avoiding var.
+- Do not use QuerySelector or QuerySelectorAll. Use GetElementById or GetElementsByClassName instead.
 
 ## Browser Compatibility
 
