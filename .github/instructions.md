@@ -18,7 +18,7 @@ Bigfoot-Bib-Report.txt
 
 ## Coding Standards
 
-- Use 2 spaces for indentation throughout.
+- Use 4 spaces for indentation throughout.
 - All HTML, JavaScript, and CSS code are all contained within the Bigfoot-Bib-Report-Initial.html file.
 - Use semicolons at the end of javascript statements.
 - Use single quotes for strings in JavaScript.
