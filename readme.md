@@ -247,7 +247,7 @@ The form allows you to click or tap on input fields to select them, and you can 
 1. Press Tab to move to the "Time" entry box and the current 24-hour time will appear in the box for the _current day_.
 1. _As necessary_ update the time to an accurate representation of the time the runner arrived, left, or dropped. Generally, this timestamp should be close to actual but it is _not an official record_ so use your best judgement.
 1. Click the checkbox labeled `Yesterday` to tell the Form the time references _yesterday_.
-1. Click IN, OUT, DROP depending on what the runner `Action` was.
+1. Click IN, OUT, DROP depending on what the runner `Action` was. Alternatively, hit either the + or = key for IN, - for OUT, and / for DROP.
 
 The correctly formatted bib data will appear in the window below and the `Number of Entries` count will increase by `1` for every enty you complete.
 
