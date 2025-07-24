@@ -376,13 +376,6 @@
             );
         }
 
-        function autoGrowTextArea(textField) {
-            if (textField.clientHeight < textField.scrollHeight) {
-                textField.style.height =
-                    textField.scrollHeight * 2 - textField.clientHeight + 'px';
-            }
-        }
-
         // converts bib records in TheData element from tab-separated to comma-separated values
         function convertRawBibRecordsToArray() {
             let bibRecordsRaw = GetElementById('TheData').value;
@@ -581,7 +574,6 @@
             }
 
             setFormElementsWithLsValues();
-            autoGrowTextArea(GetElementById('TheCsvData'));
         });
 
     </script>
