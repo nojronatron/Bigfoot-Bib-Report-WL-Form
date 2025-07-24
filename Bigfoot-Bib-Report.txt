@@ -2,11 +2,12 @@ Form: Bigfoot-Bib-Report-Initial.html
 To:<var address>
 Subject:<var msgsubject>
 Msg:
--
+-----
 <var TheData>
 -----
-<var Comment>
-<var FormatNote>
------
+
+Comment: <var Comment>
+
+-
 Winlink Express Sender <var MsgSender> 
 Template version <var FormVersion>
