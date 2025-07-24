@@ -522,7 +522,7 @@
         }
 
         window.addEventListener('load', function () {
-            const formVersion = '2.4.0';
+            const formVersion = '2.4.1';
             document.getElementById('thisVersion').innerText = 'Version ' + formVersion;
             document.getElementById('FormVersion').value = formVersion;
             localStorage.setItem('Form Version', formVersion);
@@ -723,6 +723,7 @@
         select:hover {
             cursor: pointer;
             opacity: 0.8;
+            outline: solid 2px rgb(255, 153, 0);
         }
 
         input:focus,
