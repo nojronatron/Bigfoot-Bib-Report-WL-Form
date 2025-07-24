@@ -408,7 +408,7 @@
             Location: GetElementById('Location').value,
             msgsubject: GetElementById('msgsubject').value,
             entryCount: GetElementById('entryCount').value,
-            Comment: GetElementById('Comment').value,
+            Comment: GetElementById('comment').value,
             TheCsvData: cleanBibRecordsArray
         };
 
@@ -470,7 +470,7 @@
         const msgsubject = GetElementById('msgsubject').value;
         const entryCount = GetElementById('entryCount').value;
         const TheData = GetElementById('TheData').value;
-        const Comment = GetElementById('Comment').value;
+        const Comment = GetElementById('comment').value;
         const previousRecord = JSON.parse(localStorage.getItem('previousRecord'));
 
         const formObject = JSON.stringify({
@@ -500,7 +500,7 @@
             GetElementById('Location').value = jsonStringData.Location ? jsonStringData.Location : '';
             GetElementById('msgsubject').value = jsonStringData.msgsubject ? jsonStringData.msgsubject : '';
             GetElementById('entryCount').value = jsonStringData.entryCount ? jsonStringData.entryCount : 0;
-            GetElementById('Comment').value = jsonStringData.Comment ? jsonStringData.Comment : '';
+            GetElementById('comment').value = jsonStringData.Comment ? jsonStringData.Comment : '';
             GetElementById('endOfPriorBatch').value = jsonStringData.previousRecord ? jsonStringData.previousRecord : '';
             
             const theCsvDataRaw = jsonStringData.TheCsvData;
@@ -615,7 +615,7 @@
                 font-size: 0.7em;
             }
             .addressInput {
-                min-width: 70%;
+                min-width: 65%;
             }
             .block-line-div {
                 display: block;
@@ -668,7 +668,7 @@
         }
 
         textarea {
-            width: 96%;
+            width: 80%;
         }
 
         ul {
@@ -679,14 +679,59 @@
             padding: 0.2rem;
         }
 
-        .screen-reader {
-            /* only screen readers see this element */
-            position: absolute;
-            left: -500px;
-            top: auto;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
+        input {
+            padding: 0.2em;
+            border-radius: 0.5rem;
+        }
+
+        input[type='submit'] {
+            font-weight: bold;
+            background-color: rgb(113, 169, 253);
+        }
+
+        input[type='button'],
+        input[type='submit'] {
+            color: rgb(10, 10, 10);
+            padding-left: 0.8em;
+            padding-right: 0.8em;
+        }
+
+        textarea, select {
+            padding: 0.3em 0.3em;
+            border: solid 0.15em rgb(10, 10, 10);
+            border-radius: 0.5rem;
+        }
+
+        input:hover, textarea:hover, select:hover {
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: solid 3px rgb(255, 153, 0);
+        }
+
+        #comment {
+            width: 80%;
+            display: block;
+            margin: auto;
+        }
+
+        #commentLabel {
+            display: block;
+            margin: .3em auto;
+        }
+
+        #MessageNumber {
+            max-width: 2em;
+        }
+
+        #txtfiletoread, #parseme, #TheData {
+            display: none;
+        }
+
+        #RiderNum, #TimeField {
+            max-width: 6em;
         }
 
         .div-across-auto-align {
@@ -696,9 +741,14 @@
         }
 
         .formTitleHeader {
+            display: block;
             text-align: center;
             color:rgb(0,0,255);
             font-style: italic;
+        }
+
+        .formReadVersion {
+            text-align: center;
         }
 
         .msgHeaderTitle {
@@ -706,13 +756,14 @@
             text-align: center;
         }
 
-        .maxSizeInputWidth {
-            min-width: 75%;
+        .msgSubjElement {
+            width: 70vw;
+            outline-style: none !important;
         }
 
         .readOnlyText {
             color: rgb(84, 84, 84) !important;
-            outline: none !important;
+            outline-style: none !important;
             cursor: default !important;
             opacity: unset !important;
         }
@@ -722,7 +773,6 @@
             position: absolute;
             top: 0em;
             left: -500em;
-            
         }
 
         .pop-up:target {
@@ -732,18 +782,16 @@
 
         /* The pop-up itself */
         .popBox {
-            background: rgb(255, 255, 255);
-            /* alternatively fixed width / height and negative margins from 50% */
+            background: rgb(240, 240, 240);
             position: absolute;
             left: 2em;
             right: 2em;
             top: 2em;
             bottom: 2em;
             z-index: 10;
-            border: 3px solid rgb(0, 0, 150);
-            /* CSS3 where available: rounded corners, drop-shadow, and fade in. */
+            border: 3px solid rgb(150, 150, 150);
             border-radius: 1rem;
-            box-shadow: 0rem 0.5rem 0.5rem rgb(255, 255, 255);
+            box-shadow: 0.4rem 0.4rem 0.5rem 0.8rem rgb(150, 150, 150);
             opacity: 0;
             transition: opacity 0.8s ease-out;
         }
@@ -753,33 +801,12 @@
             opacity: 1;
         }
 
-        /* The pop-ups close link, moved via CSS to the top right of the pop-up */
-        .close:link,
-        .close:visited {
-            position: absolute;
-            top: -2rem;
-            right: -0.75em;
-            display: block;
-            line-height: 1.8;
-            padding-left: 0.4rem;
-            padding-right: 0.4rem;
-            padding-top: 0.2rem;
-            padding-bottom: 0.2rem;
-            text-align: center;
-            text-decoration: none;
-            background-color: rgb(0,0,0);
-            border: 2px solid rgb(255,255,255);
-            color: rgb(255,255,255);
-            border-radius: 1em;
-            box-shadow: 0rem 0rem 0.5rem 0.5rem;
-        }
-
         .close:hover,
         .close:active,
         .close:focus {
             box-shadow: 0rem 0rem 0.5rem 0.5rem;
             background-color: rgb(192, 192, 192);
-            color: rgb(0,0,0);
+            color: rgb(10, 10, 10);
         }
 
         .close span {
@@ -796,47 +823,13 @@
             bottom: 1rem;
             overflow-y: auto;
             padding-right: 0.5em;
-            margin-top: 1.5rem;
+            margin-top: 2rem;
         }
-
-        input {
-            padding: 0.2em 0.2em;
-            border-radius: 0.5rem;
-        }
-
-        input[type='submit'] {
-            color: rgb(0, 0, 0);
-            font-weight: bold;
-            background-color: rgb(113, 169, 253);
-            padding-left: 0.8em;
-            padding-right: 0.8em;
-        }
-
+        
         .clearDataButton {
-            color: black;
+            color: rgb(10, 10, 10);
             background-color: rgb(255, 153, 0);
             font-weight: bold;
-        }
-
-        input[type='button'] {
-            color: black;
-            padding-left: 0.8em;
-            padding-right: 0.8em;
-        }
-
-        textarea, select {
-            padding: 0.3em 0.3em;
-            border: rgb(0,0,0) solid 0.15em;
-            border-radius: 0.5rem;
-        }
-
-        input:hover, textarea:hover, select:hover {
-            cursor: pointer;
-            opacity: 0.8;
-        }
-
-        input:focus, textarea:focus, select:focus {
-            outline: rgb(255, 153, 0) solid 3px;
         }
     </style>
   </head>
@@ -846,13 +839,12 @@
       <form 
         onsubmit="return confirm('To complete your form submission, click OK and close the browser tab. You will return to the new message window so you can post your message to the outbox.');"
         method="post" id="myform" enctype="multipart/form-data" action="http://{FormServer}:{FormPort}">
-            <div style="text-align: center;">
-                <label class="formTitleHeader">Bigfoot Bib Report</label>
-            </div>
-            <div style="text-align: center;">
-                <input type="button" value="Form Information - READ" id="formInfoReadBtn" />
-                <label id="thisVersion"></label>
-            </div>
+        <label class="formTitleHeader">Bigfoot Bib Report</label>
+        <div class="formReadVersion">
+            <input type="button" value="Form Information - READ" id="formInfoReadBtn" />
+            <label id="thisVersion"></label>
+        </div>
+
         <hr />
 
         <div class="msgHeaderTitle">Message Header</div>
@@ -863,10 +855,9 @@
             </div>
             <div class="block-line-div">
                 <label for="MessageNumber">Message #</label>
-                <input name="MessageNumber" type="text" id="MessageNumber" maxlength="3" style="max-width: 3em;" onchange="elementValuesToLocalStorage();" />
+                <input name="MessageNumber" type="text" id="MessageNumber" maxlength="3" onchange="elementValuesToLocalStorage();" />
+                <label for="incrMsgNum"></label>
                 <input name="incrMsgNum" type="button" id="incrMsgNum" value="increment" onclick="incrementMsgNum();" />
-                <!-- invisible label that screen readers can still use -->
-                <label for="incrMsgNum" class="screen-reader">Increment</label>
             </div>
         </div>
 
@@ -908,83 +899,65 @@
         <input name="FormVersion" type="hidden" id="FormVersion" />
         <input name="FormatNote" type="hidden" id="FormatNote"
             value="* Entries in the email will be tab-delimited, allowing copy/paste into a spreadsheet." />
-        <input type="file" id="txtfiletoread" accept=".txt" style="display: none" />
+        <input type="file" id="txtfiletoread" accept=".txt" />
         <input name="sendto" type="hidden" id="sendto" />
-        <textarea name="parseme" id="parseme" style="display: none"></textarea>
+        <textarea name="parseme" id="parseme"></textarea>
         <!-- end hidden elements -->
 
         <div class="div-across-auto-align">
             <label for="msgsubject">Subject:</label>
-            <input name="msgsubject" type="text" id="msgsubject" readonly="readonly" maxlength="40" class="maxSizeInputWidth readOnlyText" />
+            <input name="msgsubject" type="text" id="msgsubject" class="readOnlyText msgSubjElement" tabindex="-1" readonly />
         </div>
 
         <hr />
+
         <div class="msgHeaderTitle">Bib Data Entry</div>
 
         <div class="div-across-auto-align">
-            <div class="block-line-div">
-                <label for="RiderNum">Bib Number:</label>
-                <input name="RiderNum" type="text" id="RiderNum" maxlength="15" style="max-width: 6em;" required />
-            </div>
-            <div class="block-line-div">
-                <label for="TimeField">Time:</label>
-                <input name="TimeField" type="text" id="TimeField" maxlength="6" style="max-width: 6em;" required />
-                <input type="checkbox" id="yesterday" name="yesterday" value="Yesterday" />    
-                <label for="yesterday">Yesterday</label>
-            </div>
+            <label for="RiderNum">Bib Number:</label>
+            <input name="RiderNum" type="text" id="RiderNum" maxlength="15" required />
+            <label for="TimeField">Time:</label>
+            <input name="TimeField" type="text" id="TimeField" maxlength="6" required />
+            <input type="checkbox" id="yesterday" name="yesterday" value="Yesterday" />    
+            <label for="yesterday">Yesterday</label>
         </div>
 
         <div id="inOutDropBtns"  class="div-across-auto-align">
-            <div class="block-line-div">
-                <label>Click an Action button to create a record:</label>
-            </div>
-            <div class="block-line-div">
-                <input name="Inbtn" type="button" id="Inbtn" value="In"
-                title="Participant arrived at this station." />
-                <input name="Outbtn" type="button" id="Outbtn" value="Out"
-                title="Participant departed from this station." />
-                <input name="Dropbtn" type="button" id="Dropbtn" value="Drop"
-                title="Participant dropped from race." />
-            </div>
+            <label>Click an Action button to create a record:</label>
+            <input name="Inbtn" type="button" id="Inbtn" value="In"
+            title="Participant arrived at this station." />
+            <input name="Outbtn" type="button" id="Outbtn" value="Out"
+            title="Participant departed from this station." />
+            <input name="Dropbtn" type="button" id="Dropbtn" value="Drop"
+            title="Participant dropped from race." />
         </div>
 
         <hr />
 
-            <div class="div-across-auto-align">
-                <label for="entryCount">Entry Count:</label>
-                <input name="entryCount" type="text" id="entryCount" size="3" class="readOnlyText" readonly title="Number of bib entries submitted." />
-                <label for="endOfPriorBatch">End Of Prior:</label>
-                <input name="endOfPriorBatch" type="text" id="endOfPriorBatch" size="25" class="readOnlyText" readonly title="The last saved bib record."></input>
-            </div>
-            <div class="div-across-auto-align">
-                <textarea name="TheCsvData" placeholder="Limit to a sensible number of entries." id="TheCsvData" class="bibEntries" maxlength="1200"></textarea> <!-- visible, put csv items here -->
-                <textarea name="TheData" id="TheData" class="bibEntries" maxlength="1200" style="display:none"></textarea> <!-- style display:none, put tab delim data here -->
-            </div>
-            <div class="div-across-auto-align">
-                <label for="Comment">Comment:</label>
-                <textarea name="Comment" id="Comment" maxlength="340" placeholder="Enter a short comment, space is very limited!"></textarea>
-            </div>
-
         <div class="div-across-auto-align">
-            <div class="block-line-div">
+            <label for="entryCount">Entry Count:</label>
+            <input name="entryCount" type="text" id="entryCount" size="3" class="readOnlyText"  tabindex="-1" readonly title="Number of bib entries submitted." />
+            <label for="endOfPriorBatch">End Of Prior:</label>
+            <input name="endOfPriorBatch" type="text" id="endOfPriorBatch" size="25" class="readOnlyText"  tabindex="-1" readonly title="The last saved bib record."></input>
+            <textarea name="TheCsvData" placeholder="Limit to a sensible number of entries." id="TheCsvData" class="bibEntries" maxlength="1200"></textarea> <!-- put csv items here -->
+            <textarea name="TheData" id="TheData" class="bibEntries" maxlength="1200"></textarea> <!-- put tab delim data here -->
+            <label for="comment" id="commentLabel">Optional Short Comment</label>
+            <textarea name="comment" id="comment" maxlength="340"></textarea>
+
             <input title="After submitting, close browser, then address message for posting" class="SubmitBtn"
                 enctype="multipart/form-data" id="Submit" method="Post" name="Submit" value="SUBMIT" type="submit" />
             <input name="savebtn" type="button" class="saveDataButton" id="savebtn" onclick="SaveData()"
                 value="Save Race data" title="Save data to a file." />
-            </div>            
-            <div class="block-line-div">
             <input name="loadbtn" type="button" class="loadDataButton" id="loadbtn"
                 onclick="document.getElementById('txtfiletoread').click();" value="Load Race data"
                 title="Load data from a file." />
             <input name="doclear" type="button" id="doclear" onclick="clearParticipantData()" value="Clear Entries"
                     title="Clear all runner entries." class="clearDataButton" />
-            </div>
         </div>
       </form>
     </section>
 
-    <section>
-      <div id="pop1" class="pop-up">
+    <section id="pop1" class="pop-up">
         <!-- The pop-up block -->
 
         <div class="popBox">
@@ -1184,7 +1157,6 @@
                 <p>Design and code assistance: Mark K7TUM</p>
                 
                 <p>Feature and dev-ops assistance: Jason KI7TYU</p>
-            </div>
         </div>
       </div>
 
