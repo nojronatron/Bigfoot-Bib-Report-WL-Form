@@ -3,6 +3,7 @@
 ## Table of Contents
 
 - [Overview](#overview)
+- [Contributing](#contributing)
 - [Form and Template Version](#form-and-template-version)
 - [How Winlink Forms Work](#how-winlink-forms-work)
 - [How Bib Data Is Recorded At Aid Stations](#how-bib-data-is-recorded-at-aid-stations)
@@ -27,6 +28,10 @@ This form was developed to standardize the message and data to race headquarters
 
 For more information about Destination Trail and their ultra trail running marathons, see [DestinationTrailRun.com](https://www.destinationtrailrun.com/).
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for information. You are welcome to help me, and the Bigfoot Hams, with your ideas.
+
 ## Form and Template Version
 
 1-Aug-2024: v2.4.x (in development)
@@ -35,6 +40,8 @@ For more information about Destination Trail and their ultra trail running marat
 - Clear Entries button also removes Comment field text.
 - Fix UI tabstops and selected highlight.
 - Code cleanup and refinements.
+- Code improvements for screen readers.
+- Improved time input sanitization.
 - Documentation updates covering the above features.
 
 25-June-2024: v2.1.3
