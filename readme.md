@@ -37,7 +37,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for information. You are welcome to help 
 1-Aug-2024: v2.4.x (in development)
 
 - Mouseless input: IN, OUT, DROP buttons activated using `+`, `-`, and `/` keys.
-- Clear Entries button now also removes Comment field.
+- Clear Entries button also removes Comment field text.
+- Fix UI tabstops and selected highlight.
+- Code cleanup and refinements.
 - Code improvements for screen readers.
 - Improved time input sanitization.
 - Documentation updates covering the above features.
