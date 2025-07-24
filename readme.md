@@ -374,7 +374,7 @@ Wanted: _Your help and input developing this form_!
 - UI operational validation on many devices and platforms.
 - Refactoring the UI to better support Web Accessibility best practices for inclusion, maximizing the user-base.
 
-Contact [K7RMZ at ARRL dot NET](k7rmz@arrl.net) with a message about your interest(s) and a link to your Github profile. Be sure to include the name of this repository in the subject line.
+Contact jonrumsey dot dev at gmail dot com with a message about your interest(s) and a link to your Github profile. Be sure to include the name of this repository in the subject line.
 
 ### Development Best Practices
 
