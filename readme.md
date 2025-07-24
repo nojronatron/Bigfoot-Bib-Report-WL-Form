@@ -127,7 +127,7 @@ There are 2 files to download:
 You have options as to where to get them (in preferential order):
 
 1. From this GitHub Repo's [releases page](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/releases).
-2. From the least-likely to be up-to-date [Google Drive]()
+2. From the least-likely to be up-to-date [Google Drive](https://drive.google.com/drive/folders/1hNptcqq6-Z2Rib4HhJcBcAi8-VUD-Ggb)
 
 When downloading from the [GitHub Releases page](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/releases) the files will be inside of a `.zip` file. After downloading, either right-click and select "Extract All..." and follow the wizard screen to unzip the files, or use your favorite "unzipping" utility (there are many to choose from, free and paid).
 
@@ -146,8 +146,8 @@ Generally speaking, Winlink Forms and Templates are stored in a directory under 
 
 If multiple operators will use this Winlink Express station, it might be better to install Forms and Templates to the `Global Folders\Templates` folder instead. Just adjust instructions above accordingly:
 
-- Step 2) Copy `Bigfoot-Bib-Report-Initial.html` and `Bigfoot-Bib-Report.txt` to the directory named `Global Folders\Templates`.
-- Step 6) In the Template Manager window double-click `Global Templates`.
+- Step 2: Copy `Bigfoot-Bib-Report-Initial.html` and `Bigfoot-Bib-Report.txt` to the directory named `Global Folders\Templates`.
+- Step 6: In the Template Manager window double-click `Global Templates`.
 
 Notes:
 
