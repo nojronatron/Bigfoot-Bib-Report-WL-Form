@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <meta name="author" content="Greg KG6SJT" />
     <meta name="author" content="Jon K7RMZ" />
-    <meta
-      name="description"
-      content="Race Tracker Form for Winlink Express created by KG6SJT, modified by K7RMZ for Bigfoot ultra marathon comms-support events."
-    />
+    <meta name="description"
+        content="Race Tracker Form for Winlink Express created by KG6SJT, modified by K7RMZ for Bigfoot ultra marathon comms-support events." />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="" />
     <title>Bigfoot Bib Tracker</title>
@@ -20,642 +19,658 @@
             return pop1 ? pop1.querySelectorAll('input, select, textarea, button') : [];
         }
 
-    // get data in TheCsvData and clean it up and set the count of entries
-    function cleanAndCountCsvData() {
-        let csvData = GetElementById('TheCsvData').value;
-        let csvDataArray = csvData.split('\n');
-        let nonEmptyLinesCount = 0;
+        // get data in TheCsvData and clean it up and set the count of entries
+        function cleanAndCountCsvData() {
+            let csvData = GetElementById('TheCsvData').value;
+            let csvDataArray = csvData.split('\n');
+            let nonEmptyLinesCount = 0;
 
-        let cleanCsvDataArray = csvDataArray.map(item => {
-            if (item !== undefined && item.length > 0) {
-                nonEmptyLinesCount++;
-                return item.replace(/ *\, */g, ', ');
-            }
-        });
-
-        let rejoinedCsvData = cleanCsvDataArray.join('\n');
-        GetElementById('TheCsvData').value = rejoinedCsvData;
-        GetElementById('entryCount').value = nonEmptyLinesCount;
-    }
-
-    // converts bib records from csv-delimited and returns tab-delimited version
-    function convertCsvRecordsToTabbed() {
-        let csvData = GetElementById('TheCsvData').value;
-        return csvData.replace(/, /g, '\t');
-    }
-
-    // updates both csv and tabbed bib records into their respective elements
-    function updateCsvAndTabRecordsElement(riderNum, bibAction, time, dayOfMonth, shortLoc){
-        let previousRecordsComma = GetElementById('TheCsvData').value;
-        let previousRecordsTab = convertCsvRecordsToTabbed();
-        GetElementById('TheCsvData').value = formatBibRecord(previousRecordsComma, riderNum, bibAction, time, dayOfMonth, shortLoc, ', ');
-        GetElementById('TheData').value = formatBibRecord(previousRecordsTab, riderNum, bibAction, time, dayOfMonth, shortLoc, '\t');
-    }
-
-    // pluck the top record from the csv data and return to the caller
-    function getTopRecordFromCsvData() {
-        let csvData = GetElementById('TheCsvData').value;
-        let csvDataArray = csvData.split('\n');
-        let topRecord = csvDataArray[0];
-        return topRecord;
-    }
-
-    // copy csv data and convert it to tabbed then set tabbed data to tabbed data element
-    function handleCsvDataEdited() {
-        let csvData = GetElementById('TheCsvData').value;
-        let tabbedData = convertCsvRecordsToTabbed();
-        GetElementById('TheData').value = tabbedData;
-        let lastEnteredBibRecord = getTopRecordFromCsvData();
-        // force a comma-space delimiter for readability
-        let lastEnteredBibRecordParts = lastEnteredBibRecord.split(', '); 
-        storePreviousRecord(lastEnteredBibRecordParts[0], lastEnteredBibRecordParts[1], lastEnteredBibRecordParts[2], lastEnteredBibRecordParts[3], lastEnteredBibRecordParts[4]);
-    }
-
-    // gets an element by id
-    function GetElementById(id) {
-        return document.getElementById(id);
-    }
-
-    // calculate most likely hours characters returning a best-effort hours value
-    function getHoursFromTimeString(timeString) {
-        var ghColonIndex = timeString.indexOf(':');
-        var ghHoursResult = "00";
-
-        // if there is a colon, take character(s) just before it
-        if (ghColonIndex > -1) {
-            if (ghColonIndex > 2) {
-                var ghHourIndex = ghColonIndex - 2;
-                ghHoursResult = timeString.slice(ghHourIndex, ghColonIndex);
-            }
-
-            if (ghColonIndex > 0 && ghColonIndex <= 2) {
-                ghHoursResult = timeString.slice(0, ghColonIndex);
-            }
-        }
-        else {
-            // if there is no colon take up to 2 leftmost characters depending on timeString size
-            if (timeString.length >= 4) {
-                ghHoursResult = timeString.slice(timeString.length - 4, timeString.length - 2);
-            }
-
-            if (timeString.length === 3) {
-                ghHoursResult = timeString.slice(0, 1);
-            }
-
-            if (timeString.length <= 2) {
-                console.log('Info: TIME value character cound is less than 3. No action required.');
-            }
-        }
-
-        return ghHoursResult;
-    }
-
-    // calculate most likely minutes characters returning a best-effort minutes value
-    function getMinutesFromTimeString(gmTimeString) {
-        var gmColonIndex = gmTimeString.indexOf(':');
-        var gmMinutesResult = "00";
-
-        // if there is a colon, take up to 2 characters after it, adding zero(s) to get 2 characters total
-        if (gmColonIndex > -1) {
-            if (gmColonIndex < gmTimeString.length - 1) {
-                // if input :01 then result 01, if input :001 then result 00, etc
-                gmMinutesResult = gmTimeString.slice(gmColonIndex + 1, gmColonIndex + 3);
-            }
-
-            while (gmMinutesResult.length < 2) {
-                // if input was : then result 00, if :1 then result 10, if :2 then result 20, etc
-                gmMinutesResult = gmMinutesResult + '0';
-            }
-        }
-        else {
-            // there is no colon in the input so best-effort to find minutes characters
-            if (gmTimeString.length == 2) {
-                // 11 is 11, 22 is 22 etc
-                gmMinutesResult = gmTimeString;
-            }
-            if (gmTimeString.length > 2) {
-                // just take the last two characters there is no way to tell user intent anymore
-                gmMinutesResult = gmTimeString.slice(gmTimeString.length - 2, gmTimeString.length);
-            }
-            if (gmTimeString.length == 1) {
-                // if no colon then 1 is 01 minutes, 2 is 02 minutes, etc
-                gmMinutesResult = "0" + gmTimeString;
-            }
-        }
-        
-        return gmMinutesResult;
-    }
-
-    // return a valid value for hours or minutes based on maxValue
-    function sanitizeTimeUnits(stuTimeString, maxValue) {
-        var stuTimeNum = Number.parseInt(stuTimeString, 10);
-
-        if (stuTimeNum === undefined || Number.isNaN(stuTimeNum) || stuTimeNum < 0) {
-            stuTimeNum == '00';
-        }
-
-        if (stuTimeNum > maxValue) {
-            stuTimeNum = maxValue;
-        }
-
-        var stuResult = stuTimeNum.toString();
-
-        while (stuResult.length < 2) {
-            stuResult = '0' + stuResult;
-        }
-
-        return stuResult;
-    }
-
-    // take a string and attempt to format it as HHMM using helper methods
-    function formatTimeValue(ftvTimeString) {
-        // eliminate all non-time characters from the string maintaining only numbers and colon character
-        var ftvHoursMins = ftvTimeString.replace(/[^\d:]/g, '');
-        // get hours and minutes, sanitize the numbers, then concatenate and return
-        var ftvHours = getHoursFromTimeString(ftvHoursMins);
-        var ftvMinutes = getMinutesFromTimeString(ftvHoursMins);
-        var ftvSanitizedHours = sanitizeTimeUnits(ftvHours, 23);
-        var ftvSanitizedMinutes = sanitizeTimeUnits(ftvMinutes, 59);
-        return ftvSanitizedHours + ftvSanitizedMinutes;
-    }
-    
-    function getDayOfMonth(date) {
-        var today = date.getDate();
-        var day = GetElementById('yesterday').checked ? (today === 1 ? 31 : today - 1) : today;
-        var result = day.toString();
-        
-        if (result.length < 2) {
-            result = "0" + result;
-        }
-        
-        return result;
-    }
-    
-    function ResetForm() {
-        ['RiderNum', 'TimeField'].forEach(id => GetElementById(id).value = '');
-        GetElementById('yesterday').checked = false;
-        GetElementById('RiderNum').focus();
-    }
-   
-    // validate bib number and time then add bib record to csv and tab record elements
-    function handleAddBib(bibAction) {
-        const riderNum = GetElementById('RiderNum').value;
-        if (riderNum && bibAction != undefined && bibAction.length > 0) {
-            // let time = formatCurrentTime(GetElementById('TimeField').value);
-            var time = formatTimeValue(GetElementById('TimeField').value);
-            let dayOfMonth = getDayOfMonth(new Date());
-            let locationVal = GetElementById('Location').value;
-            let shortLoc = shortenLocation(locationVal);
-            storePreviousRecord(riderNum, bibAction, time, dayOfMonth, shortLoc);
-            updateCsvAndTabRecordsElement(riderNum, bibAction, time, dayOfMonth, shortLoc);
-            ResetForm();
-            cleanAndCountCsvData();
-        } else {
-            alert('Enter Runner/Bib number');
-            GetElementById('RiderNum').focus();
-        }
-    }
-
-    function elementValuesToLocalStorage() {
-        let addressFormatted = GetElementById('address');
-        localStorage.setItem('RTrackeradd', addressFormatted.value);
-        let locationFormatted= GetElementById('Location');
-        localStorage.setItem('RTrackerloc', locationFormatted.value);
-        let eventTitleFormatted = GetElementById('EventTitle');
-        localStorage.setItem('RTrackertitle', eventTitleFormatted.value);
-        let msgNumFormatted = GetElementById('MessageNumber');
-        localStorage.setItem('MessageNumber', msgNumFormatted.value);
-        let locationLong = lengthenLocation(locationFormatted.value);
-        let regulartitle = GetElementById('EventTitle').value + ' ' + locationLong + ' Message #' + msgNumFormatted.value;
-        GetElementById('msgsubject').value = regulartitle;
-    }
-
-    function shortenLocation(locationVal) {
-        let underscoreIdx = locationVal.indexOf('_');
-        return locationVal.slice(0, underscoreIdx);
-    }
-
-    function lengthenLocation(locationVal) {
-        if (!locationVal) {
-            return ' ';
-        }
-        let underscoreIdx = locationVal.indexOf('_') + 1;
-        return locationVal.slice(underscoreIdx);
-    }
-
-    // set form elements with the values stored in local storage
-    function setFormElementsWithLsValues() {
-        let storedAddress = localStorage.getItem('RTrackeradd');
-        GetElementById('address').value = storedAddress;
-        let storedLocation = localStorage.getItem('RTrackerloc');
-
-        if (storedLocation !== '') {
-            GetElementById('Location').value = storedLocation;
-        } else {
-            GetElementById('Location').value = '--Choose a station--';
-        }
-
-        let storedTitle = localStorage.getItem('RTrackertitle');
-        GetElementById('EventTitle').value = storedTitle;
-        let storedMsgNumber = localStorage.getItem('MessageNumber');
-        GetElementById('MessageNumber').value = storedMsgNumber;
-        let locationLong = lengthenLocation(storedLocation);
-        let regulartitle = '' + storedTitle + ' ' + locationLong + ' Message #' + storedMsgNumber;
-        GetElementById('msgsubject').value = regulartitle;
-        GetElementById('MessageNumber').value = storedMsgNumber;
-        GetElementById('FormatNote').value = '* The entries in the message will be TAB delimited, allowing copy/paste into a spreadsheet.';
-        copyPreviousRecordFromLsToElement();
-    }
-
-    function copyPreviousRecordFromLsToElement() {
-        // if previous record key exists in local storage populate the element with string formatted value
-        if (localStorage.getItem('previousRecord')) {
-            const previousItem = JSON.parse(localStorage.getItem('previousRecord'));
-            const prevRunner = previousItem.runner || 'none';
-            const prevAction = previousItem.action || 'none';
-            const prevTime = previousItem.time || 'none';
-            const prevDOM = previousItem.dayOfMonth || 'none';
-            const prevMsgNum = previousItem.messageNumber || 'none';
-            console.log('previous Runner, Action, Time, DOM, MsgNum', prevRunner, prevAction, prevTime, prevDOM, prevMsgNum);
-            const previousRecordString = '#' + previousItem.runner + ', ' + previousItem.action + ', ' + prevTime + ', D:' + previousItem.dayOfMonth + ', M#' + previousItem.messageNumber;
-            GetElementById('endOfPriorBatch').value = previousRecordString;
-        }
-    }
-
-    function clearParticipantData() {
-        if (confirm('Clear all participant data?')) {
-            GetElementById('TheData').value = '';
-            GetElementById('TheCsvData').value = '';
-            GetElementById('Inbtn').disabled = false;
-            GetElementById('Outbtn').disabled = false;
-            GetElementById('Dropbtn').disabled = false;
-            GetElementById('entryCount').disabled = false;
-            GetElementById('entryCount').value = '0';
-            let formatNoteText =
-            '* Entries in the email will be tab-delimited, allowing copy/paste into a spreadsheet.';
-            GetElementById('FormatNote').value = formatNoteText;
-            ResetForm();
-        }
-    }
-
-    // gets, formats, and returns the current clock time in HHMM format
-    function getCurrentTime() {
-        var currentDateResult = new Date();
-        var dateResultHoursOnly = currentDateResult.getHours();
-        var dateResultMinutesOnly = currentDateResult.getMinutes();
-        var currentHour = dateResultHoursOnly.toString();
-
-        while (currentHour.length < 2) {
-            currentHour = "0" + currentHour;
-        }
-
-        var currentMinute = dateResultMinutesOnly.toString();
-
-        while (currentMinute.length < 2) {
-            currentMinute = "0" + currentMinute;
-        }
-
-        var resultGctTime = currentHour + ':' + currentMinute;
-        return resultGctTime;
-    }
-
-    function addIn() {
-        handleAddBib('IN');
-    }
-
-    function addOut() {
-        handleAddBib('OUT');
-    }
-
-    function addDrop() {
-        handleAddBib('DROP');
-    }
-
-    function storePreviousRecord(bibNumber, action, timestamp, dayOfMonth, location) {
-    // capture the current message number to store with the previous record
-    const messageNumber = GetElementById('MessageNumber').value;
-    // initialize a new object and store bibNumber, action, timestamp, dayOfMonth, and location variables as properties
-    let previousRecord = {
-        runner: bibNumber,
-        action: action,
-        time: timestamp,
-        dayOfMonth: dayOfMonth,
-        location: location,
-        messageNumber: messageNumber,
-    };
-
-    // store this object into localStorage
-    localStorage.setItem('previousRecord', JSON.stringify(previousRecord));
-    }
-
-    // separator is either '\t' or ', ' depending on format needed
-    function formatBibRecord(pTime, tRunner, action, tTime, doM, loc, separator) {
-        if (separator !== '\t' && separator !== ', ') {
-            separator = '\t';
-        }
-
-        storePreviousRecord(tRunner, action, tTime, doM, loc);
-        newTime = String(tTime);
-
-        if (tTime.indexOf(':') > -1) {
-            newTime = tTime.replace(':', '');
-        }
-
-        return (
-            tRunner +
-            separator +
-            action +
-            separator +
-            newTime +
-            separator +
-            doM +
-            separator +
-            loc +
-            '\n' +
-            pTime
-        );
-    }
-
-    function autoGrowTextArea(textField) {
-        if (textField.clientHeight < textField.scrollHeight) {
-            textField.style.height =
-            textField.scrollHeight * 2 - textField.clientHeight + 'px';
-        }
-      }
-
-    // converts bib records in TheData element from tab-separated to comma-separated values
-    function convertRawBibRecordsToArray() {
-        let bibRecordsRaw = GetElementById('TheData').value;
-        const bibRecordsArray = bibRecordsRaw.split('\n');
-        const cleanBibRecordsArray = [];
-        
-        bibRecordsArray.forEach(record => {
-            if (record.length > 0) {
-                let csvRecord = record.replace(/\t/g, ', ');
-                cleanBibRecordsArray.push(csvRecord);
-            }
-        });
-
-        return cleanBibRecordsArray;
-    }
-
-    function createJsonObjectFromFormElements(cleanBibRecordsArray) {
-        const jsonObject = {
-            FormVersion: GetElementById('FormVersion').value,
-            EventTitle: GetElementById('EventTitle').value,
-            MessageNumber: GetElementById('MessageNumber').value,
-            address: GetElementById('address').value,
-            Location: GetElementById('Location').value,
-            msgsubject: GetElementById('msgsubject').value,
-            entryCount: GetElementById('entryCount').value,
-            Comment: GetElementById('Comment').value,
-            TheCsvData: cleanBibRecordsArray
-        };
-
-        return jsonObject;
-    }
-
-    function saveTextAsFile() {
-        let fileNameToSaveAs = 'Bigfoot Bib Data ' + dateStampForFile() + '.txt';
-        fileNameToSaveAs = prompt('', fileNameToSaveAs);
-        const cleanBibRecords = convertRawBibRecordsToArray();
-        let formElementsAsJson = createJsonObjectFromFormElements(cleanBibRecords);
-        let textToWrite = JSON.stringify(formElementsAsJson, null, 2);
-
-        let textFileAsBlob = new Blob([textToWrite], {
-            type: 'application/json',
-        });
-
-        if (navigator.msSaveBlob) {
-            navigator.msSaveBlob(textFileAsBlob, fileNameToSaveAs);
-        } else {
-            let downloadLink = document.createElement('a');
-            downloadLink.download = fileNameToSaveAs;
-            downloadLink.href = URL.createObjectURL(textFileAsBlob);
-            downloadLink.onclick = function (e) {
-                document.body.removeChild(e.target);
-            };
-            downloadLink.style.display = 'none';
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-        }
-    }
-    
-    function dateStampForFile() {
-        let d = new Date();
-        let thisyear = d.getFullYear();
-        let thismonth = d.getMonth() + 1;
-        let thisday = d.getDate();
-        let h = (d.getHours() < 10 ? '0' : '') + d.getHours();
-        let m = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
-
-        if (thismonth < 10) {
-            thismonth = '0' + thismonth;
-        }
-
-        if (thisday < 10) {
-            thisday = '0' + thisday;
-        }
-
-        return '' + thisyear + '-' + thismonth + '-' + thisday + ' ' + h + '_' + m;
-    }
-
-    // captures each form element value in a JSON object and stores it in hidden element 'parseme'
-    function storeFormValuesToHiddenElement() {
-        const FormVersion = GetElementById('FormVersion').value;
-        const EventTitle = GetElementById('EventTitle').value;
-        const MessageNumber = GetElementById('MessageNumber').value;
-        const address = GetElementById('address').value;
-        const Location = GetElementById('Location').value;
-        const msgsubject = GetElementById('msgsubject').value;
-        const entryCount = GetElementById('entryCount').value;
-        const TheData = GetElementById('TheData').value;
-        const Comment = GetElementById('Comment').value;
-        const previousRecord = JSON.parse(localStorage.getItem('previousRecord'));
-
-        const formObject = JSON.stringify({
-            FormVersion,
-            EventTitle,
-            MessageNumber,
-            address,
-            Location,
-            msgsubject,
-            entryCount,
-            TheData,
-            Comment,
-            previousRecord,
-        });
-
-        GetElementById('parseme').value = formObject;
-    }
-
-    // takes values stored in parseme hidden element, iterates through form elements and populates them with values
-    function populateForm(jsonStringData) {
-        if (jsonStringData === undefined || jsonStringData.length < 1) {
-            console.log('jsonStringData is empty. Exiting function.');
-        } else {
-            GetElementById('EventTitle').value = jsonStringData.EventTitle;
-            GetElementById('MessageNumber').value = jsonStringData.MessageNumber ? jsonStringData.MessageNumber : 1;
-            GetElementById('address').value = jsonStringData.address ? jsonStringData.address : '';
-            GetElementById('Location').value = jsonStringData.Location ? jsonStringData.Location : '';
-            GetElementById('msgsubject').value = jsonStringData.msgsubject ? jsonStringData.msgsubject : '';
-            GetElementById('entryCount').value = jsonStringData.entryCount ? jsonStringData.entryCount : 0;
-            GetElementById('Comment').value = jsonStringData.Comment ? jsonStringData.Comment : '';
-            GetElementById('endOfPriorBatch').value = jsonStringData.previousRecord ? jsonStringData.previousRecord : '';
-            
-            const theCsvDataRaw = jsonStringData.TheCsvData;
-            let csvData = theCsvDataRaw.join('\n');
-            GetElementById('TheCsvData').value = csvData;
-
-            let tabbedData = theCsvDataRaw.map(item => {
+            let cleanCsvDataArray = csvDataArray.map(item => {
                 if (item !== undefined && item.length > 0) {
-                    return item.replace(/, /g, '\t');
-                }
-            }).join('\n');
-
-            GetElementById('TheData').value = tabbedData;
-            copyPreviousRecordFromLsToElement();
-        }
-    }
-
-    function SaveData() {
-        storeFormValuesToHiddenElement();
-        elementValuesToLocalStorage();  // update localstorage values
-        saveTextAsFile();
-    }
-
-    function incrementMsgNum() {
-        const formMsgNum = Number.parseInt(GetElementById('MessageNumber').value, 10);
-        const lsMsgNum = Number.parseInt(localStorage.getItem('MessageNumber'), 10);
-        const incrMsgNum = formMsgNum ? formMsgNum + 1 : 1;
-        GetElementById('MessageNumber').value = incrMsgNum;
-        elementValuesToLocalStorage();
-    }
-
-    window.addEventListener('load', function () {
-        const formVersion = '2.4.0';
-        document.getElementById('thisVersion').innerText = 'Version ' + formVersion;
-        document.getElementById('FormVersion').value = formVersion;
-        localStorage.setItem('Form Version', formVersion);
-
-        // set tabindex to -1 on all focusable elements within #pop1
-        getFocusableElements('pop1').forEach(el => {
-            el.setAttribute('tabindex', '-1');
-        });
-
-        // Check the support for the File API
-        if (window.File && window.FileReader && window.FileList && window.Blob) {
-            let fileSelected = GetElementById('txtfiletoread');
-
-            // begin fileSelected Change Event Listener
-            fileSelected.addEventListener('change', function (e) {
-                // Set the extension for the file
-                let fileExtension = /text.*/;
-                // Get the file object
-                let fileTobeRead = fileSelected.files[0];
-                // Check if the extension matches
-                if (fileTobeRead.type.match(fileExtension)) {
-                    // Initialize the FileReader object to read the file data
-                    let fileReader = new FileReader();
-
-                    fileReader.onload = function (e) {
-                        document.getElementById('parseme').value = fileReader.result;
-
-                        try {
-                            let jsonData = JSON.parse(document.getElementById('parseme').value);
-                            // console.log('filereader.onload json parse of parseme element value: ', jsonData);
-                            populateForm(jsonData);
-                        } catch (err) {
-                            console.error('An error occurred while parsing the JSON data: ', err);
-                        }
-                    };
-
-                    fileReader.readAsText(fileTobeRead);
-                } else {
-                    alert('Please select a text file');
+                    nonEmptyLinesCount++;
+                    return item.replace(/ *\, */g, ', ');
                 }
             });
-            // end fileSelected Change Event Listener
-        } else {
-            alert('Files are not supported');
+
+            let rejoinedCsvData = cleanCsvDataArray.join('\n');
+            GetElementById('TheCsvData').value = rejoinedCsvData;
+            GetElementById('entryCount').value = nonEmptyLinesCount;
         }
 
-        setFormElementsWithLsValues();
-        autoGrowTextArea(GetElementById('TheCsvData'));
-    });
+        // converts bib records from csv-delimited and returns tab-delimited version
+        function convertCsvRecordsToTabbed() {
+            let csvData = GetElementById('TheCsvData').value;
+            return csvData.replace(/, /g, '\t');
+        }
+
+        // updates both csv and tabbed bib records into their respective elements
+        function updateCsvAndTabRecordsElement(riderNum, bibAction, time, dayOfMonth, shortLoc) {
+            let previousRecordsComma = GetElementById('TheCsvData').value;
+            let previousRecordsTab = convertCsvRecordsToTabbed();
+            GetElementById('TheCsvData').value = formatBibRecord(previousRecordsComma, riderNum, bibAction, time, dayOfMonth, shortLoc, ', ');
+            GetElementById('TheData').value = formatBibRecord(previousRecordsTab, riderNum, bibAction, time, dayOfMonth, shortLoc, '\t');
+        }
+
+        // pluck the top record from the csv data and return to the caller
+        function getTopRecordFromCsvData() {
+            let csvData = GetElementById('TheCsvData').value;
+            let csvDataArray = csvData.split('\n');
+            let topRecord = csvDataArray[0];
+            return topRecord;
+        }
+
+        // copy csv data and convert it to tabbed then set tabbed data to tabbed data element
+        function handleCsvDataEdited() {
+            let csvData = GetElementById('TheCsvData').value;
+            let tabbedData = convertCsvRecordsToTabbed();
+            GetElementById('TheData').value = tabbedData;
+            let lastEnteredBibRecord = getTopRecordFromCsvData();
+            // force a comma-space delimiter for readability
+            let lastEnteredBibRecordParts = lastEnteredBibRecord.split(', ');
+            storePreviousRecord(lastEnteredBibRecordParts[0], lastEnteredBibRecordParts[1], lastEnteredBibRecordParts[2], lastEnteredBibRecordParts[3], lastEnteredBibRecordParts[4]);
+        }
+
+        // gets an element by id
+        function GetElementById(id) {
+            return document.getElementById(id);
+        }
+
+        // calculate most likely hours characters returning a best-effort hours value
+        function getHoursFromTimeString(timeString) {
+            var ghColonIndex = timeString.indexOf(':');
+            var ghHoursResult = "00";
+
+            // if there is a colon, take character(s) just before it
+            if (ghColonIndex > -1) {
+                if (ghColonIndex > 2) {
+                    var ghHourIndex = ghColonIndex - 2;
+                    ghHoursResult = timeString.slice(ghHourIndex, ghColonIndex);
+                }
+
+                if (ghColonIndex > 0 && ghColonIndex <= 2) {
+                    ghHoursResult = timeString.slice(0, ghColonIndex);
+                }
+            }
+            else {
+                // if there is no colon take up to 2 leftmost characters depending on timeString size
+                if (timeString.length >= 4) {
+                    ghHoursResult = timeString.slice(timeString.length - 4, timeString.length - 2);
+                }
+
+                if (timeString.length === 3) {
+                    ghHoursResult = timeString.slice(0, 1);
+                }
+
+                if (timeString.length <= 2) {
+                    console.log('Info: TIME value character cound is less than 3. No action required.');
+                }
+            }
+
+            return ghHoursResult;
+        }
+
+        // calculate most likely minutes characters returning a best-effort minutes value
+        function getMinutesFromTimeString(gmTimeString) {
+            var gmColonIndex = gmTimeString.indexOf(':');
+            var gmMinutesResult = "00";
+
+            // if there is a colon, take up to 2 characters after it, adding zero(s) to get 2 characters total
+            if (gmColonIndex > -1) {
+                if (gmColonIndex < gmTimeString.length - 1) {
+                    // if input :01 then result 01, if input :001 then result 00, etc
+                    gmMinutesResult = gmTimeString.slice(gmColonIndex + 1, gmColonIndex + 3);
+                }
+
+                while (gmMinutesResult.length < 2) {
+                    // if input was : then result 00, if :1 then result 10, if :2 then result 20, etc
+                    gmMinutesResult = gmMinutesResult + '0';
+                }
+            }
+            else {
+                // there is no colon in the input so best-effort to find minutes characters
+                if (gmTimeString.length == 2) {
+                    // 11 is 11, 22 is 22 etc
+                    gmMinutesResult = gmTimeString;
+                }
+                if (gmTimeString.length > 2) {
+                    // just take the last two characters there is no way to tell user intent anymore
+                    gmMinutesResult = gmTimeString.slice(gmTimeString.length - 2, gmTimeString.length);
+                }
+                if (gmTimeString.length == 1) {
+                    // if no colon then 1 is 01 minutes, 2 is 02 minutes, etc
+                    gmMinutesResult = "0" + gmTimeString;
+                }
+            }
+
+            return gmMinutesResult;
+        }
+
+        // return a valid value for hours or minutes based on maxValue
+        function sanitizeTimeUnits(stuTimeString, maxValue) {
+            var stuTimeNum = Number.parseInt(stuTimeString, 10);
+
+            if (stuTimeNum === undefined || Number.isNaN(stuTimeNum) || stuTimeNum < 0) {
+                stuTimeNum == '00';
+            }
+
+            if (stuTimeNum > maxValue) {
+                stuTimeNum = maxValue;
+            }
+
+            var stuResult = stuTimeNum.toString();
+
+            while (stuResult.length < 2) {
+                stuResult = '0' + stuResult;
+            }
+
+            return stuResult;
+        }
+
+        // take a string and attempt to format it as HHMM using helper methods
+        function formatTimeValue(ftvTimeString) {
+            // eliminate all non-time characters from the string maintaining only numbers and colon character
+            var ftvHoursMins = ftvTimeString.replace(/[^\d:]/g, '');
+            // get hours and minutes, sanitize the numbers, then concatenate and return
+            var ftvHours = getHoursFromTimeString(ftvHoursMins);
+            var ftvMinutes = getMinutesFromTimeString(ftvHoursMins);
+            var ftvSanitizedHours = sanitizeTimeUnits(ftvHours, 23);
+            var ftvSanitizedMinutes = sanitizeTimeUnits(ftvMinutes, 59);
+            return ftvSanitizedHours + ftvSanitizedMinutes;
+        }
+
+        function getDayOfMonth(date) {
+            var today = date.getDate();
+            var day = GetElementById('yesterday').checked ? (today === 1 ? 31 : today - 1) : today;
+            var result = day.toString();
+
+            if (result.length < 2) {
+                result = "0" + result;
+            }
+
+            return result;
+        }
+
+        function ResetForm() {
+            ['RiderNum', 'TimeField'].forEach(id => GetElementById(id).value = '');
+            GetElementById('yesterday').checked = false;
+            GetElementById('RiderNum').focus();
+            GetElementById('comment').value = '';
+        }
+
+        // validate bib number and time then add bib record to csv and tab record elements
+        function handleAddBib(bibAction) {
+            const riderNum = GetElementById('RiderNum').value;
+            if (riderNum && bibAction != undefined && bibAction.length > 0) {
+                // let time = formatCurrentTime(GetElementById('TimeField').value);
+                var time = formatTimeValue(GetElementById('TimeField').value);
+                let dayOfMonth = getDayOfMonth(new Date());
+                let locationVal = GetElementById('Location').value;
+                let shortLoc = shortenLocation(locationVal);
+                storePreviousRecord(riderNum, bibAction, time, dayOfMonth, shortLoc);
+                updateCsvAndTabRecordsElement(riderNum, bibAction, time, dayOfMonth, shortLoc);
+                ResetForm();
+                cleanAndCountCsvData();
+            } else {
+                alert('Enter Runner/Bib number');
+                GetElementById('RiderNum').focus();
+            }
+        }
+
+        function elementValuesToLocalStorage() {
+            let addressFormatted = GetElementById('address');
+            localStorage.setItem('RTrackeradd', addressFormatted.value);
+            let locationFormatted = GetElementById('Location');
+            localStorage.setItem('RTrackerloc', locationFormatted.value);
+            let eventTitleFormatted = GetElementById('EventTitle');
+            localStorage.setItem('RTrackertitle', eventTitleFormatted.value);
+            let msgNumFormatted = GetElementById('MessageNumber');
+            localStorage.setItem('MessageNumber', msgNumFormatted.value);
+            let locationLong = lengthenLocation(locationFormatted.value);
+            let regulartitle = GetElementById('EventTitle').value + ' ' + locationLong + ' Message #' + msgNumFormatted.value;
+            GetElementById('msgsubject').value = regulartitle;
+        }
+
+        function shortenLocation(locationVal) {
+            let underscoreIdx = locationVal.indexOf('_');
+            return locationVal.slice(0, underscoreIdx);
+        }
+
+        function lengthenLocation(locationVal) {
+            if (!locationVal) {
+                return ' ';
+            }
+            let underscoreIdx = locationVal.indexOf('_') + 1;
+            return locationVal.slice(underscoreIdx);
+        }
+
+        // set form elements with the values stored in local storage
+        function setFormElementsWithLsValues() {
+            let storedAddress = localStorage.getItem('RTrackeradd');
+            GetElementById('address').value = storedAddress;
+            let storedLocation = localStorage.getItem('RTrackerloc');
+
+            if (storedLocation !== '') {
+                GetElementById('Location').value = storedLocation;
+            } else {
+                GetElementById('Location').value = '--Choose a station--';
+            }
+
+            let storedTitle = localStorage.getItem('RTrackertitle');
+            GetElementById('EventTitle').value = storedTitle;
+            let storedMsgNumber = localStorage.getItem('MessageNumber');
+            GetElementById('MessageNumber').value = storedMsgNumber;
+            let locationLong = lengthenLocation(storedLocation);
+            let regulartitle = '' + storedTitle + ' ' + locationLong + ' Message #' + storedMsgNumber;
+            GetElementById('msgsubject').value = regulartitle;
+            GetElementById('MessageNumber').value = storedMsgNumber;
+            copyPreviousRecordFromLsToElement();
+        }
+
+        function copyPreviousRecordFromLsToElement() {
+            // if previous record key exists in local storage populate the element with string formatted value
+            if (localStorage.getItem('previousRecord')) {
+                const previousItem = JSON.parse(localStorage.getItem('previousRecord'));
+                const prevRunner = previousItem.runner || 'none';
+                const prevAction = previousItem.action || 'none';
+                const prevTime = previousItem.time || 'none';
+                const prevDOM = previousItem.dayOfMonth || 'none';
+                const prevMsgNum = previousItem.messageNumber || 'none';
+                console.log('previous Runner, Action, Time, DOM, MsgNum', prevRunner, prevAction, prevTime, prevDOM, prevMsgNum);
+                const previousRecordString = '#' + previousItem.runner + ', ' + previousItem.action + ', ' + prevTime + ', D:' + previousItem.dayOfMonth + ', M#' + previousItem.messageNumber;
+                GetElementById('endOfPriorBatch').value = previousRecordString;
+            }
+        }
+
+        function clearParticipantData() {
+            if (confirm('Clear all participant data?')) {
+                GetElementById('TheData').value = '';
+                GetElementById('TheCsvData').value = '';
+                GetElementById('Inbtn').disabled = false;
+                GetElementById('Outbtn').disabled = false;
+                GetElementById('Dropbtn').disabled = false;
+                GetElementById('entryCount').disabled = false;
+                GetElementById('entryCount').value = '0';
+                ResetForm();
+            }
+        }
+
+        // gets, formats, and returns the current clock time in HHMM format
+        function getCurrentTime() {
+            var currentDateResult = new Date();
+            var dateResultHoursOnly = currentDateResult.getHours();
+            var dateResultMinutesOnly = currentDateResult.getMinutes();
+            var currentHour = dateResultHoursOnly.toString();
+
+            while (currentHour.length < 2) {
+                currentHour = "0" + currentHour;
+            }
+
+            var currentMinute = dateResultMinutesOnly.toString();
+
+            while (currentMinute.length < 2) {
+                currentMinute = "0" + currentMinute;
+            }
+
+            var resultGctTime = currentHour + ':' + currentMinute;
+            return resultGctTime;
+        }
+
+        function addIn() {
+            handleAddBib('IN');
+        }
+
+        function addOut() {
+            handleAddBib('OUT');
+        }
+
+        function addDrop() {
+            handleAddBib('DROP');
+        }
+
+        function storePreviousRecord(bibNumber, action, timestamp, dayOfMonth, location) {
+            // capture the current message number to store with the previous record
+            const messageNumber = GetElementById('MessageNumber').value;
+            // initialize a new object and store bibNumber, action, timestamp, dayOfMonth, and location variables as properties
+            let previousRecord = {
+                runner: bibNumber,
+                action: action,
+                time: timestamp,
+                dayOfMonth: dayOfMonth,
+                location: location,
+                messageNumber: messageNumber,
+            };
+
+            // store this object into localStorage
+            localStorage.setItem('previousRecord', JSON.stringify(previousRecord));
+        }
+
+        // separator is either '\t' or ', ' depending on format needed
+        function formatBibRecord(pTime, tRunner, action, tTime, doM, loc, separator) {
+            if (separator !== '\t' && separator !== ', ') {
+                separator = '\t';
+            }
+
+            storePreviousRecord(tRunner, action, tTime, doM, loc);
+            newTime = String(tTime);
+
+            if (tTime.indexOf(':') > -1) {
+                newTime = tTime.replace(':', '');
+            }
+
+            return (
+                tRunner +
+                separator +
+                action +
+                separator +
+                newTime +
+                separator +
+                doM +
+                separator +
+                loc +
+                '\n' +
+                pTime
+            );
+        }
+
+        // converts bib records in TheData element from tab-separated to comma-separated values
+        function convertRawBibRecordsToArray() {
+            let bibRecordsRaw = GetElementById('TheData').value;
+            const bibRecordsArray = bibRecordsRaw.split('\n');
+            const cleanBibRecordsArray = [];
+
+            bibRecordsArray.forEach(record => {
+                if (record.length > 0) {
+                    let csvRecord = record.replace(/\t/g, ', ');
+                    cleanBibRecordsArray.push(csvRecord);
+                }
+            });
+
+            return cleanBibRecordsArray;
+        }
+
+        function createJsonObjectFromFormElements(cleanBibRecordsArray) {
+            const jsonObject = {
+                FormVersion: GetElementById('FormVersion').value,
+                EventTitle: GetElementById('EventTitle').value,
+                MessageNumber: GetElementById('MessageNumber').value,
+                address: GetElementById('address').value,
+                Location: GetElementById('Location').value,
+                msgsubject: GetElementById('msgsubject').value,
+                entryCount: GetElementById('entryCount').value,
+                Comment: GetElementById('comment').value,
+                TheCsvData: cleanBibRecordsArray
+            };
+
+            return jsonObject;
+        }
+
+        function saveTextAsFile() {
+            let fileNameToSaveAs = 'Bigfoot Bib Data ' + dateStampForFile() + '.txt';
+            fileNameToSaveAs = prompt('', fileNameToSaveAs);
+            const cleanBibRecords = convertRawBibRecordsToArray();
+            let formElementsAsJson = createJsonObjectFromFormElements(cleanBibRecords);
+            let textToWrite = JSON.stringify(formElementsAsJson, null, 2);
+
+            let textFileAsBlob = new Blob([textToWrite], {
+                type: 'application/json',
+            });
+
+            if (navigator.msSaveBlob) {
+                navigator.msSaveBlob(textFileAsBlob, fileNameToSaveAs);
+            } else {
+                let downloadLink = document.createElement('a');
+                downloadLink.download = fileNameToSaveAs;
+                downloadLink.href = URL.createObjectURL(textFileAsBlob);
+                downloadLink.onclick = function (e) {
+                    document.body.removeChild(e.target);
+                };
+                downloadLink.style.display = 'none';
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+            }
+        }
+
+        function dateStampForFile() {
+            let d = new Date();
+            let thisyear = d.getFullYear();
+            let thismonth = d.getMonth() + 1;
+            let thisday = d.getDate();
+            let h = (d.getHours() < 10 ? '0' : '') + d.getHours();
+            let m = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
+
+            if (thismonth < 10) {
+                thismonth = '0' + thismonth;
+            }
+
+            if (thisday < 10) {
+                thisday = '0' + thisday;
+            }
+
+            return '' + thisyear + '-' + thismonth + '-' + thisday + ' ' + h + '_' + m;
+        }
+
+        // captures each form element value in a JSON object and stores it in hidden element 'parseme'
+        function storeFormValuesToHiddenElement() {
+            const FormVersion = GetElementById('FormVersion').value;
+            const EventTitle = GetElementById('EventTitle').value;
+            const MessageNumber = GetElementById('MessageNumber').value;
+            const address = GetElementById('address').value;
+            const Location = GetElementById('Location').value;
+            const msgsubject = GetElementById('msgsubject').value;
+            const entryCount = GetElementById('entryCount').value;
+            const TheData = GetElementById('TheData').value;
+            const Comment = GetElementById('comment').value;
+            const previousRecord = JSON.parse(localStorage.getItem('previousRecord'));
+
+            const formObject = JSON.stringify({
+                FormVersion,
+                EventTitle,
+                MessageNumber,
+                address,
+                Location,
+                msgsubject,
+                entryCount,
+                TheData,
+                Comment,
+                previousRecord,
+            });
+
+            GetElementById('parseme').value = formObject;
+        }
+
+        // takes values stored in parseme hidden element, iterates through form elements and populates them with values
+        function populateForm(jsonStringData) {
+            if (jsonStringData === undefined || jsonStringData.length < 1) {
+                console.log('jsonStringData is empty. Exiting function.');
+            } else {
+                GetElementById('EventTitle').value = jsonStringData.EventTitle;
+                GetElementById('MessageNumber').value = jsonStringData.MessageNumber ? jsonStringData.MessageNumber : 1;
+                GetElementById('address').value = jsonStringData.address ? jsonStringData.address : '';
+                GetElementById('Location').value = jsonStringData.Location ? jsonStringData.Location : '';
+                GetElementById('msgsubject').value = jsonStringData.msgsubject ? jsonStringData.msgsubject : '';
+                GetElementById('entryCount').value = jsonStringData.entryCount ? jsonStringData.entryCount : 0;
+                GetElementById('comment').value = jsonStringData.Comment ? jsonStringData.Comment : '';
+                GetElementById('endOfPriorBatch').value = jsonStringData.previousRecord ? jsonStringData.previousRecord : '';
+
+                const theCsvDataRaw = jsonStringData.TheCsvData;
+                let csvData = theCsvDataRaw.join('\n');
+                GetElementById('TheCsvData').value = csvData;
+
+                let tabbedData = theCsvDataRaw.map(item => {
+                    if (item !== undefined && item.length > 0) {
+                        return item.replace(/, /g, '\t');
+                    }
+                }).join('\n');
+
+                GetElementById('TheData').value = tabbedData;
+                copyPreviousRecordFromLsToElement();
+            }
+        }
+
+        function SaveData() {
+            storeFormValuesToHiddenElement();
+            elementValuesToLocalStorage();  // update localstorage values
+            saveTextAsFile();
+        }
+
+        function incrementMsgNum() {
+            const formMsgNum = Number.parseInt(GetElementById('MessageNumber').value, 10);
+            const lsMsgNum = Number.parseInt(localStorage.getItem('MessageNumber'), 10);
+            const incrMsgNum = formMsgNum ? formMsgNum + 1 : 1;
+            GetElementById('MessageNumber').value = incrMsgNum;
+            elementValuesToLocalStorage();
+        }
+
+        window.addEventListener('load', function () {
+            const formVersion = '2.4.0';
+            document.getElementById('thisVersion').innerText = 'Version ' + formVersion;
+            document.getElementById('FormVersion').value = formVersion;
+            localStorage.setItem('Form Version', formVersion);
+
+            // set tabindex to -1 on all focusable elements within #pop1
+            getFocusableElements('pop1').forEach(el => {
+                el.setAttribute('tabindex', '-1');
+            });
+
+            // Check the support for the File API
+            if (window.File && window.FileReader && window.FileList && window.Blob) {
+                let fileSelected = GetElementById('txtfiletoread');
+
+                // begin fileSelected Change Event Listener
+                fileSelected.addEventListener('change', function (e) {
+                    // Set the extension for the file
+                    let fileExtension = /text.*/;
+                    // Get the file object
+                    let fileTobeRead = fileSelected.files[0];
+                    // Check if the extension matches
+                    if (fileTobeRead.type.match(fileExtension)) {
+                        // Initialize the FileReader object to read the file data
+                        let fileReader = new FileReader();
+
+                        fileReader.onload = function (e) {
+                            document.getElementById('parseme').value = fileReader.result;
+
+                            try {
+                                let jsonData = JSON.parse(document.getElementById('parseme').value);
+                                // console.log('filereader.onload json parse of parseme element value: ', jsonData);
+                                populateForm(jsonData);
+                            } catch (err) {
+                                console.error('An error occurred while parsing the JSON data: ', err);
+                            }
+                        };
+
+                        fileReader.readAsText(fileTobeRead);
+                    } else {
+                        alert('Please select a text file');
+                    }
+                });
+                // end fileSelected Change Event Listener
+            } else {
+                alert('Files are not supported');
+            }
+
+            setFormElementsWithLsValues();
+        });
 
     </script>
 
     <style type="text/css">
         body {
-            font-family:Arial, Helvetica, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
             font-size: 18px;
             background-color: rgb(220, 220, 220);
         }
 
         @media screen and (width < 650px) {
-            label, input, textarea, select, button {
+
+            label,
+            input,
+            textarea,
+            select,
+            button {
                 font-size: .7em;
             }
+
             input {
                 margin: 0.2em 0.2em;
             }
+
             input[type="checkbox"] {
                 width: 1em;
                 height: 1em;
             }
+
             .formTitleHeader {
                 font-size: 2em;
             }
+
             .bibEntries {
                 min-height: 3em;
                 max-height: 6em;
             }
+
             .msgHeaderTitle {
                 font-size: 0.7em;
             }
+
             .addressInput {
-                min-width: 70%;
+                min-width: 65%;
             }
+
             .block-line-div {
                 display: block;
             }
+
             .readOnlyText {
                 font-size: 0.6em;
             }
+
             #closePopBtn {
                 margin-left: 1rem;
                 margin-top: 0.5rem;
             }
         }
 
-        @media screen and (width >= 650px) {
-            label, input, textarea, select, button {
+        @media screen and (width >=650px) {
+
+            label,
+            input,
+            textarea,
+            select,
+            button {
                 font-size: 1em;
             }
+
             input {
                 margin: 0.3em 0.3em;
             }
+
             input[type="checkbox"] {
                 width: 1.2em;
                 height: 1.2em;
             }
+
             .formTitleHeader {
                 font-size: 3em;
             }
+
             .bibEntries {
                 min-height: 4em;
                 max-height: 10em;
             }
+
             .msgHeaderTitle {
                 font-size: 1.1em;
             }
+
             .addressInput {
                 max-width: 55%;
             }
+
             .block-line-div {
                 display: inline;
             }
+
             #closePopBtn {
                 margin-left: 75vw;
                 margin-top: 0.5rem;
@@ -668,7 +683,7 @@
         }
 
         textarea {
-            width: 96%;
+            width: 80%;
         }
 
         ul {
@@ -679,40 +694,99 @@
             padding: 0.2rem;
         }
 
-        .screen-reader {
-            /* only screen readers see this element */
-            position: absolute;
-            left: -500px;
-            top: auto;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
+        input {
+            padding: 0.2em;
+            border-radius: 0.5rem;
+        }
+
+        input[type='submit'] {
+            font-weight: bold;
+            background-color: rgb(113, 169, 253);
+        }
+
+        input[type='button'],
+        input[type='submit'] {
+            color: rgb(10, 10, 10);
+            padding-left: 0.8em;
+            padding-right: 0.8em;
+        }
+
+        textarea,
+        select {
+            padding: 0.3em 0.3em;
+            border: solid 0.15em rgb(10, 10, 10);
+            border-radius: 0.5rem;
+        }
+
+        input:hover,
+        textarea:hover,
+        select:hover {
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: solid 3px rgb(255, 153, 0);
+        }
+
+        #comment {
+            width: 80%;
+            display: block;
+            margin: auto;
+        }
+
+        #commentLabel {
+            display: block;
+            margin: .3em auto;
+        }
+
+        #MessageNumber {
+            max-width: 2em;
+        }
+
+        #txtfiletoread,
+        #parseme,
+        #TheData {
+            display: none;
+        }
+
+        #RiderNum,
+        #TimeField {
+            max-width: 6em;
         }
 
         .div-across-auto-align {
-            width:100%;
-            margin:auto; 
-            text-align:center;
+            width: 100%;
+            margin: auto;
+            text-align: center;
         }
 
         .formTitleHeader {
+            display: block;
             text-align: center;
-            color:rgb(0,0,255);
+            color: rgb(0, 0, 255);
             font-style: italic;
         }
 
-        .msgHeaderTitle {
-            color: rgb(0,0,255);
+        .formReadVersion {
             text-align: center;
         }
 
-        .maxSizeInputWidth {
-            min-width: 75%;
+        .msgHeaderTitle {
+            color: rgb(0, 0, 255);
+            text-align: center;
+        }
+
+        .msgSubjElement {
+            width: 70vw;
+            outline-style: none !important;
         }
 
         .readOnlyText {
             color: rgb(84, 84, 84) !important;
-            outline: none !important;
+            outline-style: none !important;
             cursor: default !important;
             opacity: unset !important;
         }
@@ -722,7 +796,6 @@
             position: absolute;
             top: 0em;
             left: -500em;
-            
         }
 
         .pop-up:target {
@@ -732,18 +805,16 @@
 
         /* The pop-up itself */
         .popBox {
-            background: rgb(255, 255, 255);
-            /* alternatively fixed width / height and negative margins from 50% */
+            background: rgb(240, 240, 240);
             position: absolute;
             left: 2em;
             right: 2em;
             top: 2em;
             bottom: 2em;
             z-index: 10;
-            border: 3px solid rgb(0, 0, 150);
-            /* CSS3 where available: rounded corners, drop-shadow, and fade in. */
+            border: 3px solid rgb(150, 150, 150);
             border-radius: 1rem;
-            box-shadow: 0rem 0.5rem 0.5rem rgb(255, 255, 255);
+            box-shadow: 0.4rem 0.4rem 0.5rem 0.8rem rgb(150, 150, 150);
             opacity: 0;
             transition: opacity 0.8s ease-out;
         }
@@ -753,33 +824,12 @@
             opacity: 1;
         }
 
-        /* The pop-ups close link, moved via CSS to the top right of the pop-up */
-        .close:link,
-        .close:visited {
-            position: absolute;
-            top: -2rem;
-            right: -0.75em;
-            display: block;
-            line-height: 1.8;
-            padding-left: 0.4rem;
-            padding-right: 0.4rem;
-            padding-top: 0.2rem;
-            padding-bottom: 0.2rem;
-            text-align: center;
-            text-decoration: none;
-            background-color: rgb(0,0,0);
-            border: 2px solid rgb(255,255,255);
-            color: rgb(255,255,255);
-            border-radius: 1em;
-            box-shadow: 0rem 0rem 0.5rem 0.5rem;
-        }
-
         .close:hover,
         .close:active,
         .close:focus {
             box-shadow: 0rem 0rem 0.5rem 0.5rem;
             background-color: rgb(192, 192, 192);
-            color: rgb(0,0,0);
+            color: rgb(10, 10, 10);
         }
 
         .close span {
@@ -796,195 +846,147 @@
             bottom: 1rem;
             overflow-y: auto;
             padding-right: 0.5em;
-            margin-top: 1.5rem;
-        }
-
-        input {
-            padding: 0.2em 0.2em;
-            border-radius: 0.5rem;
-        }
-
-        input[type='submit'] {
-            color: rgb(0, 0, 0);
-            font-weight: bold;
-            background-color: rgb(113, 169, 253);
-            padding-left: 0.8em;
-            padding-right: 0.8em;
+            margin-top: 2rem;
         }
 
         .clearDataButton {
-            color: black;
+            color: rgb(10, 10, 10);
             background-color: rgb(255, 153, 0);
             font-weight: bold;
         }
-
-        input[type='button'] {
-            color: black;
-            padding-left: 0.8em;
-            padding-right: 0.8em;
-        }
-
-        textarea, select {
-            padding: 0.3em 0.3em;
-            border: rgb(0,0,0) solid 0.15em;
-            border-radius: 0.5rem;
-        }
-
-        input:hover, textarea:hover, select:hover {
-            cursor: pointer;
-            opacity: 0.8;
-        }
-
-        input:focus, textarea:focus, select:focus {
-            outline: rgb(255, 153, 0) solid 3px;
-        }
     </style>
-  </head>
+</head>
 
-  <body>
+<body>
     <section id="close">
-      <form 
-        onsubmit="return confirm('To complete your form submission, click OK and close the browser tab. You will return to the new message window so you can post your message to the outbox.');"
-        method="post" id="myform" enctype="multipart/form-data" action="http://{FormServer}:{FormPort}">
-            <div style="text-align: center;">
-                <label class="formTitleHeader">Bigfoot Bib Report</label>
-            </div>
-            <div style="text-align: center;">
+        <form
+            onsubmit="return confirm('To complete your form submission, click OK and close the browser tab. You will return to the new message window so you can post your message to the outbox.');"
+            method="post" id="myform" enctype="multipart/form-data" action="http://{FormServer}:{FormPort}">
+            <label class="formTitleHeader">Bigfoot Bib Report</label>
+            <div class="formReadVersion">
                 <input type="button" value="Form Information - READ" id="formInfoReadBtn" />
                 <label id="thisVersion"></label>
             </div>
-        <hr />
 
-        <div class="msgHeaderTitle">Message Header</div>
-        <div class="div-across-auto-align">
-            <div class="block-line-div">
-                <label for="EventTitle">Event Name:</label>
-                <input name="EventTitle" type="text" id="EventTitle" maxlength="40" onchange="elementValuesToLocalStorage();" placeholder="Race or Event Name" required />
-            </div>
-            <div class="block-line-div">
-                <label for="MessageNumber">Message #</label>
-                <input name="MessageNumber" type="text" id="MessageNumber" maxlength="3" style="max-width: 3em;" onchange="elementValuesToLocalStorage();" />
-                <input name="incrMsgNum" type="button" id="incrMsgNum" value="increment" onclick="incrementMsgNum();" />
-                <!-- invisible label that screen readers can still use -->
-                <label for="incrMsgNum" class="screen-reader">Increment</label>
-            </div>
-        </div>
+            <hr />
 
-        <div class="div-across-auto-align">
-            <div class="block-line-div">
-                <label for="address">Send to:</label>
-                <input name="address" type="text" id="address" class="addressInput" maxlength="40" onchange="elementValuesToLocalStorage();"
-                    title="Separate multiple calls or addresses with a semicolon;" placeholder="Winlink Radio Call or Email"
-                    required />
+            <div class="msgHeaderTitle">Message Header</div>
+            <div class="div-across-auto-align">
+                <div class="block-line-div">
+                    <label for="EventTitle">Event Name:</label>
+                    <input name="EventTitle" type="text" id="EventTitle" maxlength="40"
+                        onchange="elementValuesToLocalStorage();" placeholder="Race or Event Name" required />
+                </div>
+                <div class="block-line-div">
+                    <label for="MessageNumber">Message #</label>
+                    <input name="MessageNumber" type="text" id="MessageNumber" maxlength="3"
+                        onchange="elementValuesToLocalStorage();" />
+                    <label for="incrMsgNum"></label>
+                    <input name="incrMsgNum" type="button" id="incrMsgNum" value="increment"
+                        onclick="incrementMsgNum();" />
+                </div>
             </div>
 
-            <div class="aidStnSpan block-line-div">
-                <label for="Location">Aid Station:</label>
-                <select name="Location" id="Location" onchange="elementValuesToLocalStorage();" required>
-                    <option value="MM_Marble Mountain SnoPark">Marble Mountain SnoPark</option>
-                    <option value="BL_Blue Lake">Blue Lake</option>
-                    <option value="AC_Ape Canyon">Ape Canyon</option>
-                    <option value="WR_Windy Ridge">Windy Ridge</option>
-                    <option value="JR_Johnston Ridge">Johnston Ridge</option>
-                    <option value="CW_Coldwater Lake">Coldwater Lake</option>
-                    <option value="NP_Norway Pass">Norway Pass</option>
-                    <option value="EP_Elk Pass">Elk Pass</option>
-                    <option value="WM_Wright Meadow (Rd.9327)">Wright Meadow (Rd.9327)</option>
-                    <option value="SB_Spencer Butte">Spencer Butte</option>
-                    <option value="LR_Lewis River">Lewis River</option>
-                    <option value="QR_Quartz Ridge">Quartz Ridge</option>
-                    <option value="CB_Council Bluff">Council Bluff</option>
-                    <option value="CH_Chain of Lakes">Chain of Lakes</option>
-                    <option value="KT_Klickitat">Klickitat</option>
-                    <option value="TS_Twin Sisters">Twin Sisters</option>
-                    <option value="OC_Owens Creek">Owen&acute;s Creek</option>
-                    <option value="RS_Randle Skandle">Randle Skandle</option>
-                    <option value="FN_Finish Line">Finish (Bigfoot Base)</option>
-                </select>
+            <div class="div-across-auto-align">
+                <div class="block-line-div">
+                    <label for="address">Send to:</label>
+                    <input name="address" type="text" id="address" class="addressInput" maxlength="40"
+                        onchange="elementValuesToLocalStorage();"
+                        title="Separate multiple calls or addresses with a semicolon;"
+                        placeholder="Winlink Radio Call or Email" required />
+                </div>
+
+                <div class="aidStnSpan block-line-div">
+                    <label for="Location">Aid Station:</label>
+                    <select name="Location" id="Location" onchange="elementValuesToLocalStorage();" required>
+                        <option value="MM_Marble Mountain SnoPark">Marble Mountain SnoPark</option>
+                        <option value="BL_Blue Lake">Blue Lake</option>
+                        <option value="AC_Ape Canyon">Ape Canyon</option>
+                        <option value="WR_Windy Ridge">Windy Ridge</option>
+                        <option value="JR_Johnston Ridge">Johnston Ridge</option>
+                        <option value="CW_Coldwater Lake">Coldwater Lake</option>
+                        <option value="NP_Norway Pass">Norway Pass</option>
+                        <option value="EP_Elk Pass">Elk Pass</option>
+                        <option value="WM_Wright Meadow (Rd.9327)">Wright Meadow (Rd.9327)</option>
+                        <option value="SB_Spencer Butte">Spencer Butte</option>
+                        <option value="LR_Lewis River">Lewis River</option>
+                        <option value="QR_Quartz Ridge">Quartz Ridge</option>
+                        <option value="CB_Council Bluff">Council Bluff</option>
+                        <option value="CH_Chain of Lakes">Chain of Lakes</option>
+                        <option value="KT_Klickitat">Klickitat</option>
+                        <option value="TS_Twin Sisters">Twin Sisters</option>
+                        <option value="OC_Owens Creek">Owen&acute;s Creek</option>
+                        <option value="RS_Randle Skandle">Randle Skandle</option>
+                        <option value="FN_Finish Line">Finish (Bigfoot Base)</option>
+                    </select>
+                </div>
             </div>
-        </div>
 
-        <!-- hidden elements -->
-        <input name="FormVersion" type="hidden" id="FormVersion" />
-        <input name="FormatNote" type="hidden" id="FormatNote"
-            value="* Entries in the email will be tab-delimited, allowing copy/paste into a spreadsheet." />
-        <input type="file" id="txtfiletoread" accept=".txt" style="display: none" />
-        <input name="sendto" type="hidden" id="sendto" />
-        <textarea name="parseme" id="parseme" style="display: none"></textarea>
-        <!-- end hidden elements -->
+            <!-- hidden elements -->
+            <input name="FormVersion" type="hidden" id="FormVersion" />
+            <input type="file" id="txtfiletoread" accept=".txt" />
+            <input name="sendto" type="hidden" id="sendto" />
+            <textarea name="parseme" id="parseme"></textarea>
+            <!-- end hidden elements -->
 
-        <div class="div-across-auto-align">
-            <label for="msgsubject">Subject:</label>
-            <input name="msgsubject" type="text" id="msgsubject" readonly="readonly" maxlength="40" class="maxSizeInputWidth readOnlyText" />
-        </div>
+            <div class="div-across-auto-align">
+                <label for="msgsubject">Subject:</label>
+                <input name="msgsubject" type="text" id="msgsubject" class="readOnlyText msgSubjElement" tabindex="-1"
+                    readonly />
+            </div>
 
-        <hr />
-        <div class="msgHeaderTitle">Bib Data Entry</div>
+            <hr />
 
-        <div class="div-across-auto-align">
-            <div class="block-line-div">
+            <div class="msgHeaderTitle">Bib Data Entry</div>
+
+            <div class="div-across-auto-align">
                 <label for="RiderNum">Bib Number:</label>
-                <input name="RiderNum" type="text" id="RiderNum" maxlength="15" style="max-width: 6em;" required />
-            </div>
-            <div class="block-line-div">
+                <input name="RiderNum" type="text" id="RiderNum" maxlength="15" required />
                 <label for="TimeField">Time:</label>
-                <input name="TimeField" type="text" id="TimeField" maxlength="6" style="max-width: 6em;" required />
-                <input type="checkbox" id="yesterday" name="yesterday" value="Yesterday" />    
+                <input name="TimeField" type="text" id="TimeField" maxlength="6" required />
+                <input type="checkbox" id="yesterday" name="yesterday" value="Yesterday" />
                 <label for="yesterday">Yesterday</label>
             </div>
-        </div>
 
-        <div id="inOutDropBtns"  class="div-across-auto-align">
-            <div class="block-line-div">
+            <div id="inOutDropBtns" class="div-across-auto-align">
                 <label>Click an Action button to create a record:</label>
-            </div>
-            <div class="block-line-div">
-                <input name="Inbtn" type="button" id="Inbtn" value="In"
-                title="Participant arrived at this station." />
+                <input name="Inbtn" type="button" id="Inbtn" value="In" title="Participant arrived at this station." />
                 <input name="Outbtn" type="button" id="Outbtn" value="Out"
-                title="Participant departed from this station." />
-                <input name="Dropbtn" type="button" id="Dropbtn" value="Drop"
-                title="Participant dropped from race." />
+                    title="Participant departed from this station." />
+                <input name="Dropbtn" type="button" id="Dropbtn" value="Drop" title="Participant dropped from race." />
             </div>
-        </div>
 
-        <hr />
+            <hr />
 
             <div class="div-across-auto-align">
                 <label for="entryCount">Entry Count:</label>
-                <input name="entryCount" type="text" id="entryCount" size="3" class="readOnlyText" readonly title="Number of bib entries submitted." />
+                <input name="entryCount" type="text" id="entryCount" size="3" class="readOnlyText" tabindex="-1"
+                    readonly title="Number of bib entries submitted." />
                 <label for="endOfPriorBatch">End Of Prior:</label>
-                <input name="endOfPriorBatch" type="text" id="endOfPriorBatch" size="25" class="readOnlyText" readonly title="The last saved bib record."></input>
-            </div>
-            <div class="div-across-auto-align">
-                <textarea name="TheCsvData" placeholder="Limit to a sensible number of entries." id="TheCsvData" class="bibEntries" maxlength="1200"></textarea> <!-- visible, put csv items here -->
-                <textarea name="TheData" id="TheData" class="bibEntries" maxlength="1200" style="display:none"></textarea> <!-- style display:none, put tab delim data here -->
-            </div>
-            <div class="div-across-auto-align">
-                <label for="Comment">Comment:</label>
-                <textarea name="Comment" id="Comment" maxlength="340" placeholder="Enter a short comment, space is very limited!"></textarea>
-            </div>
+                <input name="endOfPriorBatch" type="text" id="endOfPriorBatch" size="25" class="readOnlyText"
+                    tabindex="-1" readonly title="The last saved bib record."></input>
+                <textarea name="TheCsvData" placeholder="Limit to a sensible number of entries." id="TheCsvData"
+                    class="bibEntries" maxlength="1200"></textarea> <!-- put csv items here -->
+                <textarea name="TheData" id="TheData" class="bibEntries" maxlength="1200"></textarea>
+                <!-- put tab delim data here -->
+                <label for="comment" id="commentLabel">Optional Short Comment</label>
+                <textarea name="comment" id="comment" maxlength="340"></textarea>
 
-        <div class="div-across-auto-align">
-            <div class="block-line-div">
-            <input title="After submitting, close browser, then address message for posting" class="SubmitBtn"
-                enctype="multipart/form-data" id="Submit" method="Post" name="Submit" value="SUBMIT" type="submit" />
-            <input name="savebtn" type="button" class="saveDataButton" id="savebtn" onclick="SaveData()"
-                value="Save Race data" title="Save data to a file." />
-            </div>            
-            <div class="block-line-div">
-            <input name="loadbtn" type="button" class="loadDataButton" id="loadbtn"
-                onclick="document.getElementById('txtfiletoread').click();" value="Load Race data"
-                title="Load data from a file." />
-            <input name="doclear" type="button" id="doclear" onclick="clearParticipantData()" value="Clear Entries"
+                <input title="After submitting, close browser, then address message for posting" class="SubmitBtn"
+                    enctype="multipart/form-data" id="Submit" method="Post" name="Submit" value="SUBMIT"
+                    type="submit" />
+                <input name="savebtn" type="button" class="saveDataButton" id="savebtn" onclick="SaveData()"
+                    value="Save Race data" title="Save data to a file." />
+                <input name="loadbtn" type="button" class="loadDataButton" id="loadbtn"
+                    onclick="document.getElementById('txtfiletoread').click();" value="Load Race data"
+                    title="Load data from a file." />
+                <input name="doclear" type="button" id="doclear" onclick="clearParticipantData()" value="Clear Entries"
                     title="Clear all runner entries." class="clearDataButton" />
             </div>
-        </div>
-      </form>
+        </form>
     </section>
 
-    <section>
-      <div id="pop1" class="pop-up">
+    <section id="pop1" class="pop-up">
         <!-- The pop-up block -->
 
         <div class="popBox">
@@ -996,197 +998,282 @@
 
                 <h3>About This Form</h3>
 
-                <p>This form has been coded using technologies available to desktop browsers all the way back to March of 2010. Chrome, Firefox, IE 11, Opera, and Safari are supported. You can also use Edge (released in 2015), although the later versions that include the Chromium Engine will be most reliably compatible.</p>
+                <p>This form has been coded using technologies available to desktop browsers all the way back to March
+                    of 2010. Chrome, Firefox, IE 11, Opera, and Safari are supported. You can also use Edge (released in
+                    2015), although the later versions that include the Chromium Engine will be most reliably
+                    compatible.</p>
 
-        <p>Mobile device-based web browsers are also supported! This includes Chrome, Samsung Internet, Opera Mobile, and Android Firefox. You can rotate your device to change the view and the form will adjust its layout to accommodate the new screen dimensions (try it now!)</p>
-        
-        <p>Some mobile device browsers have quirks:</p>
-        
-        <ul>
-            <li>The on-screen keyboard will definitely get in your way. Use a compatible external keyboard if you have one.</li>
-            <li>Tab-order is not always correct. Just tap the field you want to change/fill-in to work around the problem.</li>
-        </ul>
+                <p>Mobile device-based web browsers are also supported! This includes Chrome, Samsung Internet, Opera
+                    Mobile, and Android Firefox. You can rotate your device to change the view and the form will adjust
+                    its layout to accommodate the new screen dimensions (try it now!)</p>
 
-                <p>NEW FEATURE for 2024: Users now have the ability to edit Bib Data in the Entries Field after entering them using the IN, OUT, or DROP buttons. <em>Using the form to enter data is a better choice than entering or editing the data manually</em>, so use this feature with care and precision.</p>
-                
-                <h3>Topics</h2>
-                
+                <p>Some mobile device browsers have quirks:</p>
+
+                <ul>
+                    <li>The on-screen keyboard will definitely get in your way. Use a compatible external keyboard if
+                        you have one.</li>
+                </ul>
+
+                <p>NEW FEATURE for 2024: Users now have the ability to edit Bib Data in the Entries Field after entering
+                    them using the IN, OUT, or DROP buttons. <em>Using the form to enter data is a better choice than
+                        entering or editing the data manually</em>, so use this feature with care and precision.</p>
+
+                <h3>Topics</h3>
+
                 <p>The form is broken up into three sections:</p>
 
-        <ul>
-            <li>Top: Form header with event, location, and message information.</li>
-            <li>Middle: Entering and viewing bib data.</li>
-            <li>Bottom: A Comments field and buttons for saving, restoring, and clearing bib data, and submitting data for posting a new Winlink Express message.</li>
-        </ul>
+                <ul>
+                    <li>Top: Form header with event, location, and message information.</li>
+                    <li>Middle: Entering and viewing bib data.</li>
+                    <li>Bottom: A Comments field and buttons for saving, restoring, and clearing bib data, and
+                        submitting data for posting a new Winlink Express message.</li>
+                </ul>
 
-        <p>Note: This form provides <em>limited keyboard-only support</em>.</p>
+                <p>Note: This form provides <em>limited keyboard-only support</em>.</p>
 
-        <ul>
-            <li>
-                <kbd>Tab</kbd> key to move between screen elements.
-            </li>
-            <li>
-                <kbd>Spacebar</kbd> or <kbd>Enter</kbd> to activate a highlighted element.
-            </li>
-            <li>
-                <kbd>Enter</kbd> will try to press the <button>Submit</button> button if required fields have data in them.
-            </li>
-        </ul>
+                <ul>
+                    <li>
+                        <kbd>Tab</kbd> key to move between screen elements.
+                    </li>
+                    <li>
+                        <kbd>Spacebar</kbd> or <kbd>Enter</kbd> to activate a highlighted element.
+                    </li>
+                    <li>
+                        <kbd>Enter</kbd> will try to press the <button>Submit</button> button if required fields
+                        have data in them.
+                    </li>
+                </ul>
 
-        <p>If you have questions or suggestions about keyboard-only mode support, talk with Jon K7RMZ or see the <a href="https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form">GitHub Project</a> for more information.</p>
+                <p>If you have questions or suggestions about keyboard-only mode support, talk with Jon K7RMZ or see
+                    the <a href="https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form" target="_blank">GitHub Project</a> for
+                    more information.</p>
 
                 <h3>Top section: Header and Message Information</h3>
 
-        <ol>
-            <li>Enter this Event Name for example &quot;Bigfoot 2024&quot;.</li>
-            <li>Enter a Message Number starting with 1. You can use the <button>Increment</button> button once or just enter a number.</li>
-            <li>Enter the recipient's amateur call sign in the Send To field. You can add other recipients in the Winlink Message <em>after submitting</em>.</li>
-            <li>Aid Station: Click or press the <kbd>Spacebar</kbd> to display the list, then use your mouse or keyboard <kbd>arrows</kbd> and <kbd>Enter</kbd> key to select the Aid Station for which the bib data applies.</li>
-            <li>Subject Line: This is filled-in automagically. Resist the urge to change it.</li>
-        </ol>
+                <ol>
+                    <li>Enter this Event Name for example &quot;Bigfoot 2024&quot;.</li>
+                    <li>Enter a Message Number starting with 1. You can use the <button>Increment</button> button
+                        once or just enter a number.</li>
+                    <li>Enter the recipient's amateur call sign in the Send To field. You can add other recipients
+                        in the Winlink Message <em>after submitting</em>.</li>
+                    <li>Aid Station: Click or press the <kbd>Spacebar</kbd> to display the list, then use your mouse
+                        or keyboard <kbd>arrows</kbd> and <kbd>Enter</kbd> key to select the Aid Station for which
+                        the bib data applies.</li>
+                    <li>Subject Line: This is filled-in automagically. Resist the urge to change it.</li>
+                </ol>
 
-        <p><em>Note</em>: Be certain to select <em>the Aid Station you are reporting for</em>. This is critically important information.</p>
+                <p><em>Note</em>: Be certain to select <em>the Aid Station you are reporting for</em>. This is
+                    critically important information.</p>
 
-                        
-        <p>The Subject Line will be formatted for you. As an example, a Subject Line of <code>BigFoot 2023 Elk Pass Message #1</code> is composed from the following information:</p>
 
-        <ul>
-            <li>BigFoot 2023: The Race or Event Name entered at the top of the form.</li>
-            <li>Elk Pass: The Aid Station selected at the top of the form.</li>
-            <li>Message #1: The Message Number entered at the top of the form.</li>
-        </ul>
+                <p>The Subject Line will be formatted for you. As an example, a Subject Line of
+                    <code>BigFoot 2023 Elk Pass Message #1</code> is composed from the following information:
+                </p>
 
-        <p>The &quot;Send To&quot; data is used to address the Winlink Message to the intended recipient and is not included in the subject line.</p>
+                <ul>
+                    <li>BigFoot 2023: The Race or Event Name entered at the top of the form.</li>
+                    <li>Elk Pass: The Aid Station selected at the top of the form.</li>
+                    <li>Message #1: The Message Number entered at the top of the form.</li>
+                </ul>
+
+                <p>The &quot;Send To&quot; data is used to address the Winlink Message to the intended recipient and
+                    is not included in the subject line.</p>
 
                 <h3>Middle section: Entering and Viewing Bib Data</h3>
 
-        <p>Enter the Bib Number and time that a Runner arrived (IN), exited (OUT), or bowed-out of the event (DROP):</p>
+                <p>Enter the Bib Number and time that a Runner arrived (IN), exited (OUT), or bowed-out of the event
+                    (DROP):</p>
 
                 <ol>
                     <li>Enter Bib Number: Limited to 15 characters.</li>
-                    <li>Enter The 24-hour time that the runner entered, exited, or bowed-out. Limited to 6 characters.</li>
+                    <li>Enter The 24-hour time that the runner entered, exited, or bowed-out. Limited to 6
+                        characters.</li>
                     <li>Yesterday: Click/tap this checkbox to set the day of the month back one day.</li>
-                    <li>Click IN (arrived), or OUT (exited forward course), or DROP (bowed out of event). Doing so adds the bib information to the Entries Field, below. Shortcuts are + (or =), -, and / respectively.</li>
-		    <li>Keyboard shortcut: IN is + or =, OUT is -, and DROP is /.</li>
+                    <li>Click IN (arrived), or OUT (exited forward course), or DROP (bowed out of event). Doing so
+                        adds the bib information to the Entries Field, below. Shortcuts are + (or =), -, and /
+                        respectively.</li>
+                    <li>Keyboard shortcut: IN is + or =, OUT is -, and DROP is /.</li>
                 </ol>
 
-        <p>The following items will get updated after clicking IN, OUT, or DROP buttons.</p>
+                <p>The following items will get updated after clicking IN, OUT, or DROP buttons.</p>
 
-        <ul>
-            <li>Entry Count: A read-only field shows the number of bib records that have been entered.</li>
-            <li>End Of Prior: A read-only field that displays the last-submitted entry in a prior message created with this Form. Leave the web browser open to use this feature. The format is &quot;Bib Number, Action, Time, &quot;D:&quot; Day of month, and &quot;M#&quot; Message number&quot;</li>
-            <li>Entries Field: Displays the list of entries complete with bib number, time, action, day of month, and Aid Station abbreviation.</li>
-            <li>Bib Number, Time, and Yesterday fields will be cleared.</li>
-        </ul>
+                <ul>
+                    <li>Entry Count: A read-only field shows the number of bib records that have been entered.</li>
+                    <li>End Of Prior: A read-only field that displays the last-submitted entry in a prior message
+                        created with this Form. Leave the web browser open to use this feature. The format is
+                        &quot;Bib Number, Action, Time, &quot;D:&quot; Day of month, and &quot;M#&quot; Message
+                        number&quot;</li>
+                    <li>Entries Field: Displays the list of entries complete with bib number, time, action, day of
+                        month, and Aid Station abbreviation.</li>
+                    <li>Bib Number, Time, and Yesterday fields will be cleared.</li>
+                </ul>
 
-        <p>Bib Number and Bib Time fields will auto-populate if you forget to add data to them. Mis-keying certain characters will cause the form to attempt to correct the mistake (but it is not perfect). A common default &quot;fix&quot; is &quot;0000&quot; in the Bib Number or Time entry boxes, or in the Entries Field below. Watch for this while you are entering data and fix it before clicking IN, OUT, or DROP.</p>
+                <p>Bib Number and Bib Time fields will auto-populate if you forget to add data to them. Mis-keying
+                    certain characters will cause the form to attempt to correct the mistake (but it is not
+                    perfect). A common default &quot;fix&quot; is &quot;0000&quot; in the Bib Number or Time entry
+                    boxes, or in the Entries Field below. Watch for this while you are entering data and fix it
+                    before clicking IN, OUT, or DROP.</p>
 
-        <p><em>Note</em>: Be certain to enter Time in a 24-hour format like "0006" or "00:06" (for 6 minutes after midnight), and "2350" or "23:50" (for 11:50pm). <em>Avoid</em> using &quot;am&quot; and &quot;pm&quot;. Adding these or other characters will just take up space and will be removed before it is copied into the Entries Field below. Other characters besides numbers and &quot;:&quot; will result in the form changing your entry, possibly in an unexpected way.</p>
+                <p><em>Note</em>: Be certain to enter Time in a 24-hour format like "0006" or "00:06" (for 6 minutes
+                    after midnight), and "2350" or "23:50" (for 11:50pm). <em>Avoid</em> using &quot;am&quot; and
+                    &quot;pm&quot;. Adding these or other characters will just take up space and will be removed
+                    before it is copied into the Entries Field below. Other characters besides numbers and
+                    &quot;:&quot; will result in the form changing your entry, possibly in an unexpected way.</p>
 
-        <p><em>Pay attention while entering data</em>. Always verify data while entering it, and use the <button>Save</button> to save your place.</p>
+                <p><em>Pay attention while entering data</em>. Always verify data while entering it, and use the
+                    <button>Save</button> to save your place.
+                </p>
 
-                <p>The Entries Field uses comma-separated-values. The Bib Record data fields are (from left to right): Bib Number, Bib Action, Action Time, Day Of Month, Aid Station (abbreviated). If you must edit an entry, be certain that all 5 fields exist for each entry (row), and the 5 fields are separated by a single comma. If you must edit data, it is probably a better choice to remove the row with &quot;bad data&quot; and then re-enter the data correctly using the Form Fields and buttons.</p>
-                
+                <p>The Entries Field uses comma-separated-values. The Bib Record data fields are (from left to
+                    right): Bib Number, Bib Action, Action Time, Day Of Month, Aid Station (abbreviated). If you
+                    must edit an entry, be certain that all 5 fields exist for each entry (row), and the 5 fields
+                    are separated by a single comma. If you must edit data, it is probably a better choice to remove
+                    the row with &quot;bad data&quot; and then re-enter the data correctly using the Form Fields and
+                    buttons.</p>
+
                 <h4>About IN, OUT, and DROP Actions</h4>
 
-        <p>This is a trail-running event, not a timed competition. Use your best judgement when entering Bib Times, for the safety of registered participants, and for the well-being of their crew (knowing where their runner is).</p>
+                <p>This is a trail-running event, not a timed competition. Use your best judgement when entering Bib
+                    Times, for the safety of registered participants, and for the well-being of their crew (knowing
+                    where their runner is).</p>
 
-        <ul>
-            <li>
-                IN: The runner (bib) arrived at the Aid Station.
-            </li>
-            <li>
-                OUT: The runner exited the Aid Station, continuing forward&dash;course.
-            </li>
-            <li>
-                DROP: The runner is bowing out of the race or has been disqualified by Destination Trail.
-            </li>
-        </ul>
+                <ul>
+                    <li>
+                        IN: The runner (bib) arrived at the Aid Station.
+                    </li>
+                    <li>
+                        OUT: The runner exited the Aid Station, continuing forward&dash;course.
+                    </li>
+                    <li>
+                        DROP: The runner is bowing out of the race or has been disqualified by Destination Trail.
+                    </li>
+                </ul>
 
-        <p>Only one Action per Bib Record entry is allowed.</p>
-        
-        <p>Example: Bib 123 entered at about 12:34 today you would enter the data like this:</p>
+                <p>Only one Action per Bib Record entry is allowed.</p>
 
-        <ol>
-            <li>Bib Number: 123</li>
-            <li>Bib Time: 1234</li>
-            <li>Click &quot;IN&quot;</li>
-        </ol>
+                <p>Example: Bib 123 entered at about 12:34 today you would enter the data like this:</p>
 
-        <p>When a runner actually arrived <em>yesterday</em>, click the &quot;Yesterday&quot; checkbox before clicking the appropriate Action button.</p>
+                <ol>
+                    <li>Bib Number: 123</li>
+                    <li>Bib Time: 1234</li>
+                    <li>Click &quot;IN&quot;</li>
+                </ol>
 
-        <p>If you don't know the <em>exact time</em> the runner entered the Aid Station:</p>
-        
-        <ol>
-            <li>Check the Aid Station booklet and &quot;Bingo Board&quot; (assuming they are being updated).</li>
-            <li>Ask the Aid Station captain and volunteers. They will sometimes have a good idea as to when a runner arrived or left.</li>
-            <li>Locate the runner's crew and ask if they know.</li>
-        </ol> 
-        
-        <p>If you don't find an answer following the above steps, chances are <em>you have the best situational knowledge</em> to determine what time makes the most sense. Make a fair estimate based on your experience and enter that time. Add a concise note in the Comment field about that bib number if extra information will be helpful.</p>
+                <p>When a runner actually arrived <em>yesterday</em>, click the &quot;Yesterday&quot; checkbox
+                    before clicking the appropriate Action button.</p>
 
-        <h3>Number of Entries</h3>
+                <p>If you don't know the <em>exact time</em> the runner entered the Aid Station:</p>
 
-        <p>This accurately counts the number of bib entries currently stored in the form. This number will update every time you click IN, OUT, or DROP, and any time you make a direct edit to the comma-separated values.</p>
+                <ol>
+                    <li>Check the Aid Station booklet and &quot;Bingo Board&quot; (assuming they are being updated).
+                    </li>
+                    <li>Ask the Aid Station captain and volunteers. They will sometimes have a good idea as to when
+                        a runner arrived or left.</li>
+                    <li>Locate the runner's crew and ask if they know.</li>
+                </ol>
+
+                <p>If you don't find an answer following the above steps, chances are <em>you have the best
+                        situational knowledge</em> to determine what time makes the most sense. Make a fair estimate
+                    based on your experience and enter that time. Add a concise note in the Comment field about that
+                    bib number if extra information will be helpful.</p>
+
+                <h3>Number of Entries</h3>
+
+                <p>This accurately counts the number of bib entries currently stored in the form. This number will
+                    update every time you click IN, OUT, or DROP, and any time you make a direct edit to the
+                    comma-separated values.</p>
 
                 <h3>Bottom Section: Comment, Save, Restore, and Submit Bib Data</h3>
 
                 <h4>Comment Field</h4>
 
-        <p>For any bib entries that need additional explanation (especially DROP) use the &quot;Comments&quot; area to free-form a <em>short and to the point</em> statement.</p>
+                <p>For any bib entries that need additional explanation (especially DROP) use the
+                    &quot;Comments&quot; area to free-form a <em>short and to the point</em> statement.</p>
 
-        <p>If the message is too long or complex for the Comment field, contact Bigfoot Base via a separate Winlink Message, voice radio, or other means to relay the necessary information to them.</p>
+                <p>If the message is too long or complex for the Comment field, contact Bigfoot Base via a separate
+                    Winlink Message, voice radio, or other means to relay the necessary information to them.</p>
 
-        <p>One last note about runners that &quot;DROP&quot;: It is usually a good idea to radio-in to Bigfoot Base by voice after adding a DROP to the list. Have the bib number, time, and the reason (if known) ready before you call.</p>
+                <p>One last note about runners that &quot;DROP&quot;: It is usually a good idea to radio-in to
+                    Bigfoot Base by voice after adding a DROP to the list. Have the bib number, time, and the reason
+                    (if known) ready before you call.</p>
 
                 <h4>Save and Load buttons</h4>
 
-        <p>Use the Save Data Race Data button to store the bib entries into a plain text file.</p>
+                <p>Use the Save Data Race Data button to store the bib entries into a plain text file.</p>
 
-        <ul>
-            <li>The file will be named with the current date and time with a &quot;txt&quot; file extension so any text editor can open it.</li>
-            <li>The file will be stored in your browser's download folder (the default). Check your Browser Settings to configure this.</li>
-            <li>You can rename the downloaded file to something more meaningful without harming the data, or interfering with the operation of this Form.</li>
-        </ul>
+                <ul>
+                    <li>The file will be named with the current date and time with a &quot;txt&quot; file extension
+                        so any text editor can open it.</li>
+                    <li>The file will be stored in your browser's download folder (the default). Check your Browser
+                        Settings to configure this.</li>
+                    <li>You can rename the downloaded file to something more meaningful without harming the data, or
+                        interfering with the operation of this Form.</li>
+                </ul>
 
                 <h4>Submit Button</h4>
 
-                <p>If you launched this form using Winlink Express, use the <button>Submit</button> button to have Winlink Express automatically create a new, well formatted message. On-screen information will guide you through the submission process.</p>
-                
-                <p>The information that is sent in the new Message via WinLink can be copied and pasted directly into an excel spreadsheet or other database software. This is what Bigfoot Base does when they receive the message. If it is not formatted exactly as this Form does it, they might call you on the radio and ask for you to resubmit or clarify information. This is not a good use of your time, so refrain from editing the "posted" Winlink Message after submitting this Form.</p>
+                <p>If you launched this form using Winlink Express, use the <button>Submit</button> button to have
+                    Winlink Express automatically create a new, well formatted message. On-screen information will
+                    guide you through the submission process.</p>
+
+                <p>The information that is sent in the new Message via WinLink can be copied and pasted directly
+                    into an excel spreadsheet or other database software. This is what Bigfoot Base does when they
+                    receive the message. If it is not formatted exactly as this Form does it, they might call you on
+                    the radio and ask for you to resubmit or clarify information. This is not a good use of your
+                    time, so refrain from editing the "posted" Winlink Message after submitting this Form.</p>
 
                 <h4>Clear Entries button</h4>
 
-                <p>Use the <button>Clear Entries</button> button to remove <em>Comment text</em> and <em>all bib record entries</em>. This will not clear the header information, such as Event Name, Aid Station, or Message Number. It will also not clear the Subject Line. See the above sub-section &quot;Saving and Loading Race Data&quot; for more information.</p>
+                <p>Use the <button>Clear Entries</button> button to remove <em>Comment text</em> and <em>all bib
+                        record entries</em>. This will not clear the header information, such as Event Name, Aid
+                    Station, or Message Number. It will also not clear the Subject Line. See the above sub-section
+                    &quot;Saving and Loading Race Data&quot; for more information.</p>
 
                 <hr />
-                
-                <h3>Considerations</h2>
-               
-                <p>Stay on top of your runner records lists. Even if you cannot send data via Winlink for some reason, keep entering data into this Form and click <button>Save Race data</button> to store a list on your device. Start a new Form and repeat this process until you can send the data via Winlink using the <button>Load Race data</button> or by other means. You will have an easier time keeping track of runners this way by viewing files stored on your device.</p>
 
-        <p>The sooner you get valid data to Bigfoot Base, the better the hams and the event organizers understand the status of all runners and Aid Stations. Since runners come and go from Aid Stations both day and night, you will end up with a list of runners that arrived, exited, or dropped, sometime in the past. If you get behind by more than a day or so, you will find the record-keeping duty much more challenging than it needs to be.</p>
+                <h3>Considerations</h3>
 
-        <p>Load this Form on a tablet or laptop computer and track runners until you have several dozen. Use the <button>Save Race data</button> button to save the data to a thumbdrive to share the data with the Winlink Operator, who can then open a new message form and click <button>Load Race data</button> to load the collected data and send it. This will save you time and effort, and might even free-up your Winlink Operator to perform other duties while you collect bib records on your phone or tablet, instead of pen and paper.</p>
-        
-        <p>If you have a computer network savvy ham on your team, try networking your devices within a small WiFi, so you can just transfer the saved race data directly to the Winlink computer at any time.</p>
-        
-        <p>There are many possible ways to slice this cake. Use your imagination and allow this form to help you be efficient in tracking runners.</p>
+                <p>Stay on top of your runner records lists. Even if you cannot send data via Winlink for some
+                    reason, keep entering data into this Form and click <button>Save Race data</button> to store
+                    a list on your device. Start a new Form and repeat this process until you can send the data
+                    via Winlink using the <button>Load Race data</button> or by other means. You will have an
+                    easier time keeping track of runners this way by viewing files stored on your device.</p>
 
-        <hr />
+                <p>The sooner you get valid data to Bigfoot Base, the better the hams and the event organizers
+                    understand the status of all runners and Aid Stations. Since runners come and go from Aid
+                    Stations both day and night, you will end up with a list of runners that arrived, exited, or
+                    dropped, sometime in the past. If you get behind by more than a day or so, you will find the
+                    record-keeping duty much more challenging than it needs to be.</p>
 
-                <h3>Credits and Thanks</h2>
-                
-                <p>The original form was designed by Greg KG6SJT, a member of the <a href="https://winlink.org">Winlink Development Team</a></p>
-                
-                <p>Custom redesign and ongoing development: Jon K7RMZ (<a href="https://github.com/nojronatron">GitHub</a>)</p>
-                
+                <p>Load this Form on a tablet or laptop computer and track runners until you have several dozen.
+                    Use the <button>Save Race data</button> button to save the data to a thumbdrive to share the
+                    data with the Winlink Operator, who can then open a new message form and click <button>Load
+                        Race data</button> to load the collected data and send it. This will save you time and
+                    effort, and might even free-up your Winlink Operator to perform other duties while you
+                    collect bib records on your phone or tablet, instead of pen and paper.</p>
+
+                <p>If you have a computer network savvy ham on your team, try networking your devices within a
+                    small WiFi, so you can just transfer the saved race data directly to the Winlink computer at
+                    any time.</p>
+
+                <p>There are many possible ways to slice this cake. Use your imagination and allow this form to
+                    help you be efficient in tracking runners.</p>
+
+                <hr />
+
+                <h3>Credits and Thanks</h3>
+
+                <p>The original form was designed by Greg KG6SJT, a member of the <a href="https://winlink.org" target="_blank">Winlink
+                        Development Team</a></p>
+
+                <p>Custom redesign and ongoing development: Jon K7RMZ (<a
+                        href="https://github.com/nojronatron" target="_blank">GitHub</a>)</p>
+
                 <p>Design and code assistance: Mark K7TUM</p>
-                
-                <p>Feature and dev-ops assistance: Jason KI7TYU</p>
+
+                <p>New features and development: Jason KI7TYU</p>
             </div>
         </div>
-      </div>
 
     </section>
 
@@ -1203,18 +1290,18 @@
         let dropBtnElement = GetElementById('Dropbtn');
 
         // add event listener to csvDataElement: call functions to clean and handle existing csv data
-        csvDataElement.addEventListener('blur', function() {
+        csvDataElement.addEventListener('blur', function () {
             cleanAndCountCsvData();
             handleCsvDataEdited();
         });
 
         // add event listener to Bib Time field: call functions to sanitize and pad user input
-        timeFieldElement.addEventListener('blur', function() {
+        timeFieldElement.addEventListener('blur', function () {
             GetElementById('TimeField').value = formatTimeValue(this.value);
         });
 
         // add event listener to Rider Number field: set default value if empty or set current clock time to Time field
-        riderNumberElement.addEventListener('blur', function() {
+        riderNumberElement.addEventListener('blur', function () {
             this.value = this.value.trim();
             // set default value if field is empty
             if (this.value < minFieldLength) {
@@ -1227,21 +1314,21 @@
         });
 
         // add an event listener to the '+' key that will call handleAddBib("IN") function
-        document.addEventListener('keydown', function(event) {
+        document.addEventListener('keydown', function (event) {
             if (event.key === '+' || event.key === '=') {
                 event.preventDefault(); // prevent key character from being entered in the form
                 handleAddBib("IN");
-            } else if(event.key === '-') {
+            } else if (event.key === '-') {
                 event.preventDefault(); // prevent key character from being entered in the form
                 handleAddBib("OUT");
-            } else if(event.key === '/') {
+            } else if (event.key === '/') {
                 event.preventDefault(); // prevent key character from being entered in the form
                 handleAddBib("DROP");
             }
         });
 
         // add event listeners to the IN, OUT, and DROP buttons
-        document.addEventListener('click', function(event) {
+        document.addEventListener('click', function (event) {
             if (event.target === inBtnElement) {
                 event.preventDefault();
                 handleAddBib("IN");
@@ -1255,18 +1342,19 @@
         });
 
         // Add event listeners for "Form Information - READ" and "Close Pop-up" buttons
-        document.getElementById('formInfoReadBtn').addEventListener('click', function() {
+        document.getElementById('formInfoReadBtn').addEventListener('click', function () {
             getFocusableElements('pop1').forEach(el => {
                 el.removeAttribute('tabindex');
             });
             location.href = '#pop1';
         });
-        document.getElementById('closePopBtn').addEventListener('click', function() {
+        document.getElementById('closePopBtn').addEventListener('click', function () {
             getFocusableElements('pop1').forEach(el => {
                 el.setAttribute('tabindex', '-1');
             });
             location.href = '#close';
         });
     </script>
-  </body>
+</body>
+
 </html>

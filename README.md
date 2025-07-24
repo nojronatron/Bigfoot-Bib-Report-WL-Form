@@ -3,6 +3,7 @@
 ## Table of Contents
 
 - [Overview](#overview)
+- [Contributing](#contributing)
 - [Form and Template Version](#form-and-template-version)
 - [How Winlink Forms Work](#how-winlink-forms-work)
 - [How Bib Data Is Recorded At Aid Stations](#how-bib-data-is-recorded-at-aid-stations)
@@ -12,7 +13,6 @@
 - [How to Install This Form and Template](#how-to-install-this-form-and-template)
 - [Set A Favorite Form](#set-a-favorite-form)
 - [Form Usage in Winlink Express](#form-usage-in-winlink-express)
-- [Development](#development)
 - [Final Thoughts](#final-thoughts)
 
 ## Overview
@@ -27,12 +27,20 @@ This form was developed to standardize the message and data to race headquarters
 
 For more information about Destination Trail and their ultra trail running marathons, see [DestinationTrailRun.com](https://www.destinationtrailrun.com/).
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for information. You are welcome to help me, and the Bigfoot Hams, with your ideas.
+
 ## Form and Template Version
 
 1-Aug-2024: v2.4.x (in development)
 
 - Mouseless input: IN, OUT, DROP buttons activated using `+`, `-`, and `/` keys.
-- Clear Entries button now also removes Comment field.
+- Clear Entries button also removes Comment field text.
+- Fix UI tabstops and selected highlight.
+- Code cleanup and refinements.
+- Code improvements for screen readers.
+- Improved time input sanitization.
 - Documentation updates covering the above features.
 
 25-June-2024: v2.1.3
@@ -117,7 +125,7 @@ There are 2 files to download:
 You have options as to where to get them (in preferential order):
 
 1. From this GitHub Repo's [releases page](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/releases).
-2. From the least-likely to be up-to-date [Google Drive]()
+2. From the least-likely to be up-to-date [Google Drive](https://drive.google.com/drive/folders/1hNptcqq6-Z2Rib4HhJcBcAi8-VUD-Ggb)
 
 When downloading from the [GitHub Releases page](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/releases) the files will be inside of a `.zip` file. After downloading, either right-click and select "Extract All..." and follow the wizard screen to unzip the files, or use your favorite "unzipping" utility (there are many to choose from, free and paid).
 
@@ -136,8 +144,8 @@ Generally speaking, Winlink Forms and Templates are stored in a directory under 
 
 If multiple operators will use this Winlink Express station, it might be better to install Forms and Templates to the `Global Folders\Templates` folder instead. Just adjust instructions above accordingly:
 
-- Step 2) Copy `Bigfoot-Bib-Report-Initial.html` and `Bigfoot-Bib-Report.txt` to the directory named `Global Folders\Templates`.
-- Step 6) In the Template Manager window double-click `Global Templates`.
+- Step 2: Copy `Bigfoot-Bib-Report-Initial.html` and `Bigfoot-Bib-Report.txt` to the directory named `Global Folders\Templates`.
+- Step 6: In the Template Manager window double-click `Global Templates`.
 
 Notes:
 
@@ -338,74 +346,6 @@ You can set up to 3 Forms as _Favorites_ following these steps:
 ![Bigfoot Form set as favorite appears in New Message menus](./images/new-message-favorite-form-in-green.png)
 
 For detailed instructions on the installation of Winlink Forms and Templates see [Winlink.org](https://www.winlink.org).
-
-## Development
-
-This project utilizes HTML, Javascript, CSS, and plain text. Compatibility is biased toward supporting Windows 7-era browsers and mobile devices, over latest-greatest features and functionality.
-
-Good news for developers is single-page websites have no specific build requirements. It is helpful to have an operable and up-to-date version of Winlink Express installed on (or near) your development machine, as well as a bunch of browsers and devices for testing/viewing results.
-
-This form should support browsers and devices released after March 2010 including Chrome, Firefox, Opera, Edge, IE 11, Android Chrome and Firefox, and Opera iOS.
-
-If you run across issues using this form in a specific browser, use the [Discussions](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/discussions/11) page to search for existing information, submit a [GitHub Issue](https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form/issues), or [contact me](k7rmz@arrl.net).
-
-### Prerequisites
-
-Highly recommended: VS Code (available for Windows, mac, Linux, and GitHub Codespaces).
-
-Many other IDEs can be used however your changes might be excessive if you reformat the code at any time. [Development best practices](#development-best-practices) has more about information.
-
-### Development Help Wanted
-
-Wanted: _Your help and input developing this form_!
-
-- In-Form documentation.
-- Updating code to circa-2010 standards at a minimum.
-- Refactoring or factoring-out unnecessary functions, attributes, and CSS classes.
-- UI operational validation on many devices and platforms.
-- Refactoring the UI to better support Web Accessibility best practices for inclusion, maximizing the user-base.
-
-Contact [K7RMZ at ARRL dot NET](k7rmz@arrl.net) with a message about your interest(s) and a link to your Github profile. Be sure to include the name of this repository in the subject line.
-
-### Development Best Practices
-
-- Maintain the `.vscode/settings.json` file, it is necessary for development in this repo. If it is changed in the future, you must update it in your local.
-- Maintain the files `.gitignore` and `.gitattributes`. These are necessary to keep this codebase clean, and ensure `cr-lf` characters are maintained for Winlink Express.
-- Avoid formatting the entire document, it will significantly reduce the value of code-reviewing your PR, and therefore might not be accepted.
-- Maintain the existing color scheme and contrasts. Discuss any desired changes with me prior to starting work.
-- Ensure you have the lastest version of `main`. If your PR has merge conflicts, I will work with you to help resolve merge conflicts _after you have tried to do so_.
-
-### Handling Merge Conflicts
-
-- [Github: Resolving Merge Conflicts](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-using-the-command-line).
-- [Atlassian: Resolving Merge Conflicts](https://www.atlassian.com/git/tutorials/using-branches/merge-conflicts) for help understanding and resolving merge conflicts.
-
-### To Develop Locally
-
-1. Fork this repo to your own Github account.
-2. Clone this repo to your local dev environment.
-3. Create a development branch named appropriately for what work you are about to do.
-4. Open the project in your preferred HTML, CSS, and javascript editor/IDE. See [development best practices](#development-best-practices), above.
-5. Add, Commit, and Push your changes with appropriate comments.
-6. When you are done adding or editing the code, open a [Pull Request](#pull-requests) with appropriate documentation.
-7. If there is already an Issue and/or Discussion related to the work, please mention those in your PR Comment using the `#` [shortened linking method](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/autolinked-references-and-urls#issues-and-pull-requests).
-
-### Branching
-
-This repository uses a Root branching pattern, pointing to _main_.
-
-- _main_ is protected and requires approvals to merge code into it.
-- Create your own custom develpment branch(es) and point your PR to _main_ in this repository when your code is ready.
-- Any commits, new or patch, must be based on `main` and ready to merge without merge conflicts in order to be considered (see [Handling merge conflicts](#handling-merge-conflicts) above).
-
-### Pull Requests
-
-A Pull Request should have helpful comments within it:
-
-1. Brief subject line indicating the fix or inhancement.
-2. Detailed comments in the body of the PR following the problem-solution-result format.
-3. Body of the message should include a link to an associated GitHub Issue using the [shortened linking method](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/autolinked-references-and-urls#issues-and-pull-requests) with the hash symbol `#`.
-4. Include details on which browser(s) are affected.
 
 ## Final Thoughts
 
