@@ -263,7 +263,6 @@
             let regulartitle = '' + storedTitle + ' ' + locationLong + ' Message #' + storedMsgNumber;
             GetElementById('msgsubject').value = regulartitle;
             GetElementById('MessageNumber').value = storedMsgNumber;
-            GetElementById('FormatNote').value = '* The entries in the message will be TAB delimited, allowing copy/paste into a spreadsheet.';
             copyPreviousRecordFromLsToElement();
         }
 
@@ -291,9 +290,6 @@
                 GetElementById('Dropbtn').disabled = false;
                 GetElementById('entryCount').disabled = false;
                 GetElementById('entryCount').value = '0';
-                let formatNoteText =
-                    '* Entries in the email will be tab-delimited, allowing copy/paste into a spreadsheet.';
-                GetElementById('FormatNote').value = formatNoteText;
                 ResetForm();
             }
         }
@@ -928,8 +924,6 @@
 
             <!-- hidden elements -->
             <input name="FormVersion" type="hidden" id="FormVersion" />
-            <input name="FormatNote" type="hidden" id="FormatNote"
-                value="* Entries in the email will be tab-delimited, allowing copy/paste into a spreadsheet." />
             <input type="file" id="txtfiletoread" accept=".txt" />
             <input name="sendto" type="hidden" id="sendto" />
             <textarea name="parseme" id="parseme"></textarea>
@@ -1277,7 +1271,7 @@
 
                 <p>Design and code assistance: Mark K7TUM</p>
 
-                <p>Feature and dev-ops assistance: Jason KI7TYU</p>
+                <p>New features and development: Jason KI7TYU</p>
             </div>
         </div>
 
