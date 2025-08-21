@@ -215,6 +215,7 @@ Enter information into the top section of the form. What you enter here will upd
 
 _Note_: Many browsers will store previously entered data into fields. It is not a feature of the Form. You might (or might not) want your browser to do this.
 
+1. Select an appropriate number in the Max Bib Characters field. Bigfoot Base might even tell you what number this should be, for example `3` for a bib range of 1-450.
 1. Enter an Event Title.
 1. Update the Message Number (start with 1 unless instructed otherwise). You can use the Increment button to simplify tracking message numbers.
 1. Add Callsign(s) of the recipients you want to send the completed message to.
@@ -236,7 +237,7 @@ _Always use the Save button_ before submitting your data to a message, that way 
 
 This functionality will help you store all of the form field data in the form including the top (header) section and entered bib data.
 
-1. Complete the top section of the form.
+1. Complete the [top section](#prepare-common-form-data) of the form.
 1. Click the SAVE RACE DATA button.
 1. A pop-up will appear with a filename.
 1. Optional: Rename the file something that represents your aid station such as "Chain of Lakes WL Form Header.txt".
@@ -246,8 +247,9 @@ Here's a sample of what that saved data looks like:
 
 ```json
 {
-  "FormVersion": "2.1.3",
-  "EventTitle": "BF24 Test",
+  "FormVersion": "2.5.0",
+  "BibNumberLengthMax": "6",
+  "EventTitle": "BF Test 2026",
   "MessageNumber": "5",
   "address": "k7rmz",
   "Location": "JR_Johnston Ridge",
@@ -285,7 +287,7 @@ The form allows you to click or tap on input fields to select them, and you can 
 1. Press Tab to move to the "Time" entry box and the current 24-hour time will appear in the box for the _current day_.
 1. _As necessary_ update the time to an accurate representation of the time the runner arrived, left, or dropped. Generally, this timestamp should be close to actual but it is _not an official record_ so use your best judgement.
 1. Click the checkbox labeled `Yesterday` to tell the Form the time references _yesterday_.
-1. Click IN, OUT, DROP depending on what the runner `Action` was. Alternatively, hit either the + or = key for IN, - for OUT, and / for DROP.
+1. Click IN, OUT, DROP depending on what the runner `Action` was. Alternatively, press `+` or `=` key for IN, `-` for OUT, or `/` for DROP.
 
 The correctly formatted bib data will appear in the window below and the `Number of Entries` count will increase by `1` for every enty you complete.
 
