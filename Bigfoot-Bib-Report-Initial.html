@@ -1091,9 +1091,7 @@
                         characters.</li>
                     <li>Yesterday: Click/tap this checkbox to set the day of the month back one day.</li>
                     <li>Click IN (arrived), or OUT (exited forward course), or DROP (bowed out of event). Doing so
-                        adds the bib information to the Entries Field, below. Shortcuts are + (or =), -, and /
-                        respectively.</li>
-                    <li>Keyboard shortcut: IN is + or =, OUT is -, and DROP is /.</li>
+                        adds the bib information to the Entries Field, below.</li>
                 </ol>
 
                 <p>The following items will get updated after clicking IN, OUT, or DROP buttons.</p>
@@ -1177,6 +1175,15 @@
                         situational knowledge</em> to determine what time makes the most sense. Make a fair estimate
                     based on your experience and enter that time. Add a concise note in the Comment field about that
                     bib number if extra information will be helpful.</p>
+
+                <h4>IN, OUT, DROP Keyboard Shortcuts</h4>
+                <p>
+                    Use <code>+</code> (or <code>=</code>) for <button>IN</button> <code>-</code> for <button>OUT</button> 
+                    or <code>/</code> for <button>DROP</button>.
+                </p>
+
+                <p>These shortcut keys are only available while any field within the <em>Bib Data Entry</em> 
+                section of the form are highlighted. Outside of that area the keys will not trigger adding bib data entry.</p>
 
                 <h3>Number of Entries</h3>
 
@@ -1289,6 +1296,7 @@
         let inBtnElement = GetElementById('Inbtn');
         let outBtnElement = GetElementById('Outbtn');
         let dropBtnElement = GetElementById('Dropbtn');
+        let yesterdayElement = GetElementById('yesterday');
 
         // add event listener to csvDataElement: call functions to clean and handle existing csv data
         csvDataElement.addEventListener('blur', function () {
@@ -1314,17 +1322,25 @@
             GetElementById('TimeField').value = formatTimeValue(currTime);
         });
 
-        // add an event listener to the '+' key that will call handleAddBib("IN") function
+        // add an event listener to the '+', '=', `-`, and `/` keys that call handleAddBib() function only when timeField, RiderNumber, Yesterday input elements, or IN, OUT, or DROP buttons are focused
         document.addEventListener('keydown', function (event) {
-            if (event.key === '+' || event.key === '=') {
-                event.preventDefault(); // prevent key character from being entered in the form
-                handleAddBib("IN");
-            } else if (event.key === '-') {
-                event.preventDefault(); // prevent key character from being entered in the form
-                handleAddBib("OUT");
-            } else if (event.key === '/') {
-                event.preventDefault(); // prevent key character from being entered in the form
-                handleAddBib("DROP");
+            const activeElement = document.activeElement;
+            if (activeElement === timeFieldElement || 
+                activeElement === riderNumberElement || 
+                activeElement === yesterdayElement ||
+                activeElement === inBtnElement ||
+                activeElement === outBtnElement ||
+                activeElement === dropBtnElement) {
+                if (event.key === '+' || event.key === '=') {
+                    event.preventDefault(); // prevent key character from being entered in the form
+                    handleAddBib("IN");
+                } else if (event.key === '-') {
+                    event.preventDefault(); // prevent key character from being entered in the form
+                    handleAddBib("OUT");
+                } else if (event.key === '/') {
+                    event.preventDefault(); // prevent key character from being entered in the form
+                    handleAddBib("DROP");
+                }
             }
         });
 
