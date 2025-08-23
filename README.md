@@ -247,13 +247,13 @@ Here's a sample of what that saved data looks like:
 
 ```json
 {
-  "FormVersion": "2.5.0",
-  "BibNumberLengthMax": "6",
+  "FormVersion": "2.5.dev",
+  "BibNumberLengthMax": "3",
   "EventTitle": "BF Test 2026",
   "MessageNumber": "5",
-  "address": "k7rmz",
+  "address": "N0CALL",
   "Location": "JR_Johnston Ridge",
-  "msgsubject": "BF24 Test Johnston Ridge Message #5",
+  "msgsubject": "BF26 Test Johnston Ridge Message #5",
   "entryCount": "4",
   "Comment": "",
   "TheCsvData": [
@@ -277,6 +277,8 @@ You can record bib data using a phone, tablet, or computer (so long as it has a 
 _Note 1_: The last entry from the previously submitted batch will be displayed in the `End of Prior` textbox. This indicates the last bib entry from the last time the `Submit` button was pressed. This entry can be used in place of or supplement notations made on your source paperwork, for example, recording bib actions on paper and then relaying to this form.
 
 _Note 2_: Whenever you press `Save Race data` the form will store the last entered bib data to the file so that next time you `Load Race data`, the `End of Prior` field will be updated accordingly.
+
+_Note 3_: "BibNumberLengthMax" value does not get loaded back into the form with the other race data. This is to avoid an unexpected change to the limit already set by the current operator.
 
 ### Enter Bib Data Into The Form
 
@@ -351,10 +353,8 @@ For detailed instructions on the installation of Winlink Forms and Templates see
 
 ## Final Thoughts
 
-Have fun!
-
-This is a personal effort of love for coding and for the hobby and community of ham radio. This project open to benefit the amateur community.
-
 The original author might assert restrictions or limitations on use of their source code. See [Winlink.org](https://winlink.org/) for details.
+
+This is a personal effort of love for coding and for the hobby and community of ham radio. This project is open source, for the benefit the amateur community. ❤️👐💻🤝📻
 
 [Back To Top](#bigfoot-bib-report-winlink-form)
