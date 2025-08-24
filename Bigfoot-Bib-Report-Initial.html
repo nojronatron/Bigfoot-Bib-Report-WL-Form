@@ -1323,23 +1323,20 @@
         });
 
         // add an event listener to the '+', '=', `-`, and `/` keys that call handleAddBib() function only when timeField, RiderNumber, Yesterday input elements, or IN, OUT, or DROP buttons are focused
+        const focusableElements = [timeFieldElement, riderNumberElement, yesterdayElement, inBtnElement, outBtnElement, dropBtnElement];
+        const keyActionMap = {
+            '+': "IN",
+            '=': "IN",
+            '-': "OUT",
+            '/': "DROP"
+        };
         document.addEventListener('keydown', function (event) {
             const activeElement = document.activeElement;
-            if (activeElement === timeFieldElement || 
-                activeElement === riderNumberElement || 
-                activeElement === yesterdayElement ||
-                activeElement === inBtnElement ||
-                activeElement === outBtnElement ||
-                activeElement === dropBtnElement) {
-                if (event.key === '+' || event.key === '=') {
+            if (focusableElements.includes(activeElement)) {
+                const kAMValue = keyActionMap[event.key];
+                if (kAMValue !== undefined) {
                     event.preventDefault(); // prevent key character from being entered in the form
-                    handleAddBib("IN");
-                } else if (event.key === '-') {
-                    event.preventDefault(); // prevent key character from being entered in the form
-                    handleAddBib("OUT");
-                } else if (event.key === '/') {
-                    event.preventDefault(); // prevent key character from being entered in the form
-                    handleAddBib("DROP");
+                    handleAddBib(kAMValue);
                 }
             }
         });
