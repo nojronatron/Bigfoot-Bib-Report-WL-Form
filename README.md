@@ -33,7 +33,11 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for information. You are welcome to help 
 
 ## Form and Template Version
 
-1-Aug-2024: v2.4.x (in development)
+TBD: v2.5.x
+
+- TBD
+
+1-Aug-2024: v2.4.1
 
 - Mouseless input: IN, OUT, DROP buttons activated using `+`, `-`, and `/` keys.
 - Clear Entries button also removes Comment field text.
@@ -43,15 +47,12 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for information. You are welcome to help 
 - Improved time input sanitization.
 - Documentation updates covering the above features.
 
-25-June-2024: v2.1.3
+### Prior versions
 
 - Add sanitization to bib number and bib time inputs.
 - Format bib time input as 'HHMM' (4 characters, no colon, no non-number characters).
 - Format CSV entries as 'HHMM' etc (same as above).
 - Update Form Information (help) text.
-
-5-June-2024: v2.0.1
-
 - Updates Template file variable names.
 - Updates Form to use CSV on UI, submit Tab-delimited on Submit.
 - Update README with latest instructions, images, and depictions.
@@ -61,17 +62,12 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for information. You are welcome to help 
 - Enforce CRLF in git operations.
 - Updates code to support major desktop and mobile browsers from March 2010 forward.
 - Update in-form help documentation to bring up-to-date.
-
-6-Aug-2023: v1.1.7
-
 - Bugfix 'increment' button updates subject field.
 - Message number saved to browser storage.
 - Remove unnecessary code.
 - Remove default message number.
 
-Prior versions:
-
-Prior versions were built from original form files created by the Winlink Development Team:
+Initial versions of this form were built from original form files created by the Winlink Development Team:
 
 - "Race Tracker Initial.html" aka The Form. This is a single-page website built with html, javascript, and css.
 - "Race Tracker.txt" aka The Template. A plain-text file with special keywords elements to receive data produced by the Form.
