@@ -193,11 +193,11 @@
             return result;
         }
 
-        function ResetForm() {
+        function ResetBibDataFields() {
             ['RiderNum', 'TimeField'].forEach(id => GetElementById(id).value = '');
             GetElementById('yesterday').checked = false;
             GetElementById('RiderNum').focus();
-            GetElementById('comment').value = '';
+            //GetElementById('comment').value = '';
         }
 
         // validate bib number and time then add bib record to csv and tab record elements
@@ -211,7 +211,7 @@
                 let shortLoc = shortenLocation(locationVal);
                 storePreviousRecord(riderNum, bibAction, time, dayOfMonth, shortLoc);
                 updateCsvAndTabRecordsElement(riderNum, bibAction, time, dayOfMonth, shortLoc);
-                ResetForm();
+                ResetBibDataFields();
                 cleanAndCountCsvData();
             } else {
                 alert('Enter Runner/Bib number');
@@ -306,10 +306,11 @@
                 GetElementById('Dropbtn').disabled = false;
                 GetElementById('entryCount').disabled = false;
                 GetElementById('entryCount').value = '0';
-                ResetForm();
+                GetElementById('comment').value = '';
+                ResetBibDataFields();
             }
         }
-
+        
         // gets, formats, and returns the current clock time in HHMM format
         function getCurrentTime() {
             var currentDateResult = new Date();
