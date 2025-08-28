@@ -33,7 +33,11 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for information. You are welcome to help 
 
 ## Form and Template Version
 
-1-Aug-2024: v2.4.x (in development)
+TBD: v2.5.x
+
+- TBD
+
+1-Aug-2024: v2.4.1
 
 - Mouseless input: IN, OUT, DROP buttons activated using `+`, `-`, and `/` keys.
 - Clear Entries button also removes Comment field text.
@@ -43,15 +47,12 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for information. You are welcome to help 
 - Improved time input sanitization.
 - Documentation updates covering the above features.
 
-25-June-2024: v2.1.3
+### Prior versions
 
 - Add sanitization to bib number and bib time inputs.
 - Format bib time input as 'HHMM' (4 characters, no colon, no non-number characters).
 - Format CSV entries as 'HHMM' etc (same as above).
 - Update Form Information (help) text.
-
-5-June-2024: v2.0.1
-
 - Updates Template file variable names.
 - Updates Form to use CSV on UI, submit Tab-delimited on Submit.
 - Update README with latest instructions, images, and depictions.
@@ -61,17 +62,12 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for information. You are welcome to help 
 - Enforce CRLF in git operations.
 - Updates code to support major desktop and mobile browsers from March 2010 forward.
 - Update in-form help documentation to bring up-to-date.
-
-6-Aug-2023: v1.1.7
-
 - Bugfix 'increment' button updates subject field.
 - Message number saved to browser storage.
 - Remove unnecessary code.
 - Remove default message number.
 
-Prior versions:
-
-Prior versions were built from original form files created by the Winlink Development Team:
+Initial versions of this form were built from original form files created by the Winlink Development Team:
 
 - "Race Tracker Initial.html" aka The Form. This is a single-page website built with html, javascript, and css.
 - "Race Tracker.txt" aka The Template. A plain-text file with special keywords elements to receive data produced by the Form.
@@ -215,6 +211,7 @@ Enter information into the top section of the form. What you enter here will upd
 
 _Note_: Many browsers will store previously entered data into fields. It is not a feature of the Form. You might (or might not) want your browser to do this.
 
+1. Select an appropriate number in the Max Bib Characters field. Bigfoot Base might even tell you what number this should be, for example `3` for a bib range of 1-450.
 1. Enter an Event Title.
 1. Update the Message Number (start with 1 unless instructed otherwise). You can use the Increment button to simplify tracking message numbers.
 1. Add Callsign(s) of the recipients you want to send the completed message to.
@@ -236,7 +233,7 @@ _Always use the Save button_ before submitting your data to a message, that way 
 
 This functionality will help you store all of the form field data in the form including the top (header) section and entered bib data.
 
-1. Complete the top section of the form.
+1. Complete the [top section](#prepare-common-form-data) of the form.
 1. Click the SAVE RACE DATA button.
 1. A pop-up will appear with a filename.
 1. Optional: Rename the file something that represents your aid station such as "Chain of Lakes WL Form Header.txt".
@@ -246,12 +243,13 @@ Here's a sample of what that saved data looks like:
 
 ```json
 {
-  "FormVersion": "2.1.3",
-  "EventTitle": "BF24 Test",
+  "FormVersion": "2.5.dev",
+  "BibNumberLengthMax": "3",
+  "EventTitle": "BF Test 2026",
   "MessageNumber": "5",
-  "address": "k7rmz",
+  "address": "N0CALL",
   "Location": "JR_Johnston Ridge",
-  "msgsubject": "BF24 Test Johnston Ridge Message #5",
+  "msgsubject": "BF26 Test Johnston Ridge Message #5",
   "entryCount": "4",
   "Comment": "",
   "TheCsvData": [
@@ -276,6 +274,8 @@ _Note 1_: The last entry from the previously submitted batch will be displayed i
 
 _Note 2_: Whenever you press `Save Race data` the form will store the last entered bib data to the file so that next time you `Load Race data`, the `End of Prior` field will be updated accordingly.
 
+_Note 3_: "BibNumberLengthMax" value does not get loaded back into the form with the other race data. This is to avoid an unexpected change to the limit already set by the current operator.
+
 ### Enter Bib Data Into The Form
 
 The form allows you to click or tap on input fields to select them, and you can use the TAB key on your keyboard to move between fields. Selecting items can be done with a click, tap, or using the spacebar.
@@ -285,7 +285,7 @@ The form allows you to click or tap on input fields to select them, and you can 
 1. Press Tab to move to the "Time" entry box and the current 24-hour time will appear in the box for the _current day_.
 1. _As necessary_ update the time to an accurate representation of the time the runner arrived, left, or dropped. Generally, this timestamp should be close to actual but it is _not an official record_ so use your best judgement.
 1. Click the checkbox labeled `Yesterday` to tell the Form the time references _yesterday_.
-1. Click IN, OUT, DROP depending on what the runner `Action` was. Alternatively, hit either the + or = key for IN, - for OUT, and / for DROP.
+1. Click IN, OUT, DROP depending on what the runner `Action` was. Alternatively, press `+` or `=` key for IN, `-` for OUT, or `/` for DROP.
 
 The correctly formatted bib data will appear in the window below and the `Number of Entries` count will increase by `1` for every enty you complete.
 
@@ -349,10 +349,8 @@ For detailed instructions on the installation of Winlink Forms and Templates see
 
 ## Final Thoughts
 
-Have fun!
-
-This is a personal effort of love for coding and for the hobby and community of ham radio. This project open to benefit the amateur community.
-
 The original author might assert restrictions or limitations on use of their source code. See [Winlink.org](https://winlink.org/) for details.
+
+This is a personal effort of love for coding and for the hobby and community of ham radio. This project is open source, for the benefit the amateur community. ❤️👐💻🤝📻
 
 [Back To Top](#bigfoot-bib-report-winlink-form)
