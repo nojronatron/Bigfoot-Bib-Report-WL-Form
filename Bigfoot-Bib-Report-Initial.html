@@ -1063,6 +1063,28 @@
                         submitting data for posting a new Winlink Express message.</li>
                 </ul>
 
+                <p>Note: This form provides <em>limited keyboard-only support</em>.</p>
+
+                <ul>
+                    <li>
+                        <kbd>Tab</kbd> key to move between screen elements.
+                    </li>
+                    <li>
+                        <kbd>Spacebar</kbd> or <kbd>Enter</kbd> to activate a highlighted element.
+                    </li>
+                    <li>
+                        <kbd>Enter</kbd> will try to press the <button>Submit</button> button if required fields
+                        have data in them.
+                    </li>
+                    <li>
+                        <kbd>+</kbd> <kbd>=</kbd> <kbd>-</kbd> and <kbd>/</kbd> keys to activate IN, OUT, and DROP buttons.
+                    </li>
+                </ul>
+
+                <p>
+                    If you have questions or feedback about keyboard-only mode support, talk with Jon K7RMZ or visit the <a href="https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form" target="_blank">GitHub Project</a>.
+                </p>
+
                 <h3>Top section: Header and Message Information</h3>
 
                 <ol>
@@ -1104,9 +1126,7 @@
                         characters.</li>
                     <li>Yesterday: Click/tap this checkbox to set the day of the month back one day.</li>
                     <li>Click IN (arrived), or OUT (exited forward course), or DROP (bowed out of event). Doing so
-                        adds the bib information to the Entries Field, below. Shortcuts are + (or =), -, and /
-                        respectively.</li>
-                    <li>Keyboard shortcut: IN is + or =, OUT is -, and DROP is /.</li>
+                        adds the bib information to the Entries Field, below.</li>
                 </ol>
 
                 <p>The following items will get updated after clicking IN, OUT, or DROP buttons.</p>
@@ -1191,10 +1211,19 @@
                 </ol>
 
                 <p>If you don't find an answer following the above steps, chances are <em>you have the best
-                    situational knowledge</em> to determine what time makes the most sense. Remember, this is a run
-                    not a race, so exact times are not really necessary. Make a fair estimate based on your experience
-                    and enter that time. Add a concise note in the Comment field about that bib number only if extra
-                    information will be helpful.</p>
+                        situational knowledge</em> to determine what time makes the most sense. Make a fair estimate
+                    based on your experience and enter that time. Add a concise note in the Comment field about that
+                    bib number if extra information will be helpful.</p>
+
+                <h4>IN, OUT, DROP Keyboard Shortcuts</h4>
+                <p>
+                    Use <code>+</code> (or <code>=</code>) for <button>IN</button> <code>-</code> for <button>OUT</button> 
+                    or <code>/</code> for <button>DROP</button>.
+                </p>
+
+                <p>
+                    These shortcut keys only activate the IN, OUT, and DROP buttons when a field or element in the <em>Bib Data Entry</em> section is focused. Outside of that area the keys will not trigger adding bib data entry.
+                </p>
 
                 <h3>Number of Entries</h3>
 
@@ -1318,6 +1347,7 @@
         let inBtnElement = GetElementById('Inbtn');
         let outBtnElement = GetElementById('Outbtn');
         let dropBtnElement = GetElementById('Dropbtn');
+        let yesterdayElement = GetElementById('yesterday');
 
         // add event listener to csvDataElement: call functions to clean and handle existing csv data
         csvDataElement.addEventListener('blur', function () {
@@ -1343,17 +1373,22 @@
             GetElementById('TimeField').value = formatTimeValue(currTime);
         });
 
-        // add an event listener to the '+' key that will call handleAddBib("IN") function
+        // add an event listener to the '+', '=', `-`, and `/` keys that call handleAddBib() function only when timeField, RiderNumber, Yesterday input elements, or IN, OUT, or DROP buttons are focused
+        const focusableElements = [timeFieldElement, riderNumberElement, yesterdayElement, inBtnElement, outBtnElement, dropBtnElement];
+        const keyActionMap = {
+            '+': "IN",
+            '=': "IN",
+            '-': "OUT",
+            '/': "DROP"
+        };
         document.addEventListener('keydown', function (event) {
-            if (event.key === '+' || event.key === '=') {
-                event.preventDefault(); // prevent key character from being entered in the form
-                handleAddBib("IN");
-            } else if (event.key === '-') {
-                event.preventDefault(); // prevent key character from being entered in the form
-                handleAddBib("OUT");
-            } else if (event.key === '/') {
-                event.preventDefault(); // prevent key character from being entered in the form
-                handleAddBib("DROP");
+            const activeElement = document.activeElement;
+            if (focusableElements.includes(activeElement)) {
+                const kAMValue = keyActionMap[event.key];
+                if (kAMValue !== undefined) {
+                    event.preventDefault(); // prevent key character from being entered in the form
+                    handleAddBib(kAMValue);
+                }
             }
         });
 
