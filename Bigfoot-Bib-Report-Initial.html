@@ -12,6 +12,9 @@
     <title>Bigfoot Bib Tracker</title>
 
     <script language="javascript" type="text/javascript">
+        // set constant defaults here
+        const MIN_RIDERNUM_CHARACTERS = 1;
+        const MAX_RIDERNUM_CHARACTERS = 7;
 
         // Utility function gets focusable elements inside #pop1
         function getFocusableElements(elName) {
@@ -266,6 +269,19 @@
             copyPreviousRecordFromLsToElement();
         }
 
+        function resetRiderNumMaxLengthToStoredOrDefault() {
+            const storedMax = localStorage.getItem('maxRiderNumChars');
+            const fallback = storedMax ? storedMax : MAX_RIDERNUM_CHARACTERS;
+            document.getElementById('maxRiderNumChars').value = fallback;
+            document.getElementById('RiderNum').setAttribute('maxlength', fallback);
+        }
+
+        function setRiderNumMaxLength(validatedMaxLength) {
+            document.getElementById('RiderNum').setAttribute('maxlength', validatedMaxLength);
+            document.getElementById('maxRiderNumChars').value = validatedMaxLength;
+            localStorage.setItem('maxRiderNumChars', validatedMaxLength);
+        }
+
         function copyPreviousRecordFromLsToElement() {
             // if previous record key exists in local storage populate the element with string formatted value
             if (localStorage.getItem('previousRecord')) {
@@ -391,6 +407,8 @@
         function createJsonObjectFromFormElements(cleanBibRecordsArray) {
             const jsonObject = {
                 FormVersion: GetElementById('FormVersion').value,
+                // add bib number character count upper restriction to array for file storage
+                BibNumberLengthMax: GetElementById('maxRiderNumChars').value,
                 EventTitle: GetElementById('EventTitle').value,
                 MessageNumber: GetElementById('MessageNumber').value,
                 address: GetElementById('address').value,
@@ -569,6 +587,7 @@
                 alert('Files are not supported');
             }
 
+            resetRiderNumMaxLengthToStoredOrDefault();
             setFormElementsWithLsValues();
         });
 
@@ -743,6 +762,10 @@
             margin: .3em auto;
         }
 
+        #maxRiderNumChars {
+            width: 2.2em;
+        }
+
         #MessageNumber {
             max-width: 2em;
         }
@@ -869,6 +892,14 @@
                 <label id="thisVersion"></label>
             </div>
 
+            <div class="div-across-auto-align">
+                <div class="block-line-div">
+                    <label for="maxRiderNumChars">Max Bib Characters:</label>
+                    <input type="number" id="maxRiderNumChars" name="maxRiderNumChars" min="1" step="1"
+                        title="Sets the maximum number of characters allowed in the Bib Number field." />
+                </div>
+            </div>
+
             <hr />
 
             <div class="msgHeaderTitle">Message Header</div>
@@ -942,7 +973,7 @@
 
             <div class="div-across-auto-align">
                 <label for="RiderNum">Bib Number:</label>
-                <input name="RiderNum" type="text" id="RiderNum" maxlength="15" required />
+                <input name="RiderNum" type="text" id="RiderNum" maxlength="7" required />
                 <label for="TimeField">Time:</label>
                 <input name="TimeField" type="text" id="TimeField" maxlength="6" required />
                 <input type="checkbox" id="yesterday" name="yesterday" value="Yesterday" />
@@ -1015,10 +1046,12 @@
                         you have one.</li>
                 </ul>
 
-                <p>NEW FEATURE for 2024: Users now have the ability to edit Bib Data in the Entries Field after entering
-                    them using the IN, OUT, or DROP buttons. <em>Using the form to enter data is a better choice than
-                        entering or editing the data manually</em>, so use this feature with care and precision.</p>
-
+                <h4>Recent Feature Adds</h4>
+                <ul>
+                    <li>Set a limit to the number of digits that the Bib Number field will accept.</li>
+                    <li>Fully mouse-free keyboard-driven operation.</li>
+                    <li>Time field parses and corrects common time entry errors.</li>
+                    <li>Edit Bib Data in the Entries Field after using the IN, OUT, or DROP buttons.
                 <h3>Topics</h3>
 
                 <p>The form is broken up into three sections:</p>
@@ -1030,49 +1063,29 @@
                         submitting data for posting a new Winlink Express message.</li>
                 </ul>
 
-                <p>Note: This form provides <em>limited keyboard-only support</em>.</p>
-
-                <ul>
-                    <li>
-                        <kbd>Tab</kbd> key to move between screen elements.
-                    </li>
-                    <li>
-                        <kbd>Spacebar</kbd> or <kbd>Enter</kbd> to activate a highlighted element.
-                    </li>
-                    <li>
-                        <kbd>Enter</kbd> will try to press the <button>Submit</button> button if required fields
-                        have data in them.
-                    </li>
-                </ul>
-
-                <p>If you have questions or suggestions about keyboard-only mode support, talk with Jon K7RMZ or see
-                    the <a href="https://github.com/nojronatron/Bigfoot-Bib-Report-WL-Form" target="_blank">GitHub Project</a> for
-                    more information.</p>
-
                 <h3>Top section: Header and Message Information</h3>
 
                 <ol>
-                    <li>Enter this Event Name for example &quot;Bigfoot 2024&quot;.</li>
-                    <li>Enter a Message Number starting with 1. You can use the <button>Increment</button> button
-                        once or just enter a number.</li>
+                    <li>Enter this Event Name for example &quot;Bigfoot 2026&quot;.</li>
+                    <li>If you know there are only 750 bibs, set Max Bib Characters to 3 to help <em>prevent some data entry errors</em>.</li>
+                    <li>Enter a Message Number or use the <button>Increment</button> button to set it.</li>
                     <li>Enter the recipient's amateur call sign in the Send To field. You can add other recipients
                         in the Winlink Message <em>after submitting</em>.</li>
-                    <li>Aid Station: Click or press the <kbd>Spacebar</kbd> to display the list, then use your mouse
+                    <li>Aid Station: Mouse click or press the <kbd>Spacebar</kbd> to display the list, then use your mouse
                         or keyboard <kbd>arrows</kbd> and <kbd>Enter</kbd> key to select the Aid Station for which
                         the bib data applies.</li>
-                    <li>Subject Line: This is filled-in automagically. Resist the urge to change it.</li>
+                    <li>Subject Line: This is filled-in automagically and you cannot edit it directly.</li>
                 </ol>
 
                 <p><em>Note</em>: Be certain to select <em>the Aid Station you are reporting for</em>. This is
                     critically important information.</p>
 
-
                 <p>The Subject Line will be formatted for you. As an example, a Subject Line of
-                    <code>BigFoot 2023 Elk Pass Message #1</code> is composed from the following information:
+                    <code>BigFoot 2025 Elk Pass Message #1</code> is composed from the following information:
                 </p>
 
                 <ul>
-                    <li>BigFoot 2023: The Race or Event Name entered at the top of the form.</li>
+                    <li>BigFoot 2025: The Race or Event Name entered at the top of the form.</li>
                     <li>Elk Pass: The Aid Station selected at the top of the form.</li>
                     <li>Message #1: The Message Number entered at the top of the form.</li>
                 </ul>
@@ -1086,7 +1099,7 @@
                     (DROP):</p>
 
                 <ol>
-                    <li>Enter Bib Number: Limited to 15 characters.</li>
+                    <li>Enter Bib Number: Limited by the Max Bib Characters setting.</li>
                     <li>Enter The 24-hour time that the runner entered, exited, or bowed-out. Limited to 6
                         characters.</li>
                     <li>Yesterday: Click/tap this checkbox to set the day of the month back one day.</li>
@@ -1115,6 +1128,10 @@
                     boxes, or in the Entries Field below. Watch for this while you are entering data and fix it
                     before clicking IN, OUT, or DROP.</p>
 
+                <p>
+                    If you entered a Bib Number, then change the Max Bib Characters field value, but have not clicked <button>IN</button>, <button>OUT</button>, or <button>DROP</button> buttons, the Bib Number entry will be cleared. This is expected behavior.
+                </p>
+
                 <p><em>Note</em>: Be certain to enter Time in a 24-hour format like "0006" or "00:06" (for 6 minutes
                     after midnight), and "2350" or "23:50" (for 11:50pm). <em>Avoid</em> using &quot;am&quot; and
                     &quot;pm&quot;. Adding these or other characters will just take up space and will be removed
@@ -1122,15 +1139,15 @@
                     &quot;:&quot; will result in the form changing your entry, possibly in an unexpected way.</p>
 
                 <p><em>Pay attention while entering data</em>. Always verify data while entering it, and use the
-                    <button>Save</button> to save your place.
+                    <button>Save Race Data</button> button to save your place.
                 </p>
 
                 <p>The Entries Field uses comma-separated-values. The Bib Record data fields are (from left to
                     right): Bib Number, Bib Action, Action Time, Day Of Month, Aid Station (abbreviated). If you
                     must edit an entry, be certain that all 5 fields exist for each entry (row), and the 5 fields
-                    are separated by a single comma. If you must edit data, it is probably a better choice to remove
-                    the row with &quot;bad data&quot; and then re-enter the data correctly using the Form Fields and
-                    buttons.</p>
+                    are separated by a single comma. If you must edit data, it is probably a better choice to just
+                    remove the row with &quot;bad data&quot; and then re-enter the data correctly using the Form
+                    fields and buttons.</p>
 
                 <h4>About IN, OUT, and DROP Actions</h4>
 
@@ -1174,9 +1191,10 @@
                 </ol>
 
                 <p>If you don't find an answer following the above steps, chances are <em>you have the best
-                        situational knowledge</em> to determine what time makes the most sense. Make a fair estimate
-                    based on your experience and enter that time. Add a concise note in the Comment field about that
-                    bib number if extra information will be helpful.</p>
+                    situational knowledge</em> to determine what time makes the most sense. Remember, this is a run
+                    not a race, so exact times are not really necessary. Make a fair estimate based on your experience
+                    and enter that time. Add a concise note in the Comment field about that bib number only if extra
+                    information will be helpful.</p>
 
                 <h3>Number of Entries</h3>
 
@@ -1267,12 +1285,23 @@
                 <p>The original form was designed by Greg KG6SJT, a member of the <a href="https://winlink.org" target="_blank">Winlink
                         Development Team</a></p>
 
-                <p>Custom redesign and ongoing development: Jon K7RMZ (<a
-                        href="https://github.com/nojronatron" target="_blank">GitHub</a>)</p>
+                <p>
+                    Custom redesign and ongoing development: Jon K7RMZ [
+                    <a href="https://github.com/nojronatron" target="_blank">Nojronatron on GitHub</a>
+                    ]
+                </p>
 
-                <p>Design and code assistance: Mark K7TUM</p>
+                <p>
+                    Design and code assistance: Mark K7TUM [
+                    <a href="https://github.com/bytescream" target="_blank">Bytescream on GitHub</a>
+                    ]
+                </p>
 
-                <p>New features and development: Jason KI7TYU</p>
+                <p>
+                    New features and development: Jason KI7TYU [
+                    <a href="https://github.com/jhmartin" target="_blank">JHMartin on GitHub</a>
+                    ]
+                </p>
             </div>
         </div>
 
@@ -1355,6 +1384,27 @@
             });
             location.href = '#close';
         });
+
+        // Add event listener for maxRiderNumChars input field
+        document.getElementById('maxRiderNumChars').addEventListener('change', function () {
+            const parsedMaxLength = Number.parseInt(this.value, 10);
+            let validatedMaxLength = MAX_RIDERNUM_CHARACTERS;
+            if (
+                Number.isSafeInteger(parsedMaxLength) 
+                && parsedMaxLength >= MIN_RIDERNUM_CHARACTERS 
+                && parsedMaxLength <= MAX_RIDERNUM_CHARACTERS
+            ) {
+                validatedMaxLength = parsedMaxLength;
+                setRiderNumMaxLength(validatedMaxLength);
+            } else {
+                console.log('Please enter a valid positive integer (1-' + MAX_RIDERNUM_CHARACTERS + ') for Max Bib Characters.');
+                // Reset to previous valid value from localStorage or default
+                resetRiderNumMaxLengthToStoredOrDefault();
+            }
+            // Also clear the RiderNum input field to avoid invalid length
+            document.getElementById('RiderNum').value = '';
+        });
+
     </script>
 </body>
 
