@@ -6,15 +6,16 @@ Single page web page that is launched from another process. A user fills in the 
 
 Bigfoot-Bib-Report-Initial.html
 
-- The main HTML file that contains the form and JavaScript to handle form submission.
+- The main HTML file that contains the form UI, JavaScript for functionality, and CSS 3.0.
 
 Bigfoot-Bib-Report.txt
 
-- The text file containing variable placeholders that the external process uses to generate a message.
+- The text file containing variable placeholders that the external process uses to generate a message from the Form values.
 
 ## Frameworks and Libraries
 
-- Do not use any frameworks or libraries. The code should be written in plain HTML, CSS, and JavaScript.
+- Do not use any frameworks or libraries.
+- All code should be written in plain HTML, CSS, and JavaScript/ECMA 2015/ES6.
 
 ## Coding Standards
 
@@ -36,8 +37,8 @@ Bigfoot-Bib-Report.txt
 
 ## Browser Compatibility
 
-- Ensure compatibility going back as far as Internet Explorer 11 (IE 11).
-- Avoid modern JavaScript features that are not supported prior to ES6.
+- Ensure compatibility going back as far as Internet Explorer 11 (mid 2015).
+- Avoid modern JavaScript features that are not supported prior to ES6/ECMA 2015.
 - Avoid pseudo-elements that target specific browsers, such as `::-ms-input-placeholder`.
 
 ## Accessibility
