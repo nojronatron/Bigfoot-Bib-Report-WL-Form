@@ -194,17 +194,15 @@
         }
 
         function ResetBibDataFields() {
-            ['RiderNum', 'TimeField'].forEach(id => GetElementById(id).value = '');
+            GetElementById('RiderNum').value = '';
             GetElementById('yesterday').checked = false;
             GetElementById('RiderNum').focus();
-            //GetElementById('comment').value = '';
         }
 
         // validate bib number and time then add bib record to csv and tab record elements
         function handleAddBib(bibAction) {
             const riderNum = GetElementById('RiderNum').value;
             if (riderNum && bibAction != undefined && bibAction.length > 0) {
-                // let time = formatCurrentTime(GetElementById('TimeField').value);
                 var time = formatTimeValue(GetElementById('TimeField').value);
                 let dayOfMonth = getDayOfMonth(new Date());
                 let locationVal = GetElementById('Location').value;
@@ -589,6 +587,8 @@
             }
 
             resetRiderNumMaxLengthToStoredOrDefault();
+            let currTime = getCurrentTime();
+            GetElementById('TimeField').value = formatTimeValue(currTime); // only set computer time at form load
             setFormElementsWithLsValues();
         });
 
@@ -1140,14 +1140,13 @@
                         number&quot;</li>
                     <li>Entries Field: Displays the list of entries complete with bib number, time, action, day of
                         month, and Aid Station abbreviation.</li>
-                    <li>Bib Number, Time, and Yesterday fields will be cleared.</li>
+                    <li>Bib Number and Yesterday fields will be cleared.</li>
                 </ul>
 
                 <p>Bib Number and Bib Time fields will auto-populate if you forget to add data to them. Mis-keying
                     certain characters will cause the form to attempt to correct the mistake (but it is not
-                    perfect). A common default &quot;fix&quot; is &quot;0000&quot; in the Bib Number or Time entry
-                    boxes, or in the Entries Field below. Watch for this while you are entering data and fix it
-                    before clicking IN, OUT, or DROP.</p>
+                    perfect). The default &quot;fix&quot; is &quot;0000&quot; in the Bib Number field. Watch for this 
+                    while you are entering data and fix it before clicking IN, OUT, or DROP.</p>
 
                 <p>
                     If you entered a Bib Number, then change the Max Bib Characters field value, but have not clicked <button>IN</button>, <button>OUT</button>, or <button>DROP</button> buttons, the Bib Number entry will be cleared. This is expected behavior.
@@ -1157,7 +1156,7 @@
                     after midnight), and "2350" or "23:50" (for 11:50pm). <em>Avoid</em> using &quot;am&quot; and
                     &quot;pm&quot;. Adding these or other characters will just take up space and will be removed
                     before it is copied into the Entries Field below. Other characters besides numbers and
-                    &quot;:&quot; will result in the form changing your entry, possibly in an unexpected way.</p>
+                    &quot;:&quot; will result in the form changing your entry in an attempt to format it correctly.</p>
 
                 <p><em>Pay attention while entering data</em>. Always verify data while entering it, and use the
                     <button>Save Race Data</button> button to save your place.
@@ -1339,7 +1338,6 @@
 
     <script language="javascript" type="text/javascript">
         // USE THIS SECTION to add event listeners to form elements
-        var defaultTimeString = '00:00';
         let defaultBibValue = "000";
         let minFieldLength = 1;
         let timeFieldElement = GetElementById('TimeField');
@@ -1370,8 +1368,7 @@
             }
 
             this.value = this.value.toUpperCase();
-            var currTime = getCurrentTime();
-            GetElementById('TimeField').value = formatTimeValue(currTime);
+            //var currTime = getCurrentTime();
         });
 
         // add an event listener to the '+', '=', `-`, and `/` keys that call handleAddBib() function only when timeField, RiderNumber, Yesterday input elements, or IN, OUT, or DROP buttons are focused
