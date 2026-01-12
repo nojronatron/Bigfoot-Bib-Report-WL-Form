@@ -164,7 +164,7 @@ Simplify the process by making a Favorite:
 6. Click `Select` at the top menu to set the Template and exit the Template Manager.
 7. Click `Save` on the `Set Favorite Templates` window to store the changes.
 
-Whenver you open a New Message, select the menu item named after your favorite template (for example: "BF-Form"), and Winlink Express will load the Form into your default browser window.
+Whenever you open a New Message, select the menu item named after your favorite template (for example: "BF-Form"), and Winlink Express will load the Form into your default browser window.
 
 ## Form Usage in Winlink Express
 
