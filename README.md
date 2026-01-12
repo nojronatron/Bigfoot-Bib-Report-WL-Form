@@ -35,7 +35,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for information. You are welcome to help 
 
 TBD: v2.5.x
 
-- TBD
+- Declared browser support updated to indicate browsers that are not aware of/fully support ECMA 2015/ES6 standards are not fully supported.
+- Time Field is now "sticky" and only resets to current computer time on form load.
 
 1-Aug-2024: v2.4.1
 
@@ -282,9 +283,9 @@ The form allows you to click or tap on input fields to select them, and you can 
 
 1. Click the empty box next to `Bib or Rider`.
 1. Enter the bib number. For example `101`.
-1. Press Tab to move to the "Time" entry box and the current 24-hour time will appear in the box for the _current day_.
-1. _As necessary_ update the time to an accurate representation of the time the runner arrived, left, or dropped. Generally, this timestamp should be close to actual but it is _not an official record_ so use your best judgement.
-1. Click the checkbox labeled `Yesterday` to tell the Form the time references _yesterday_.
+1. Press Tab to move to the "Time" entry box. Enter a new time in 24-hr format.
+1. _As necessary_ update the time to an accurate representation of the time the runner arrived, left, or dropped.
+1. Click the checkbox labeled `Yesterday` to tell the Form to back-date the entry by 1 day.
 1. Click IN, OUT, DROP depending on what the runner `Action` was. Alternatively, press `+` or `=` key for IN, `-` for OUT, or `/` for DROP.
 
 The correctly formatted bib data will appear in the window below and the `Number of Entries` count will increase by `1` for every enty you complete.
