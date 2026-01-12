@@ -6,7 +6,7 @@ Single page web page that is launched from another process. A user fills in the 
 
 Bigfoot-Bib-Report-Initial.html
 
-- The main HTML file that contains the form UI, JavaScript for functionality, and CSS 3.0.
+- The main HTML file that contains the form UI, JavaScript for functionality, and CSS 3.0 styling.
 
 Bigfoot-Bib-Report.txt
 
@@ -31,14 +31,16 @@ Bigfoot-Bib-Report.txt
 - Use semantic HTML elements where appropriate.
 - Use lowercase for CSS properties and values.
 - Use descriptive names for CSS classes and IDs.
-- Use let and const for variable declarations in JavaScript, avoiding var.
-- Do not use QuerySelector or QuerySelectorAll. Use GetElementById or GetElementsByClassName instead.
+- Avoid using 'var' to declare variables in javascript.
+- Use let and const to declare variables in JavaScript.
+- Do not use QuerySelector or QuerySelectorAll.
+- Prefer GetElementById or GetElementsByClassName.
 - Prefer rgb() and rgba() over hex color values.
 
 ## Browser Compatibility
 
-- Ensure compatibility going back as far as Internet Explorer 11 (mid 2015).
-- Avoid modern JavaScript features that are not supported prior to ES6/ECMA 2015.
+- Prefer ES6/ECMA 2015 JavaScript.
+- Avoid JavaScript features that are not supported prior to ES6/ECMA 2015.
 - Avoid pseudo-elements that target specific browsers, such as `::-ms-input-placeholder`.
 
 ## Accessibility
