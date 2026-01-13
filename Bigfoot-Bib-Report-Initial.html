@@ -80,14 +80,14 @@
 
         // calculate most likely hours characters returning a best-effort hours value
         function getHoursFromTimeString(timeString) {
-            var ghColonIndex = timeString.indexOf(':');
-            var ghHoursResult = "00";
+            const ghColonIndex = timeString.indexOf(':');
+            let ghHoursResult = "00";
 
             // if there is a colon, take character(s) just before it
             if (ghColonIndex > -1) {
                 if (ghColonIndex > 2) {
-                    var ghHourIndex = ghColonIndex - 2;
-                    ghHoursResult = timeString.slice(ghHourIndex, ghColonIndex);
+                    //var ghHourIndex = ghColonIndex - 2;
+                    ghHoursResult = timeString.slice(ghColonIndex - 2, ghColonIndex);
                 }
 
                 if (ghColonIndex > 0 && ghColonIndex <= 2) {
@@ -114,8 +114,8 @@
 
         // calculate most likely minutes characters returning a best-effort minutes value
         function getMinutesFromTimeString(gmTimeString) {
-            var gmColonIndex = gmTimeString.indexOf(':');
-            var gmMinutesResult = "00";
+            const gmColonIndex = gmTimeString.indexOf(':');
+            let gmMinutesResult = "00";
 
             // if there is a colon, take up to 2 characters after it, adding zero(s) to get 2 characters total
             if (gmColonIndex > -1) {
@@ -150,7 +150,7 @@
 
         // return a valid value for hours or minutes based on maxValue
         function sanitizeTimeUnits(stuTimeString, maxValue) {
-            var stuTimeNum = Number.parseInt(stuTimeString, 10);
+            let stuTimeNum = Number.parseInt(stuTimeString, 10);
 
             if (stuTimeNum === undefined || Number.isNaN(stuTimeNum) || stuTimeNum < 0) {
                 stuTimeNum == '00';
@@ -160,7 +160,7 @@
                 stuTimeNum = maxValue;
             }
 
-            var stuResult = stuTimeNum.toString();
+            let stuResult = stuTimeNum.toString();
 
             while (stuResult.length < 2) {
                 stuResult = '0' + stuResult;
@@ -172,19 +172,19 @@
         // take a string and attempt to format it as HHMM using helper methods
         function formatTimeValue(ftvTimeString) {
             // eliminate all non-time characters from the string maintaining only numbers and colon character
-            var ftvHoursMins = ftvTimeString.replace(/[^\d:]/g, '');
+            const ftvHoursMins = ftvTimeString.replace(/[^\d:]/g, '');
             // get hours and minutes, sanitize the numbers, then concatenate and return
-            var ftvHours = getHoursFromTimeString(ftvHoursMins);
-            var ftvMinutes = getMinutesFromTimeString(ftvHoursMins);
-            var ftvSanitizedHours = sanitizeTimeUnits(ftvHours, 23);
-            var ftvSanitizedMinutes = sanitizeTimeUnits(ftvMinutes, 59);
+            const ftvHours = getHoursFromTimeString(ftvHoursMins);
+            const ftvMinutes = getMinutesFromTimeString(ftvHoursMins);
+            const ftvSanitizedHours = sanitizeTimeUnits(ftvHours, 23);
+            const ftvSanitizedMinutes = sanitizeTimeUnits(ftvMinutes, 59);
             return ftvSanitizedHours + ftvSanitizedMinutes;
         }
 
         function getDayOfMonth(date) {
-            var today = date.getDate();
-            var day = GetElementById('yesterday').checked ? (today === 1 ? 31 : today - 1) : today;
-            var result = day.toString();
+            const today = date.getDate();
+            const day = GetElementById('yesterday').checked ? (today === 1 ? 31 : today - 1) : today;
+            let result = day.toString();
 
             if (result.length < 2) {
                 result = "0" + result;
@@ -203,10 +203,10 @@
         function handleAddBib(bibAction) {
             const riderNum = GetElementById('RiderNum').value;
             if (riderNum && bibAction != undefined && bibAction.length > 0) {
-                var time = formatTimeValue(GetElementById('TimeField').value);
-                let dayOfMonth = getDayOfMonth(new Date());
-                let locationVal = GetElementById('Location').value;
-                let shortLoc = shortenLocation(locationVal);
+                const time = formatTimeValue(GetElementById('TimeField').value);
+                const dayOfMonth = getDayOfMonth(new Date());
+                const locationVal = GetElementById('Location').value;
+                const shortLoc = shortenLocation(locationVal);
                 storePreviousRecord(riderNum, bibAction, time, dayOfMonth, shortLoc);
                 updateCsvAndTabRecordsElement(riderNum, bibAction, time, dayOfMonth, shortLoc);
                 ResetBibDataFields();
@@ -218,21 +218,21 @@
         }
 
         function elementValuesToLocalStorage() {
-            let addressFormatted = GetElementById('address');
+            const addressFormatted = GetElementById('address');
             localStorage.setItem('RTrackeradd', addressFormatted.value);
-            let locationFormatted = GetElementById('Location');
+            const locationFormatted = GetElementById('Location');
             localStorage.setItem('RTrackerloc', locationFormatted.value);
-            let eventTitleFormatted = GetElementById('EventTitle');
+            const eventTitleFormatted = GetElementById('EventTitle');
             localStorage.setItem('RTrackertitle', eventTitleFormatted.value);
-            let msgNumFormatted = GetElementById('MessageNumber');
+            const msgNumFormatted = GetElementById('MessageNumber');
             localStorage.setItem('MessageNumber', msgNumFormatted.value);
-            let locationLong = lengthenLocation(locationFormatted.value);
-            let regulartitle = GetElementById('EventTitle').value + ' ' + locationLong + ' Message #' + msgNumFormatted.value;
+            const locationLong = lengthenLocation(locationFormatted.value);
+            const regulartitle = GetElementById('EventTitle').value + ' ' + locationLong + ' Message #' + msgNumFormatted.value;
             GetElementById('msgsubject').value = regulartitle;
         }
 
         function shortenLocation(locationVal) {
-            let underscoreIdx = locationVal.indexOf('_');
+            const underscoreIdx = locationVal.indexOf('_');
             return locationVal.slice(0, underscoreIdx);
         }
 
@@ -240,15 +240,15 @@
             if (!locationVal) {
                 return ' ';
             }
-            let underscoreIdx = locationVal.indexOf('_') + 1;
+            const underscoreIdx = locationVal.indexOf('_') + 1;
             return locationVal.slice(underscoreIdx);
         }
 
         // set form elements with the values stored in local storage
         function setFormElementsWithLsValues() {
-            let storedAddress = localStorage.getItem('RTrackeradd');
+            const storedAddress = localStorage.getItem('RTrackeradd');
             GetElementById('address').value = storedAddress;
-            let storedLocation = localStorage.getItem('RTrackerloc');
+            const storedLocation = localStorage.getItem('RTrackerloc');
 
             if (storedLocation !== '') {
                 GetElementById('Location').value = storedLocation;
@@ -256,12 +256,12 @@
                 GetElementById('Location').value = '--Choose a station--';
             }
 
-            let storedTitle = localStorage.getItem('RTrackertitle');
+            const storedTitle = localStorage.getItem('RTrackertitle');
             GetElementById('EventTitle').value = storedTitle;
-            let storedMsgNumber = localStorage.getItem('MessageNumber');
+            const storedMsgNumber = localStorage.getItem('MessageNumber');
             GetElementById('MessageNumber').value = storedMsgNumber;
-            let locationLong = lengthenLocation(storedLocation);
-            let regulartitle = '' + storedTitle + ' ' + locationLong + ' Message #' + storedMsgNumber;
+            const locationLong = lengthenLocation(storedLocation);
+            const regulartitle = '' + storedTitle + ' ' + locationLong + ' Message #' + storedMsgNumber;
             GetElementById('msgsubject').value = regulartitle;
             GetElementById('MessageNumber').value = storedMsgNumber;
             copyPreviousRecordFromLsToElement();
@@ -282,8 +282,9 @@
 
         function copyPreviousRecordFromLsToElement() {
             // if previous record key exists in local storage populate the element with string formatted value
-            if (localStorage.getItem('previousRecord')) {
-                const previousItem = JSON.parse(localStorage.getItem('previousRecord'));
+            const previousItem = localStorage.getItem('previousRecord');
+
+            if (previousItem !== null) {
                 const prevRunner = previousItem.runner || 'none';
                 const prevAction = previousItem.action || 'none';
                 const prevTime = previousItem.time || 'none';
@@ -292,6 +293,9 @@
                 console.log('previous Runner, Action, Time, DOM, MsgNum', prevRunner, prevAction, prevTime, prevDOM, prevMsgNum);
                 const previousRecordString = '#' + previousItem.runner + ', ' + previousItem.action + ', ' + prevTime + ', D:' + previousItem.dayOfMonth + ', M#' + previousItem.messageNumber;
                 GetElementById('endOfPriorBatch').value = previousRecordString;
+            } else {
+                // try to address occasional 'undefined' value
+                GetElementById('endOfPriorBatch').value = "none";
             }
         }
 
@@ -311,23 +315,22 @@
         
         // gets, formats, and returns the current clock time in HHMM format
         function getCurrentTime() {
-            var currentDateResult = new Date();
-            var dateResultHoursOnly = currentDateResult.getHours();
-            var dateResultMinutesOnly = currentDateResult.getMinutes();
-            var currentHour = dateResultHoursOnly.toString();
+            const currentDateResult = new Date();
+            const dateResultHoursOnly = currentDateResult.getHours();
+            const dateResultMinutesOnly = currentDateResult.getMinutes();
+            let currentHour = dateResultHoursOnly.toString();
 
             while (currentHour.length < 2) {
                 currentHour = "0" + currentHour;
             }
 
-            var currentMinute = dateResultMinutesOnly.toString();
+            let currentMinute = dateResultMinutesOnly.toString();
 
             while (currentMinute.length < 2) {
                 currentMinute = "0" + currentMinute;
             }
 
-            var resultGctTime = currentHour + ':' + currentMinute;
-            return resultGctTime;
+            return currentHour + ':' + currentMinute;
         }
 
         function addIn() {
@@ -344,7 +347,6 @@
 
         function storePreviousRecord(bibNumber, action, timestamp, dayOfMonth, location) {
             // capture the current message number to store with the previous record
-            const messageNumber = GetElementById('MessageNumber').value;
             // initialize a new object and store bibNumber, action, timestamp, dayOfMonth, and location variables as properties
             let previousRecord = {
                 runner: bibNumber,
@@ -352,7 +354,7 @@
                 time: timestamp,
                 dayOfMonth: dayOfMonth,
                 location: location,
-                messageNumber: messageNumber,
+                messageNumber: GetElementById('MessageNumber').value
             };
 
             // store this object into localStorage
@@ -366,7 +368,7 @@
             }
 
             storePreviousRecord(tRunner, action, tTime, doM, loc);
-            newTime = String(tTime);
+            let newTime = tTime.toString();
 
             if (tTime.indexOf(':') > -1) {
                 newTime = tTime.replace(':', '');
@@ -389,13 +391,13 @@
 
         // converts bib records in TheData element from tab-separated to comma-separated values
         function convertRawBibRecordsToArray() {
-            let bibRecordsRaw = GetElementById('TheData').value;
+            const bibRecordsRaw = GetElementById('TheData').value;
             const bibRecordsArray = bibRecordsRaw.split('\n');
             const cleanBibRecordsArray = [];
 
             bibRecordsArray.forEach(record => {
                 if (record.length > 0) {
-                    let csvRecord = record.replace(/\t/g, ', ');
+                    const csvRecord = record.replace(/\t/g, ', ');
                     cleanBibRecordsArray.push(csvRecord);
                 }
             });
@@ -425,8 +427,8 @@
             let fileNameToSaveAs = 'Bigfoot Bib Data ' + dateStampForFile() + '.txt';
             fileNameToSaveAs = prompt('', fileNameToSaveAs);
             const cleanBibRecords = convertRawBibRecordsToArray();
-            let formElementsAsJson = createJsonObjectFromFormElements(cleanBibRecords);
-            let textToWrite = JSON.stringify(formElementsAsJson, null, 2);
+            const formElementsAsJson = createJsonObjectFromFormElements(cleanBibRecords);
+            const textToWrite = JSON.stringify(formElementsAsJson, null, 2);
 
             let textFileAsBlob = new Blob([textToWrite], {
                 type: 'application/json',
@@ -448,12 +450,12 @@
         }
 
         function dateStampForFile() {
-            let d = new Date();
-            let thisyear = d.getFullYear();
+            const d = new Date();
+            const thisyear = d.getFullYear();
             let thismonth = d.getMonth() + 1;
             let thisday = d.getDate();
-            let h = (d.getHours() < 10 ? '0' : '') + d.getHours();
-            let m = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
+            const thishour = (d.getHours() < 10 ? '0' : '') + d.getHours();
+            const thisminute = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
 
             if (thismonth < 10) {
                 thismonth = '0' + thismonth;
@@ -463,7 +465,7 @@
                 thisday = '0' + thisday;
             }
 
-            return '' + thisyear + '-' + thismonth + '-' + thisday + ' ' + h + '_' + m;
+            return '' + thisyear + '-' + thismonth + '-' + thisday + ' ' + thishour + '_' + thisminute;
         }
 
         // captures each form element value in a JSON object and stores it in hidden element 'parseme'
@@ -510,10 +512,10 @@
                 GetElementById('endOfPriorBatch').value = jsonStringData.previousRecord ? jsonStringData.previousRecord : '';
 
                 const theCsvDataRaw = jsonStringData.TheCsvData;
-                let csvData = theCsvDataRaw.join('\n');
+                const csvData = theCsvDataRaw.join('\n');
                 GetElementById('TheCsvData').value = csvData;
 
-                let tabbedData = theCsvDataRaw.map(item => {
+                const tabbedData = theCsvDataRaw.map(item => {
                     if (item !== undefined && item.length > 0) {
                         return item.replace(/, /g, '\t');
                     }
@@ -532,9 +534,7 @@
 
         function incrementMsgNum() {
             const formMsgNum = Number.parseInt(GetElementById('MessageNumber').value, 10);
-            const lsMsgNum = Number.parseInt(localStorage.getItem('MessageNumber'), 10);
-            const incrMsgNum = formMsgNum ? formMsgNum + 1 : 1;
-            GetElementById('MessageNumber').value = incrMsgNum;
+            GetElementById('MessageNumber').value = formMsgNum ? formMsgNum + 1 : 1;
             elementValuesToLocalStorage();
         }
 
@@ -551,24 +551,24 @@
 
             // Check the support for the File API
             if (window.File && window.FileReader && window.FileList && window.Blob) {
-                let fileSelected = GetElementById('txtfiletoread');
+                const fileSelected = GetElementById('txtfiletoread');
 
                 // begin fileSelected Change Event Listener
                 fileSelected.addEventListener('change', function (e) {
                     // Set the extension for the file
-                    let fileExtension = /text.*/;
+                    const fileExtension = /text.*/;
                     // Get the file object
-                    let fileTobeRead = fileSelected.files[0];
+                    const fileTobeRead = fileSelected.files[0];
                     // Check if the extension matches
                     if (fileTobeRead.type.match(fileExtension)) {
                         // Initialize the FileReader object to read the file data
-                        let fileReader = new FileReader();
+                        const fileReader = new FileReader();
 
                         fileReader.onload = function (e) {
                             document.getElementById('parseme').value = fileReader.result;
 
                             try {
-                                let jsonData = JSON.parse(document.getElementById('parseme').value);
+                                const jsonData = JSON.parse(document.getElementById('parseme').value);
                                 // console.log('filereader.onload json parse of parseme element value: ', jsonData);
                                 populateForm(jsonData);
                             } catch (err) {
@@ -587,7 +587,7 @@
             }
 
             resetRiderNumMaxLengthToStoredOrDefault();
-            let currTime = getCurrentTime();
+            const currTime = getCurrentTime();
             GetElementById('TimeField').value = formatTimeValue(currTime); // only set computer time at form load
             setFormElementsWithLsValues();
         });
@@ -1332,18 +1332,17 @@
 
     <script language="javascript" type="text/javascript">
         // USE THIS SECTION to add event listeners to form elements
-        let defaultBibValue = "000";
-        let minFieldLength = 1;
-        let timeFieldElement = GetElementById('TimeField');
-        let riderNumberElement = GetElementById('RiderNum');
-        let csvDataElement = GetElementById('TheCsvData');
-        let inBtnElement = GetElementById('Inbtn');
-        let outBtnElement = GetElementById('Outbtn');
-        let dropBtnElement = GetElementById('Dropbtn');
-        let yesterdayElement = GetElementById('yesterday');
+        const defaultBibValue = "000";
+        const minFieldLength = 1;
+        const timeFieldElement = GetElementById('TimeField');
+        const riderNumberElement = GetElementById('RiderNum');
+        const inBtnElement = GetElementById('Inbtn');
+        const outBtnElement = GetElementById('Outbtn');
+        const dropBtnElement = GetElementById('Dropbtn');
+        const yesterdayElement = GetElementById('yesterday');
 
         // add event listener to csvDataElement: call functions to clean and handle existing csv data
-        csvDataElement.addEventListener('blur', function () {
+        GetElementById('TheCsvData').addEventListener('blur', function () {
             cleanAndCountCsvData();
             handleCsvDataEdited();
         });
