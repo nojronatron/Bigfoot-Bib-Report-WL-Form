@@ -24,20 +24,17 @@
 
         // get data in TheCsvData and clean it up and set the count of entries
         function cleanAndCountCsvData() {
-            let csvData = GetElementById('TheCsvData').value;
-            let csvDataArray = csvData.split('\n');
-            let nonEmptyLinesCount = 0;
+            const csvData = GetElementById('TheCsvData').value || '';
+            const csvDataArray = csvData.split('\n');
+            
+            // use map and filter instead of counting
+            const cleanCsvDataArray = csvDataArray
+                .map(item => (item !== undefined ? item.trim() : ''))
+                .filter(item => item.length > 0)
+                .map(item => item.replace(/ *\, */g, ', '));
 
-            let cleanCsvDataArray = csvDataArray.map(item => {
-                if (item !== undefined && item.length > 0) {
-                    nonEmptyLinesCount++;
-                    return item.replace(/ *\, */g, ', ');
-                }
-            });
-
-            let rejoinedCsvData = cleanCsvDataArray.join('\n');
-            GetElementById('TheCsvData').value = rejoinedCsvData;
-            GetElementById('entryCount').value = nonEmptyLinesCount;
+            GetElementById('TheCsvData').value = cleanCsvDataArray.join('\n');
+            GetElementById('entryCount').value = cleanCsvDataArray.length;
         }
 
         // converts bib records from csv-delimited and returns tab-delimited version
@@ -151,9 +148,9 @@
         // return a valid value for hours or minutes based on maxValue
         function sanitizeTimeUnits(stuTimeString, maxValue) {
             let stuTimeNum = Number.parseInt(stuTimeString, 10);
-
-            if (stuTimeNum === undefined || Number.isNaN(stuTimeNum) || stuTimeNum < 0) {
-                stuTimeNum == '00';
+            
+            if (Number.isNaN(stuTimeNum) || stuTimeNum < 0) {
+                stuTimeNum == 0;
             }
 
             if (stuTimeNum > maxValue) {
@@ -282,7 +279,7 @@
 
         function copyPreviousRecordFromLsToElement() {
             // if previous record key exists in local storage populate the element with string formatted value
-            const previousItem = localStorage.getItem('previousRecord');
+            const previousItem = JSON.parse(localStorage.getItem('previousRecord'));
 
             if (previousItem !== null) {
                 const prevRunner = previousItem.runner || 'none';
@@ -1356,7 +1353,7 @@
         riderNumberElement.addEventListener('blur', function () {
             this.value = this.value.trim();
             // set default value if field is empty
-            if (this.value < minFieldLength) {
+            if (this.value.length < minFieldLength) {
                 this.value = defaultBibValue;
             }
 
