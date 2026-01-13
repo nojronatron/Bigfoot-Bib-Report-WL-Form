@@ -361,7 +361,3 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-
-## powershell dev prep files
-# ps1 files used for env, dev, and test workflows
-*.ps1
