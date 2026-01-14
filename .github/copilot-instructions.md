@@ -4,13 +4,39 @@ Single page web page that is launched from another process. A user fills in the 
 
 ## File Structure
 
-Bigfoot-Bib-Report-Initial.html
+Project Root:
 
-- The main HTML file that contains the form UI, JavaScript for functionality, and CSS 3.0 styling.
+- README, LICENSE, CONTRIBUTING, .gitignore, and .gitattributes.
+- Do not place any code in the project root.
 
-Bigfoot-Bib-Report.txt
+src Directory:
 
-- The text file containing variable placeholders that the external process uses to generate a message from the Form values.
+- The directory where most development work occurs.
+- `Form.html`: Strictly HTML 5 elements and content necessary for composing into a Winlink Express Form.
+- `Template.txt`: Plain-text Winlink Express Template file.
+- `script.js`: Strictly JavaScript functional code that will be composed into a `<script>` element in `Form.html`
+- `styles.css`: Strictly CSS 3.0 stylesheet language that will be composed into a `<style>` element in `Form.html`
+
+pub Directory:
+
+- Target directory for the copied Winlink Template file and composed Winlink Form file.
+- Only the Build script should write/overwrite files into this directory, they should not be edited.
+  - `Bigfoot-Bib-Report-Initial.html`:  A Winlink Express Form file comprised of HTML, CSS, and JavaScript located in the `src` directory.
+  - `Bigfoot-Bib-Report.txt`: A Winlink Express Template file containing variable placeholders that Winlik Express uses to generate a message from the Form values.
+
+bak Directory:
+
+- Whenever `Build-InlineHtml.ps1` executes, a backup of the HTML Form in `pub` is copied to `bak` before the source file is overwritten.
+- Do not edit files in this directory, it is only for temporary file backup.
+
+`.github` Directory:
+
+- GitHub Issue templates (bug reports, feature requests, etc).
+- Copilot instructions file.
+
+`.vscode` Directory:
+
+- VS Code settings.
 
 ## Frameworks and Libraries
 
