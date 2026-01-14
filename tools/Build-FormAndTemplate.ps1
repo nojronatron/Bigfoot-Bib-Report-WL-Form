@@ -1,22 +1,26 @@
 <#
-Synopsis: Inline CSS and JS from src folder into target HTML file.
+Synopsis: Inline CSS and JS from src folder into target HTML file and copy template to pub.
 
 Usage examples:
-  .\Build-InlineHtml.ps1                    # use defaults (src/, Bigfoot-Bib-Report-Initial.html)
-  .\Build-InlineHtml.ps1 -SourceDir src -Target ..\Bigfoot-Bib-Report-Initial.html -Backup -Validate
+  .\Build-FormAndTemplate.ps1                    # use defaults (src/, pub/, default names)
+  .\Build-FormAndTemplate.ps1 -SourceDir src -OutDir pub -Form 'Bigfoot-Bib-Report-Initial.html' -Template 'Bigfoot-Bib-Report.txt' -Backup -Validate
 
 Parameters:
-  -SourceDir: folder containing `Bigfoot-Bib-Report-Initial.html`, `styles.css`, `scripts.js` (default: src)
-  -Target: output HTML to overwrite (default: Bigfoot-Bib-Report-Initial.html in repo root)
-  -Backup: switch to create a timestamped backup of existing target before overwriting
-  -Validate: switch to run post-build validation (ensures inlining and optional checksum match)
-  -DryRun: switch to preview changes without writing file
+  -SourceDir: folder containing `form.html`, `styles.css`, `scripts.js`, `template.txt` (default: src)
+  -OutDir: destination directory for composed files (default: pub)
+  -Form: output filename for the composed HTML (default: Bigfoot-Bib-Report-Initial.html)
+  -Template: output filename for the template copy (default: Bigfoot-Bib-Report.txt)
+  -Backup: switch to create timestamped backups of existing outputs in `bak/` before overwriting
+  -Validate: run post-build validation checks
+  -DryRun: preview changes without writing files
 #>
 
 [CmdletBinding()]
 param(
     [string]$SourceDir = 'src',
-    [string]$Target = 'Bigfoot-Bib-Report-Initial.html',
+    [string]$OutDir = 'pub',
+    [string]$Form = 'Bigfoot-Bib-Report-Initial.html',
+    [string]$Template = 'Bigfoot-Bib-Report.txt',
     [switch]$Backup,
     [switch]$Validate,
     [switch]$DryRun,
@@ -31,9 +35,11 @@ try {
     $script:repoRoot = (Get-Location)
     $srcPath = Join-Path $script:repoRoot $SourceDir
 
-    $htmlSrc = Join-Path $srcPath 'Bigfoot-Bib-Report-Initial.html'
+    # Source HTML is 'form.html' in the src directory
+    $htmlSrc = Join-Path $srcPath 'form.html'
     $cssSrc = Join-Path $srcPath 'styles.css'
     $jsSrc = Join-Path $srcPath 'scripts.js'
+    $templateSrc = Join-Path $srcPath 'template.txt'
 
     if (-not (Test-Path $htmlSrc)) { Fail "Source HTML not found: $htmlSrc" }
     if (-not (Test-Path $cssSrc)) { Fail "CSS source not found: $cssSrc" }
@@ -82,18 +88,24 @@ try {
             Fail "Strict mode: could not find </body> to inject inline script." }
     }
 
-    # Prepare target path
-    $targetPath = Join-Path $script:repoRoot $Target
-    if (Test-Path $targetPath -PathType Leaf) {
-        if ($Backup) {
+    # Prepare output directory and target paths
+    $outDirPath = Join-Path $script:repoRoot $OutDir
+    if (-not (Test-Path $outDirPath)) {
+        New-Item -ItemType Directory -Path $outDirPath | Out-Null
+        Write-Host "Created output directory: $outDirPath"
+    }
+
+    $targetFormPath = Join-Path $outDirPath $Form
+    $targetTemplatePath = Join-Path $outDirPath $Template
+
+    function Backup-IfNeeded([string]$path) {
+        if ($Backup -and (Test-Path $path -PathType Leaf)) {
             $bakDir = Join-Path $script:repoRoot 'bak'
-            if (-not (Test-Path $bakDir)) {
-                New-Item -ItemType Directory -Path $bakDir | Out-Null
-            }
-            $fileName = [System.IO.Path]::GetFileName($targetPath)
+            if (-not (Test-Path $bakDir)) { New-Item -ItemType Directory -Path $bakDir | Out-Null }
+            $fileName = [System.IO.Path]::GetFileName($path)
             $stamp = (Get-Date).ToString('yyyyMMdd-HHmmss')
             $bakPath = Join-Path $bakDir ("$fileName.$stamp.bak")
-            Copy-Item -Path $targetPath -Destination $bakPath -Force
+            Copy-Item -Path $path -Destination $bakPath -Force
             Write-Host "Backup created: $bakPath"
         }
     }
@@ -120,11 +132,36 @@ try {
 
         $styleCount = ([regex]::Matches($replacedHtml, '(?is)<style[^>]*>').Count)
         $scriptCount = ([regex]::Matches($replacedHtml, '(?is)<script[^>]*>').Count)
-        Write-Host "`nSummary: total chars: $length; <style> blocks: $styleCount; <script> blocks: $scriptCount; Target: $targetPath"
+        Write-Host "`nSummary: total chars: $length; <style> blocks: $styleCount; <script> blocks: $scriptCount; Form Target: $targetFormPath; Template Target: $targetTemplatePath"
     }
     else {
-        $replacedHtml | Out-File -FilePath $targetPath -Encoding utf8 -Force
-        Write-Host "Wrote inlined HTML to: $targetPath"
+        # Backup existing form if requested
+        Backup-IfNeeded $targetFormPath
+
+        $replacedHtml | Out-File -FilePath $targetFormPath -Encoding utf8 -Force
+        Write-Host "Wrote inlined HTML to: $targetFormPath"
+
+        # Handle template copy: copy template.txt to pub only when content differs
+        if (Test-Path $templateSrc) {
+            $copyTemplate = $true
+            if (Test-Path $targetTemplatePath) {
+                try {
+                    $srcHash = (Get-FileHash -Path $templateSrc -Algorithm SHA256).Hash
+                    $dstHash = (Get-FileHash -Path $targetTemplatePath -Algorithm SHA256).Hash
+                    if ($srcHash -eq $dstHash) { $copyTemplate = $false }
+                } catch {
+                    Write-Warning "Checksum compare failed, will copy template: $_"
+                }
+            }
+
+            if ($copyTemplate) {
+                Backup-IfNeeded $targetTemplatePath
+                Copy-Item -Path $templateSrc -Destination $targetTemplatePath -Force
+                Write-Host "Copied template to: $targetTemplatePath"
+            }
+            else { Write-Host "Template unchanged; no copy needed: $targetTemplatePath" }
+        }
+        else { Write-Warning "Template source not found: $templateSrc" }
     }
 
     if ($Validate) {
