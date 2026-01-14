@@ -364,3 +364,6 @@ FodyWeavers.xsd
  
 # Build script backups
 /bak/
+
+# Do not check in published bits they will be copied to Releases, etc
+/pub/
