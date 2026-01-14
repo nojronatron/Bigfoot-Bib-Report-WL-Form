@@ -6,7 +6,7 @@ Msg:
 <var TheData>
 -----
 
-Comment: <var Comment>
+<var Comment>
 
 -
 Winlink Express Sender <var MsgSender> 

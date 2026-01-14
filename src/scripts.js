@@ -474,7 +474,7 @@ function createJsonObjectFromFormElements(cleanBibRecordsArray) {
     Location: GetElementById("Location").value,
     msgsubject: GetElementById("msgsubject").value,
     entryCount: GetElementById("entryCount").value,
-    Comment: GetElementById("comment").value,
+    Comment: `Comment: ${GetElementById("comment").value}`,
     TheCsvData: cleanBibRecordsArray,
   };
 
