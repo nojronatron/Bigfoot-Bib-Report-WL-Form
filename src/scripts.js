@@ -624,7 +624,7 @@ function incrementMsgNum() {
 }
 
 window.addEventListener("load", function () {
-  const formVersion = "2.5.dev";
+  const formVersion = "3.0.dev";
   document.getElementById("thisVersion").innerText = "Version " + formVersion;
   document.getElementById("FormVersion").value = formVersion;
   localStorage.setItem("Form Version", formVersion);
