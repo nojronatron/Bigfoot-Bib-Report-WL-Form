@@ -144,12 +144,7 @@ If multiple operators will use this Winlink Express station, it might be better 
 - Step 2: Copy `Bigfoot-Bib-Report-Initial.html` and `Bigfoot-Bib-Report.txt` to the directory named `Global Folders\Templates`.
 - Step 6: In the Template Manager window double-click `Global Templates`.
 
-Notes:
-
-- Winlink Express might be installed in either `C:\RMS Express` or `C:\Winlink Express`. Either way, navigate to your callsign directory, then the Templates directory, and place the files there.
-- It is possible to create a new directory within the Templates directory for Forms and Templates files, so they can be organized to your liking.
-
-![Template files directory example](./images/explorer-winlink-templates-folder-snippet.png)
+![Global Template files directory example](./images/explorer-winlink-templates-global-folder.png)
 
 ## Set A Favorite Form
 
@@ -188,7 +183,7 @@ The overall steps to use this form are:
 2. Drill down into the Templates Tree to find this Form and select it with the mouse.
 3. Click the Select menu item. The form opens in a new browser window (or new tab if default browser is already open).
 
-![Bigfoot Bib Report Form appearance when first opened](./images/bib-report-form-first-launch-600x600.png)
+![Bigfoot Bib Report Form appearance when first opened](./images/bib-report-form-first-launch.png)
 
 Explore the form a little to get familiar with its behavior:
 
@@ -244,20 +239,21 @@ Here's a sample of what that saved data looks like:
 
 ```json
 {
-  "FormVersion": "2.5.dev",
+  "FormVersion": "3.0.dev",
   "BibNumberLengthMax": "3",
-  "EventTitle": "BF Test 2026",
-  "MessageNumber": "5",
+  "EventTitle": "Bigfoot 2027",
+  "MessageNumber": "2",
   "address": "N0CALL",
-  "Location": "JR_Johnston Ridge",
-  "msgsubject": "BF26 Test Johnston Ridge Message #5",
-  "entryCount": "4",
+  "Location": "BL_Blue Lake",
+  "msgsubject": "Bigfoot 2027 Blue Lake Message #2",
+  "entryCount": "5",
   "Comment": "",
   "TheCsvData": [
-    "234, drop, 1511, 04, JR",
-    "234, IN, 0001, 03, JR",
-    "123, OUT, 1102, 04, JR",
-    "123, IN, 1343, 03, JR"
+    "345, DROP, 1321, 13, BL",
+    "345, IN, 1321, 13, BL",
+    "23, DROP, 1321, 14, BL",
+    "12, OUT, 1321, 14, BL",
+    "123, IN, 1321, 14, BL"
   ]
 }
 ```
