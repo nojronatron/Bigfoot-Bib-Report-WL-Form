@@ -1,0 +1,282 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  background-color: rgb(220, 220, 220);
+}
+
+@media screen and (width < 650px) {
+  label,
+  input,
+  textarea,
+  select,
+  button {
+    font-size: 0.7em;
+  }
+
+  input {
+    margin: 0.2em 0.2em;
+  }
+
+  input[type="checkbox"] {
+    width: 1em;
+    height: 1em;
+  }
+
+  .formTitleHeader {
+    font-size: 2em;
+  }
+
+  .bibEntries {
+    min-height: 3em;
+    max-height: 6em;
+  }
+
+  .msgHeaderTitle {
+    font-size: 0.7em;
+  }
+
+  .addressInput {
+    min-width: 65%;
+  }
+
+  .block-line-div {
+    display: block;
+  }
+
+  .readOnlyText {
+    font-size: 0.6em;
+  }
+
+  #closePopBtn {
+    margin-left: 1rem;
+    margin-top: 0.5rem;
+  }
+}
+
+@media screen and (width >=650px) {
+  label,
+  input,
+  textarea,
+  select,
+  button {
+    font-size: 1em;
+  }
+
+  input {
+    margin: 0.3em 0.3em;
+  }
+
+  input[type="checkbox"] {
+    width: 1.2em;
+    height: 1.2em;
+  }
+
+  .formTitleHeader {
+    font-size: 3em;
+  }
+
+  .bibEntries {
+    min-height: 4em;
+    max-height: 10em;
+  }
+
+  .msgHeaderTitle {
+    font-size: 1.1em;
+  }
+
+  .addressInput {
+    max-width: 55%;
+  }
+
+  .block-line-div {
+    display: inline;
+  }
+
+  #closePopBtn {
+    margin-left: 75vw;
+    margin-top: 0.5rem;
+  }
+}
+
+hr {
+  height: 0.1em;
+  width: 90%;
+}
+
+textarea {
+  width: 80%;
+}
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  padding: 0.2rem;
+}
+
+input {
+  padding: 0.2em;
+  border-radius: 0.5rem;
+}
+
+input[type="submit"] {
+  font-weight: bold;
+  background-color: rgb(113, 169, 253);
+}
+
+input[type="button"],
+input[type="submit"] {
+  color: rgb(10, 10, 10);
+  padding-left: 0.8em;
+  padding-right: 0.8em;
+}
+
+textarea,
+select {
+  padding: 0.3em 0.3em;
+  border: solid 0.15em rgb(10, 10, 10);
+  border-radius: 0.5rem;
+}
+
+input:hover,
+textarea:hover,
+select:hover {
+  cursor: pointer;
+  opacity: 0.8;
+  outline: solid 2px rgb(255, 153, 0);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: solid 3px rgb(255, 153, 0);
+}
+
+#comment {
+  width: 80%;
+  display: block;
+  margin: auto;
+}
+
+#commentLabel {
+  display: block;
+  margin: 0.3em auto;
+}
+
+#maxRiderNumChars {
+  width: 2.2em;
+}
+
+#MessageNumber {
+  max-width: 2em;
+}
+
+#txtfiletoread,
+#parseme,
+#TheData {
+  display: none;
+}
+
+#RiderNum,
+#TimeField {
+  max-width: 6em;
+}
+
+.div-across-auto-align {
+  width: 100%;
+  margin: auto;
+  text-align: center;
+}
+
+.formTitleHeader {
+  display: block;
+  text-align: center;
+  color: rgb(0, 0, 255);
+  font-style: italic;
+}
+
+.formReadVersion {
+  text-align: center;
+}
+
+.msgHeaderTitle {
+  color: rgb(0, 0, 255);
+  text-align: center;
+}
+
+.msgSubjElement {
+  width: 70vw;
+  outline-style: none !important;
+}
+
+.readOnlyText {
+  color: rgb(84, 84, 84) !important;
+  outline-style: none !important;
+  cursor: default !important;
+  opacity: unset !important;
+}
+
+/* Pop-up content shifted off-screen when not in view. Still readable by screen-reader software. When targeted it fills the browser window. */
+.pop-up {
+  position: absolute;
+  top: 0em;
+  left: -500em;
+}
+
+.pop-up:target {
+  position: static;
+  left: 0em;
+}
+
+/* The pop-up itself */
+.popBox {
+  background: rgb(240, 240, 240);
+  position: absolute;
+  left: 2em;
+  right: 2em;
+  top: 2em;
+  bottom: 2em;
+  z-index: 10;
+  border: 3px solid rgb(150, 150, 150);
+  border-radius: 1rem;
+  box-shadow: 0.4rem 0.4rem 0.5rem 0.8rem rgb(150, 150, 150);
+  opacity: 0;
+  transition: opacity 0.8s ease-out;
+}
+
+:target .popBox {
+  position: fixed;
+  opacity: 1;
+}
+
+.close:hover,
+.close:active,
+.close:focus {
+  box-shadow: 0rem 0rem 0.5rem 0.5rem;
+  background-color: rgb(192, 192, 192);
+  color: rgb(10, 10, 10);
+}
+
+.close span {
+  text-indent: -200em;
+  display: block;
+}
+
+/* The pop-up content div will scroll if it has too much content */
+.popScroll {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  overflow-y: auto;
+  padding-right: 0.5em;
+  margin-top: 2rem;
+}
+
+.clearDataButton {
+  color: rgb(10, 10, 10);
+  background-color: rgb(255, 153, 0);
+  font-weight: bold;
+}
