@@ -32,7 +32,9 @@ function Fail([string]$msg) {
 }
 
 try {
-    $script:repoRoot = (Get-Location)
+    # Determine repository root as the parent of the tools script folder
+    # Use $PSScriptRoot (folder where this script lives) and take its parent
+    $script:repoRoot = Split-Path -Parent $PSScriptRoot
     $srcPath = Join-Path $script:repoRoot $SourceDir
 
     # Source HTML is 'form.html' in the src directory
