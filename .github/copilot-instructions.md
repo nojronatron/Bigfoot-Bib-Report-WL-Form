@@ -26,7 +26,7 @@ pub Directory:
 
 bak Directory:
 
-- Whenever `Build-InlineHtml.ps1` executes, a backup of the HTML Form in `pub` is copied to `bak` before the source file is overwritten.
+- Whenever `Build-FormAndTemplate.ps1` executes, a backup of the HTML Form in `pub` is copied to `bak` before the source file is overwritten.
 - Do not edit files in this directory, it is only for temporary file backup.
 
 `.github` Directory:
