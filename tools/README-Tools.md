@@ -22,7 +22,11 @@
 Before building the Form:
 
 - Design unit tests to validate JavaScript functions.
-- Use Copilot or another AI
+- Add `console.log()` functions to verify values (remember to remove them after testing).
+- Validate HTML, CSS, and JavaScript with VS Code's "Prettier" document formatter.
+- Copy the Form URL and load it into a browser and use Browser Developer Tools.
+  - See the Console tab for `console.log()` output text.
+- Use Copilot or another AI.
 
 After building the Form and Template:
 
