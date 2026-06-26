@@ -33,12 +33,14 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for information. You are welcome to help 
 
 ## Form and Template Version
 
-TBD: v2.5.x
+August 2026: v2.5.x
 
 - Declared browser support updated to indicate browsers that are not aware of/fully support ECMA 2015/ES6 standards are not fully supported.
-- Time Field is now "sticky" and only resets to current computer time on form load.
+- Time Field is now "sticky" to last-entered time by the user and will only reset to computer time when form is loaded.
+- User control sets maximum bib **characters** count.
+- Update documentation with info on current features.
 
-1-Aug-2024: v2.4.1
+### Prior versions
 
 - Mouseless input: IN, OUT, DROP buttons activated using `+`, `-`, and `/` keys.
 - Clear Entries button also removes Comment field text.
@@ -47,9 +49,6 @@ TBD: v2.5.x
 - Code improvements for screen readers.
 - Improved time input sanitization.
 - Documentation updates covering the above features.
-
-### Prior versions
-
 - Add sanitization to bib number and bib time inputs.
 - Format bib time input as 'HHMM' (4 characters, no colon, no non-number characters).
 - Format CSV entries as 'HHMM' etc (same as above).
