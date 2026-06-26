@@ -747,6 +747,20 @@
             outline: solid 3px rgb(255, 153, 0);
         }
 
+        kbd {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            color: #333;
+            display: inline-block;
+            font-family: inherit; /* Keeps the help text font seamless */
+            font-size: 0.8em;
+            font-weight: 600;
+            padding: 3px 8px;
+            white-space: nowrap;
+        }
+
         #comment {
             width: 80%;
             display: block;
@@ -1033,10 +1047,14 @@
 
                 <h4>Recent Feature Adds</h4>
                 <ul>
+                    <li>Time field resets to current time at form load but once set by user will "stick" between bib record entries if unedited.</li>
+                    <li>Save file format simplified for readability and portability.</li>
                     <li>Set a limit to the number of digits that the Bib Number field will accept.</li>
                     <li>Fully mouse-free keyboard-driven operation.</li>
                     <li>Time field parses and corrects common time entry errors.</li>
-                    <li>Edit Bib Data in the Entries Field after using the IN, OUT, or DROP buttons.
+                    <li>Edit Bib Data in the Entries Field after using the <kbd>IN</kbd>, <kbd>OUT</kbd>, or <kbd>DROP</kbd> buttons.</li>
+                </ul>
+
                 <h3>Topics</h3>
 
                 <p>The form is broken up into three sections:</p>
@@ -1058,11 +1076,11 @@
                         <kbd>Spacebar</kbd> or <kbd>Enter</kbd> to activate a highlighted element.
                     </li>
                     <li>
-                        <kbd>Enter</kbd> will try to press the <button>Submit</button> button if required fields
+                        <kbd>Enter</kbd> will try to press the <kbd>Submit</kbd> button if required fields
                         have data in them.
                     </li>
                     <li>
-                        <kbd>+</kbd> <kbd>=</kbd> <kbd>-</kbd> and <kbd>/</kbd> keys to activate IN, OUT, and DROP buttons.
+                        <kbd>+</kbd> <kbd>=</kbd> <kbd>-</kbd> and <kbd>/</kbd> keys to activate <kbd>IN</kbd>, <kbd>OUT</kbd>, and <kbd>DROP</kbd> buttons.
                     </li>
                 </ul>
 
@@ -1075,7 +1093,7 @@
                 <ol>
                     <li>Enter this Event Name for example &quot;Bigfoot 2026&quot;.</li>
                     <li>If you know there are only 750 bibs, set Max Bib Characters to 3 to help <em>prevent some data entry errors</em>.</li>
-                    <li>Enter a Message Number or use the <button>Increment</button> button to set it.</li>
+                    <li>Enter a Message Number or use the <kbd>Increment</kbd> button to set it.</li>
                     <li>Enter the recipient's amateur call sign in the Send To field. You can add other recipients
                         in the Winlink Message <em>after submitting</em>.</li>
                     <li>Aid Station: Mouse click or press the <kbd>Spacebar</kbd> to display the list, then use your mouse
@@ -1110,11 +1128,11 @@
                     <li>Enter The 24-hour time that the runner entered, exited, or bowed-out. Limited to 6
                         characters.</li>
                     <li>Yesterday: Click/tap this checkbox to set the day of the month back one day.</li>
-                    <li>Click IN (arrived), or OUT (exited forward course), or DROP (bowed out of event). Doing so
+                    <li>Click <kbd>IN</kbd> (arrived), or <kbd>OUT</kbd> (exited forward course), or DROP (bowed out of event). Doing so
                         adds the bib information to the Entries Field, below.</li>
                 </ol>
 
-                <p>The following items will get updated after clicking IN, OUT, or DROP buttons.</p>
+                <p>The following items will get updated after clicking <kbd>IN</kbd>, <kbd>OUT</kbd>, or <kbd>DROP</kbd> buttons.</p>
 
                 <ul>
                     <li>Entry Count: A read-only field shows the number of bib records that have been entered.</li>
@@ -1130,10 +1148,10 @@
                 <p>Bib Number and Bib Time fields will auto-populate if you forget to add data to them. Mis-keying
                     certain characters will cause the form to attempt to correct the mistake (but it is not
                     perfect). The default &quot;fix&quot; is &quot;0000&quot; in the Bib Number field. Watch for this 
-                    while you are entering data and fix it before clicking IN, OUT, or DROP.</p>
+                    while you are entering data and fix it before clicking IN, <kbd>OUT</kbd>, or DROP.</p>
 
                 <p>
-                    If you entered a Bib Number, then change the Max Bib Characters field value, but have not clicked <button>IN</button>, <button>OUT</button>, or <button>DROP</button> buttons, the Bib Number entry will be cleared. This is expected behavior.
+                    If you entered a Bib Number, then change the Max Bib Characters field value, but have not clicked <kbd>IN</kbd>, <kbd>OUT</kbd>, or <kbd>DROP</kbd> buttons, the Bib Number entry will be cleared. This is expected behavior.
                 </p>
 
                 <p><em>Note</em>: Be certain to enter Time in a 24-hour format like "0006" or "00:06" (for 6 minutes
@@ -1143,7 +1161,7 @@
                     &quot;:&quot; will result in the form changing your entry in an attempt to format it correctly.</p>
 
                 <p><em>Pay attention while entering data</em>. Always verify data while entering it, and use the
-                    <button>Save Race Data</button> button to save your place.
+                    <kbd>Save Race Data</kbd> button to save your place.
                 </p>
 
                 <p>The Entries Field uses comma-separated-values. The Bib Record data fields are (from left to
@@ -1200,20 +1218,28 @@
                     bib number if extra information will be helpful.</p>
 
                 <h4>IN, OUT, DROP Keyboard Shortcuts</h4>
-                <p>
-                    Use <code>+</code> (or <code>=</code>) for <button>IN</button> <code>-</code> for <button>OUT</button> 
-                    or <code>/</code> for <button>DROP</button>.
-                </p>
+                
+                <ul>
+                    <li>
+                        Use <kbd>+</kbd> or <kbd>=</kbd> for <kbd>IN</kbd>
+                    </li>
+                    <li>
+                        Use <kbd>-</kbd> for <kbd>OUT</kbd> 
+                    </li>
+                    <li>
+                        Use <kbd>/</kbd> for <kbd>DROP</kbd>
+                    </li>
+                </ul>
 
                 <p>
-                    These shortcut keys only activate the IN, OUT, and DROP buttons when a field or element in the <em>Bib Data Entry</em> section is focused. Outside of that area the keys will not trigger adding bib data entry.
+                    These shortcut keys only activate the <kbd>IN</kbd>, <kbd>OUT</kbd>, and <kbd>DROP</kbd> buttons when a field or element in the <em>Bib Data Entry</em> section is focused. Outside of that area the keys will not trigger adding bib data entry.
                 </p>
 
                 <h3>Number of Entries</h3>
 
                 <p>This accurately counts the number of bib entries currently stored in the form. This number will
-                    update every time you click IN, OUT, or DROP, and any time you make a direct edit to the
-                    comma-separated values.</p>
+                    update every time you click <kbd>IN</kbd>, <kbd>OUT</kbd>, or <kbd>DROP</kbd>, and any time you 
+                    make a direct edit to the comma-separated values.</p>
 
                 <h3>Bottom Section: Comment, Save, Restore, and Submit Bib Data</h3>
 
@@ -1225,9 +1251,9 @@
                 <p>If the message is too long or complex for the Comment field, contact Bigfoot Base via a separate
                     Winlink Message, voice radio, or other means to relay the necessary information to them.</p>
 
-                <p>One last note about runners that &quot;DROP&quot;: It is usually a good idea to radio-in to
-                    Bigfoot Base by voice after adding a DROP to the list. Have the bib number, time, and the reason
-                    (if known) ready before you call.</p>
+                <p>One last note about runners that drop from the event: It is usually a good idea to radio-in to
+                    Bigfoot Base by voice with the &quot;DROP&quot; in addition to sending via the list.
+                    Have the bib number, time, and the reason (if known) ready before you call.</p>
 
                 <h4>Save and Load buttons</h4>
 
@@ -1244,7 +1270,7 @@
 
                 <h4>Submit Button</h4>
 
-                <p>If you launched this form using Winlink Express, use the <button>Submit</button> button to have
+                <p>If you launched this form using Winlink Express, use the <kbd>Submit</kbd> button to have
                     Winlink Express automatically create a new, well formatted message. On-screen information will
                     guide you through the submission process.</p>
 
@@ -1256,7 +1282,7 @@
 
                 <h4>Clear Entries button</h4>
 
-                <p>Use the <button>Clear Entries</button> button to remove <em>Comment text</em> and <em>all bib
+                <p>Use the <kbd>Clear Entries</kbd> button to remove <em>Comment text</em> and <em>all bib
                         record entries</em>. This will not clear the header information, such as Event Name, Aid
                     Station, or Message Number. It will also not clear the Subject Line. See the above sub-section
                     &quot;Saving and Loading Race Data&quot; for more information.</p>
@@ -1266,9 +1292,9 @@
                 <h3>Considerations</h3>
 
                 <p>Stay on top of your runner records lists. Even if you cannot send data via Winlink for some
-                    reason, keep entering data into this Form and click <button>Save Race data</button> to store
+                    reason, keep entering data into this Form and click <kbd>Save Race data</kbd> to store
                     a list on your device. Start a new Form and repeat this process until you can send the data
-                    via Winlink using the <button>Load Race data</button> or by other means. You will have an
+                    via Winlink using the <kbd>Load Race data</kbd> or by other means. You will have an
                     easier time keeping track of runners this way by viewing files stored on your device.</p>
 
                 <p>The sooner you get valid data to Bigfoot Base, the better the hams and the event organizers
@@ -1278,9 +1304,9 @@
                     record-keeping duty much more challenging than it needs to be.</p>
 
                 <p>Load this Form on a tablet or laptop computer and track runners until you have several dozen.
-                    Use the <button>Save Race data</button> button to save the data to a thumbdrive to share the
-                    data with the Winlink Operator, who can then open a new message form and click <button>Load
-                        Race data</button> to load the collected data and send it. This will save you time and
+                    Use the <kbd>Save Race data</kbd> button to save the data to a thumbdrive to share the
+                    data with the Winlink Operator, who can then open a new message form and click <kbd>Load
+                        Race data</kbd> to load the collected data and send it. This will save you time and
                     effort, and might even free-up your Winlink Operator to perform other duties while you
                     collect bib records on your phone or tablet, instead of pen and paper.</p>
 
