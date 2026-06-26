@@ -565,7 +565,6 @@
 
                             try {
                                 const jsonData = JSON.parse(document.getElementById('parseme').value);
-                                // console.log('filereader.onload json parse of parseme element value: ', jsonData);
                                 populateForm(jsonData);
                             } catch (err) {
                                 console.error('An error occurred while parsing the JSON data: ', err);
