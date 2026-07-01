@@ -35,10 +35,12 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for information. You are welcome to help 
 
 August 2026: v2.5.x
 
-- Declared browser support updated to indicate browsers that are not aware of/fully support ECMA 2015/ES6 standards are not fully supported.
+- Declared and documented browser back-support to ECMA 2015/ES6. Earlier browser versions might not work as expected.
 - Time Field is now "sticky" to last-entered time by the user and will only reset to computer time when form is loaded.
 - User control sets maximum bib **characters** count.
-- Update documentation with info on current features.
+- Screen-size tweaks to avoid awkward layout situations.
+- Add bib record count and bibnumber length setting to Template data upon submission.
+- Fix various layout issues on large and small screens.
 
 ### Prior versions
 
