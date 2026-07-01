@@ -6,8 +6,10 @@ Msg:
 <var TheData>
 -----
 
+Claimed Entry Count: <var entryCount>
 Comment: <var Comment>
 
 -
 Winlink Express Sender <var MsgSender> 
 Template version <var FormVersion>
+User Settings: maxbibchars <var maxRiderNumChars>
