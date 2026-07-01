@@ -304,7 +304,7 @@
                 GetElementById('Dropbtn').disabled = false;
                 GetElementById('entryCount').disabled = false;
                 GetElementById('entryCount').value = '0';
-                GetElementById('comment').value = '';
+                GetElementById('comment-content').value = '';
                 ResetBibDataFields();
             }
         }
@@ -412,7 +412,7 @@
                 Location: GetElementById('Location').value,
                 msgsubject: GetElementById('msgsubject').value,
                 entryCount: GetElementById('entryCount').value,
-                Comment: GetElementById('comment').value,
+                Comment: GetElementById('comment-content').value,
                 TheCsvData: cleanBibRecordsArray
             };
 
@@ -474,8 +474,9 @@
             const msgsubject = GetElementById('msgsubject').value;
             const entryCount = GetElementById('entryCount').value;
             const TheData = GetElementById('TheData').value;
-            const Comment = GetElementById('comment').value;
             const previousRecord = JSON.parse(localStorage.getItem('previousRecord'));
+            const Comment = GetElementById('comment-content').value;
+            const MaxBibCharsSetting = GetElementById('maxRiderNumChars').value;
 
             const formObject = JSON.stringify({
                 FormVersion,
@@ -486,8 +487,9 @@
                 msgsubject,
                 entryCount,
                 TheData,
-                Comment,
                 previousRecord,
+                Comment,
+                MaxBibCharsSetting,
             });
 
             GetElementById('parseme').value = formObject;
@@ -504,8 +506,9 @@
                 GetElementById('Location').value = jsonStringData.Location ? jsonStringData.Location : '';
                 GetElementById('msgsubject').value = jsonStringData.msgsubject ? jsonStringData.msgsubject : '';
                 GetElementById('entryCount').value = jsonStringData.entryCount ? jsonStringData.entryCount : 0;
-                GetElementById('comment').value = jsonStringData.Comment ? jsonStringData.Comment : '';
+                GetElementById('comment-content').value = jsonStringData.Comment ? jsonStringData.Comment : '';
                 GetElementById('endOfPriorBatch').value = jsonStringData.previousRecord ? jsonStringData.previousRecord : '';
+                GetElementById('maxRiderNumChars').value = jsonStringData.BibNumberLengthMax ? jsonStringData.BibNumberLengthMax : MAX_RIDERNUM_CHARACTERS;
 
                 const theCsvDataRaw = jsonStringData.TheCsvData;
                 const csvData = theCsvDataRaw.join('\n');
@@ -596,7 +599,7 @@
             background-color: rgb(220, 220, 220);
         }
 
-        @media screen and (width < 650px) {
+        @media screen and (width < 500px) {
 
             label,
             input,
@@ -606,15 +609,37 @@
                 font-size: .7em;
             }
 
-            input {
-                margin: 0.2em 0.2em;
+            input,
+            textarea,
+            text,
+            select {
+                margin-top: 0.5em;
             }
 
             input[type="checkbox"] {
                 width: 1em;
                 height: 1em;
             }
+            
+            .div-across-auto-align {
+                width: 100%;
+                margin: auto;
+                text-align: center;
+            }
 
+            .new-div-across-auto-align {
+                text-align: center;
+                /* align-content: center; */
+            }
+
+            .data-entry-subsection {
+                min-width: 80vw;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+                margin-top: 0.3em;
+            }
+            
             .formTitleHeader {
                 font-size: 2em;
             }
@@ -625,13 +650,16 @@
             }
 
             .msgHeaderTitle {
+                color: rgb(0, 0, 255);
                 font-size: 0.7em;
+                text-align: center;
+                margin: 0.5em auto;
             }
-
+            
             .addressInput {
                 min-width: 65%;
             }
-
+            
             .block-line-div {
                 display: block;
             }
@@ -639,15 +667,20 @@
             .readOnlyText {
                 font-size: 0.6em;
             }
-
+            
             #closePopBtn {
                 margin-left: 1rem;
                 margin-top: 0.5rem;
             }
+            
+            #maxRiderNumChars {
+                width: 2.4em;
+                text-align: center;
+            }
         }
-
-        @media screen and (width >=650px) {
-
+        
+        @media screen and (width >= 500px) {
+            
             label,
             input,
             textarea,
@@ -655,27 +688,49 @@
             button {
                 font-size: 1em;
             }
-
+            
             input {
                 margin: 0.3em 0.3em;
             }
-
+            
             input[type="checkbox"] {
                 width: 1.2em;
                 height: 1.2em;
+            }
+            
+            .div-across-auto-align {
+                width: 100%;
+                margin: auto;
+                text-align: center;
+            }
+
+            .new-div-across-auto-align {
+                text-align: center;
+                align-content: center;
+                margin: 0 0.5em;
+            }
+
+            .data-entry-subsection {
+                width: max-content;
+                display: flex;
+                flex-direction: row;
+                margin: 0.8em auto 0 auto;
             }
 
             .formTitleHeader {
                 font-size: 3em;
             }
-
+            
             .bibEntries {
                 min-height: 4em;
                 max-height: 10em;
             }
-
+            
             .msgHeaderTitle {
-                font-size: 1.1em;
+                font-size: 1.4em;
+                color: rgb(0, 0, 255);
+                text-align: center;
+                margin: 0.5em auto;
             }
 
             .addressInput {
@@ -689,6 +744,11 @@
             #closePopBtn {
                 margin-left: 75vw;
                 margin-top: 0.5rem;
+            }
+            
+            #maxRiderNumChars {
+                width: 2.2em;
+                text-align: center;
             }
         }
 
@@ -761,10 +821,10 @@
             white-space: nowrap;
         }
 
-        #comment {
+        #comment-content {
             width: 80%;
             display: block;
-            margin: auto;
+            margin: 0.4em auto 0 auto;
         }
 
         #commentLabel {
@@ -772,12 +832,8 @@
             margin: .3em auto;
         }
 
-        #maxRiderNumChars {
-            width: 2.2em;
-        }
-
         #MessageNumber {
-            max-width: 2em;
+            width: 2em;
         }
 
         #txtfiletoread,
@@ -788,13 +844,13 @@
 
         #RiderNum,
         #TimeField {
-            max-width: 6em;
+            width: 3.5em;
         }
 
-        .div-across-auto-align {
-            width: 100%;
-            margin: auto;
+        #TheCsvData {
             text-align: center;
+            margin-top: 0.5em;
+            width: 20em;
         }
 
         .formTitleHeader {
@@ -808,14 +864,10 @@
             text-align: center;
         }
 
-        .msgHeaderTitle {
-            color: rgb(0, 0, 255);
-            text-align: center;
-        }
-
         .msgSubjElement {
-            width: 70vw;
-            outline-style: none !important;
+            /* max-width: 600px; looks good on very wide and very thin screens */
+            width: auto;
+            /* outline-style: none !important; */
         }
 
         .readOnlyText {
@@ -896,7 +948,7 @@
         <form
             onsubmit="return confirm('To complete your form submission, click OK and close the browser tab. You will return to the new message window so you can post your message to the outbox.');"
             method="post" id="myform" enctype="multipart/form-data" action="http://{FormServer}:{FormPort}">
-            <label class="formTitleHeader">Bigfoot Bib Report</label>
+            <div class="formTitleHeader">Bigfoot Bib Report</div>
             <div class="formReadVersion">
                 <input type="button" value="Form Information - READ" id="formInfoReadBtn" />
                 <label id="thisVersion"></label>
@@ -912,7 +964,8 @@
 
             <hr />
 
-            <div class="msgHeaderTitle">Message Header</div>
+            <p class="msgHeaderTitle">Message Header</p>
+
             <div class="div-across-auto-align">
                 <div class="block-line-div">
                     <label for="EventTitle">Event Name:</label>
@@ -976,50 +1029,73 @@
 
             <hr />
 
-            <div class="msgHeaderTitle">Bib Data Entry</div>
+            <p class="msgHeaderTitle">Bib Data Entry</p>
 
-            <div class="div-across-auto-align">
-                <label for="RiderNum">Bib Number:</label>
-                <input name="RiderNum" type="text" id="RiderNum" maxlength="1" required />
-                <label for="TimeField">Time:</label>
-                <input name="TimeField" type="text" id="TimeField" maxlength="6" required />
-                <input type="checkbox" id="yesterday" name="yesterday" value="Yesterday" />
-                <label for="yesterday">Yesterday</label>
-            </div>
+            <div class="data-entry-subsection" >
+                <div class="new-div-across-auto-align">
+                    <label for="RiderNum">Bib Number:</label>
+                    <input name="RiderNum" type="text" id="RiderNum" maxlength="1" required />
+                </div>
+                <div class="new-div-across-auto-align">
+                    <label for="TimeField">Time:</label>
+                    <input name="TimeField" type="text" id="TimeField" maxlength="6" required />
+                    <input type="checkbox" id="yesterday" name="yesterday" value="Yesterday" />
+                    <label for="yesterday">Yesterday</label>
+                </div>
+             
+                <div>
+                    <div id="inOutDropBtns" class="new-div-across-auto-align">
+                        <label>Click an Action button:</label>
+                    </div>
+                    <div id="inOutDropBtns" class="new-div-across-auto-align">
+                        <input name="Inbtn" type="button" id="Inbtn" value="In" title="Participant arrived at this station." />
+                        <input name="Outbtn" type="button" id="Outbtn" value="Out"
+                        title="Participant departed from this station." />
+                        <input name="Dropbtn" type="button" id="Dropbtn" value="Drop" title="Participant dropped from event." />
+                    </div>
+                </div>
 
-            <div id="inOutDropBtns" class="div-across-auto-align">
-                <label>Click an Action button to create a record:</label>
-                <input name="Inbtn" type="button" id="Inbtn" value="In" title="Participant arrived at this station." />
-                <input name="Outbtn" type="button" id="Outbtn" value="Out"
-                    title="Participant departed from this station." />
-                <input name="Dropbtn" type="button" id="Dropbtn" value="Drop" title="Participant dropped from event." />
             </div>
 
             <hr />
 
-            <div class="div-across-auto-align">
-                <label for="entryCount">Entry Count:</label>
-                <input name="entryCount" type="text" id="entryCount" size="3" class="readOnlyText" tabindex="-1"
-                    readonly title="Number of bib entries submitted." />
-                <label for="endOfPriorBatch">End Of Prior:</label>
-                <input name="endOfPriorBatch" type="text" id="endOfPriorBatch" size="25" class="readOnlyText"
-                    tabindex="-1" readonly title="The last saved bib record."></input>
-                <textarea name="TheCsvData" placeholder="Limit to a sensible number of entries." id="TheCsvData"
-                    class="bibEntries" maxlength="1200"></textarea> <!-- put csv items here -->
-                <textarea name="TheData" id="TheData" class="bibEntries" maxlength="1200"></textarea>
-                <!-- put tab delim data here -->
-                <label for="comment" id="commentLabel">Optional Short Comment</label>
-                <textarea name="comment" id="comment" maxlength="340"></textarea>
+            <div>
+                <div class="new-div-across-auto-align">
+                    <label for="entryCount">Entry Count:</label>
+                    <input name="entryCount" type="text" id="entryCount" size="3" class="readOnlyText" tabindex="-1"
+                        readonly title="Number of bib entries submitted." />
+                </div>
+                <div class="new-div-across-auto-align">
+                    <label for="endOfPriorBatch">End Of Prior:</label>
+                    <input name="endOfPriorBatch" type="text" id="endOfPriorBatch" size="25" class="readOnlyText"
+                        tabindex="-1" readonly title="The last saved bib record."></input>
+                </div>
 
-                <input type="submit" class="SubmitBtn" id="Submit" method="Post" name="Submit" 
-                value="SUBMIT" title="Submit form data to a new Winlink Message." />
-                <input name="savebtn" type="button" class="saveDataButton" id="savebtn"
-                    value="Save Race data" title="Save data to a file." />
-                <input name="loadbtn" type="button" class="loadDataButton" id="loadbtn"
-                    value="Load Race data" title="Load data from a file." />
-                <input name="doclear" type="button" id="doclear" value="Clear Entries"
-                    title="Clear all runner entries." class="clearDataButton" />
+                <div style="text-align:center;">
+                    <textarea name="TheCsvData" placeholder="Limit to a sensible number of entries." id="TheCsvData"
+                        class="bibEntries" maxlength="1200"></textarea> <!-- put csv items here -->
+                    <textarea name="TheData" id="TheData" class="bibEntries" maxlength="1200"></textarea>
+                    <!-- put tab delim data here -->
+                    <label for="comment" id="commentLabel">Optional Short Comment</label>
+                    <input type="text" name="comment" id="comment-content" maxlength="340"></textarea>
+                </div>
             </div>
+
+            <div class="data-entry-subsection">
+                <div class="new-div-across-auto-align">
+                    <input type="submit" class="SubmitBtn" id="Submit" method="Post" name="Submit" 
+                    value="SUBMIT" title="Submit form data to a new Winlink Message." />
+                    <input name="savebtn" type="button" class="saveDataButton" id="savebtn"
+                    value="Save Race data" title="Save data to a file." />
+                </div>
+                <div class="new-div-across-auto-align">
+                    <input name="loadbtn" type="button" class="loadDataButton" id="loadbtn"
+                    value="Load Race data" title="Load data from a file." />
+                    <input name="doclear" type="button" id="doclear" value="Clear Entries"
+                    title="Clear all runner entries." class="clearDataButton" />
+                </div>
+            </div>
+
         </form>
     </section>
 
