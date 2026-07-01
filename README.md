@@ -41,6 +41,8 @@ August 2026: v2.5.x
 - Screen-size tweaks to avoid awkward layout situations.
 - Add bib record count and bibnumber length setting to Template data upon submission.
 - Fix various layout issues on large and small screens.
+- Updated template file to report additional information on Winlink Message.
+- Updated script that copies template and form files to WE's "global" directory.
 
 ### Prior versions
 
