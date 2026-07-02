@@ -2,16 +2,15 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="author" content="Greg KG6SJT" />
-    <meta name="author" content="Jon K7RMZ" />
+    <meta charset="utf-8">
+    <meta name="author" content="Greg KG6SJT">
+    <meta name="author" content="Jon K7RMZ">
     <meta name="description"
-        content="Race Tracker Form for Winlink Express created by KG6SJT, modified by K7RMZ for Bigfoot ultra marathon comms-support events." />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="" />
+        content="Race Tracker Form for Winlink Express created by KG6SJT, modified by K7RMZ for Bigfoot ultra marathon comms-support events.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bigfoot Bib Tracker</title>
 
-    <script language="javascript" type="text/javascript">
+    <script type="text/javascript">
         // set constant defaults here
         const MIN_RIDERNUM_CHARACTERS = 1;
         const MAX_RIDERNUM_CHARACTERS = 7;
@@ -594,7 +593,7 @@
 
     </script>
 
-    <style type="text/css">
+    <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
             font-size: 18px;
@@ -636,7 +635,7 @@
             }
             
             .formTitleHeader {
-                font-size: 2em;
+                font-size: 1.5em;
             }
 
             .bibEntries {
@@ -711,7 +710,7 @@
             }
 
             .formTitleHeader {
-                font-size: 3em;
+                font-size: 2.4em;
             }
             
             .bibEntries {
@@ -851,7 +850,6 @@
         }
 
         .formTitleHeader {
-            display: block;
             text-align: center;
             color: rgb(0, 0, 255);
             font-style: italic;
@@ -937,12 +935,12 @@
 
 <body>
     <section id="close">
+        <h1 class="formTitleHeader">Bigfoot Bib Report</h1>
         <form
             onsubmit="return confirm('To complete your form submission, click OK and close the browser tab. You will return to the new message window so you can post your message to the outbox.');"
-            method="post" id="myform" enctype="multipart/form-data" action="http://{FormServer}:{FormPort}">
-            <div class="formTitleHeader">Bigfoot Bib Report</div>
+            id="myform" enctype="multipart/form-data" action="http://{FormServer}:{FormPort}">
             <div class="formReadVersion">
-                <input type="button" value="Form Information - READ" id="formInfoReadBtn" />
+                <input type="button" value="Form Information - READ" id="formInfoReadBtn">
                 <label id="thisVersion"></label>
             </div>
 
@@ -950,11 +948,11 @@
                 <div class="block-line-div">
                     <label for="maxRiderNumChars">Max Bib Characters:</label>
                     <input type="number" id="maxRiderNumChars" name="maxRiderNumChars" min="1" step="1"
-                        title="Sets the maximum number of characters allowed in the Bib Number field." />
+                        title="Sets the maximum number of characters allowed in the Bib Number field.">
                 </div>
             </div>
 
-            <hr />
+            <hr>
 
             <p class="msgHeaderTitle">Message Header</p>
 
@@ -962,13 +960,13 @@
                 <div class="block-line-div">
                     <label for="EventTitle">Event Name:</label>
                     <input name="EventTitle" type="text" id="EventTitle" maxlength="40"
-                        placeholder="Race or Event Name" required />
+                        placeholder="Race or Event Name" required>
                 </div>
                 <div class="block-line-div">
                     <label for="MessageNumber">Message #</label>
-                    <input name="MessageNumber" type="text" id="MessageNumber" maxlength="3" />
+                    <input name="MessageNumber" type="text" id="MessageNumber" maxlength="3">
                     <label for="incrMsgNum"></label>
-                    <input name="incrMsgNum" type="button" id="incrMsgNum" value="increment" />
+                    <input name="incrMsgNum" type="button" id="incrMsgNum" value="increment">
                 </div>
             </div>
 
@@ -977,7 +975,7 @@
                     <label for="address">Send to:</label>
                     <input name="address" type="text" id="address" class="addressInput" maxlength="40"
                         title="Separate multiple calls or addresses with a semicolon;"
-                        placeholder="Winlink Radio Call or Email" required />
+                        placeholder="Winlink Radio Call or Email" required>
                 </div>
 
                 <div class="aidStnSpan block-line-div">
@@ -1007,83 +1005,83 @@
             </div>
 
             <!-- hidden elements -->
-            <input name="FormVersion" type="hidden" id="FormVersion" />
-            <input type="file" id="txtfiletoread" accept=".txt" />
-            <input name="sendto" type="hidden" id="sendto" />
+            <input name="FormVersion" type="hidden" id="FormVersion">
+            <input type="file" id="txtfiletoread" accept=".txt">
+            <input name="sendto" type="hidden" id="sendto">
             <textarea name="parseme" id="parseme"></textarea>
             <!-- end hidden elements -->
 
             <div class="div-across-auto-align">
                 <label for="msgsubject">Subject:</label>
                 <input name="msgsubject" type="text" id="msgsubject" class="readOnlyText msgSubjElement" tabindex="-1"
-                    readonly />
+                    readonly>
             </div>
 
-            <hr />
+            <hr>
 
             <p class="msgHeaderTitle">Bib Data Entry</p>
 
             <div class="data-entry-subsection" >
                 <div class="div-across-auto-align">
                     <label for="RiderNum">Bib:</label>
-                    <input name="RiderNum" type="text" id="RiderNum" maxlength="1" required />
+                    <input name="RiderNum" type="text" id="RiderNum" maxlength="1" required>
                 </div>
                 <div class="div-across-auto-align">
                     <label for="TimeField">Time:</label>
-                    <input name="TimeField" type="text" id="TimeField" maxlength="6" required />
-                    <input type="checkbox" id="yesterday" name="yesterday" value="Yesterday" />
+                    <input name="TimeField" type="text" id="TimeField" maxlength="6" required>
+                    <input type="checkbox" id="yesterday" name="yesterday" value="Yesterday">
                     <label for="yesterday">Yesterday</label>
                 </div>
              
                 <div>
-                    <div id="inOutDropBtns" class="div-across-auto-align">
+                    <div class="div-across-auto-align">
                         <label>Click Action button:</label>
                     </div>
                     <div id="inOutDropBtns" class="div-across-auto-align">
-                        <input name="Inbtn" type="button" id="Inbtn" value="In" title="Participant arrived at this station." />
+                        <input name="Inbtn" type="button" id="Inbtn" value="In" title="Participant arrived at this station.">
                         <input name="Outbtn" type="button" id="Outbtn" value="Out"
-                        title="Participant departed from this station." />
-                        <input name="Dropbtn" type="button" id="Dropbtn" value="Drop" title="Participant dropped from event." />
+                        title="Participant departed from this station.">
+                        <input name="Dropbtn" type="button" id="Dropbtn" value="Drop" title="Participant dropped from event.">
                     </div>
                 </div>
 
             </div>
 
-            <hr />
+            <hr>
 
             <div>
                 <div class="div-across-auto-align">
                     <label for="entryCount">Entry Count:</label>
                     <input name="entryCount" type="text" id="entryCount" size="3" class="readOnlyText" tabindex="-1"
-                        readonly title="Number of bib entries submitted." />
+                        readonly title="Number of bib entries submitted.">
                 </div>
                 <div class="div-across-auto-align">
                     <label for="endOfPriorBatch">End Of Prior:</label>
                     <input name="endOfPriorBatch" type="text" id="endOfPriorBatch" size="25" class="readOnlyText"
-                        tabindex="-1" readonly title="The last saved bib record."></input>
+                        tabindex="-1" readonly title="The last saved bib record.">
                 </div>
 
                 <div style="text-align:center;">
                     <textarea name="TheCsvData" placeholder="Limit to a sensible number of entries." id="TheCsvData"
                         class="bibEntries" maxlength="1200"></textarea> <!-- put csv items here -->
                     <textarea name="TheData" id="TheData" class="bibEntries" maxlength="1200"></textarea>
-                    <label for="comment" id="commentLabel">Optional Short Comment</label>
-                    <input type="text" name="comment" id="comment-content" maxlength="340"></textarea>
+                    <label for="comment-content" id="commentLabel">Optional Short Comment</label>
+                    <input type="text" name="comment" id="comment-content" maxlength="340">
                 </div>
             </div>
 
             <div class="data-entry-subsection">
                 <div class="div-across-auto-align">
                     <input type="submit" class="SubmitBtn" id="Submit" method="Post" name="Submit" 
-                    value="SUBMIT" title="Submit form data to a new Winlink Message." />
+                    value="SUBMIT" title="Submit form data to a new Winlink Message.">
                     <input name="savebtn" type="button" class="saveDataButton" id="savebtn"
-                    value="Save Race data" title="Save data to a file." />
+                    value="Save Race data" title="Save data to a file.">
                 </div>
                 <div class="div-across-auto-align">
                     <input name="loadbtn" type="button" class="loadDataButton" id="loadbtn"
-                    value="Load Race data" title="Load data from a file." />
+                    value="Load Race data" title="Load data from a file.">
                     <input name="doclear" type="button" id="doclear" value="Clear Entries"
-                    title="Clear all runner entries." class="clearDataButton" />
+                    title="Clear all runner entries." class="clearDataButton">
                 </div>
             </div>
 
@@ -1093,7 +1091,7 @@
     <section id="pop1" class="pop-up">
 
         <div class="popBox">
-            <input type="button" id="closePopBtn" value="Click to close this help" class="close" />
+            <input type="button" id="closePopBtn" value="Click to close this help" class="close">
 
             <div class="popScroll">
                 <h2>Winlink Operator Instructions</h2>
@@ -1407,7 +1405,7 @@
                     &quot;Saving and Loading Race Data&quot; for more information.
                 </p>
 
-                <hr />
+                <hr>
 
                 <h3>Considerations</h3>
 
@@ -1447,7 +1445,7 @@
                     help you be efficient in tracking runners.
                 </p>
 
-                <hr />
+                <hr>
 
                 <h3>Credits and Thanks</h3>
 
