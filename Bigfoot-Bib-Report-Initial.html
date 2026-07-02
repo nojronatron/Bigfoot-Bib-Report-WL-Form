@@ -548,6 +548,8 @@
                 el.setAttribute('tabindex', '-1');
             });
 
+            document.getElementById('entryCount').value = '0';
+
             // Check the support for the File API
             if (window.File && window.FileReader && window.FileList && window.Blob) {
                 const fileSelected = GetElementById('txtfiletoread');
@@ -620,16 +622,9 @@
                 width: 1em;
                 height: 1em;
             }
-            
-            .div-across-auto-align {
-                width: 100%;
-                margin: auto;
-                text-align: center;
-            }
 
-            .new-div-across-auto-align {
+            .div-across-auto-align {
                 text-align: center;
-                /* align-content: center; */
             }
 
             .data-entry-subsection {
@@ -662,6 +657,10 @@
             
             .block-line-div {
                 display: block;
+            }
+
+            .msgSubjElement {
+                width: 70vw;
             }
 
             .readOnlyText {
@@ -697,14 +696,8 @@
                 width: 1.2em;
                 height: 1.2em;
             }
-            
-            .div-across-auto-align {
-                width: 100%;
-                margin: auto;
-                text-align: center;
-            }
 
-            .new-div-across-auto-align {
+            .div-across-auto-align {
                 text-align: center;
                 align-content: center;
                 margin: 0 0.5em;
@@ -739,6 +732,10 @@
 
             .block-line-div {
                 display: inline;
+            }
+
+            .msgSubjElement {
+                width: 60vw;
             }
 
             #closePopBtn {
@@ -864,11 +861,6 @@
             text-align: center;
         }
 
-        .msgSubjElement {
-            /* max-width: 600px; looks good on very wide and very thin screens */
-            width: auto;
-            /* outline-style: none !important; */
-        }
 
         .readOnlyText {
             color: rgb(84, 84, 84) !important;
@@ -1032,11 +1024,11 @@
             <p class="msgHeaderTitle">Bib Data Entry</p>
 
             <div class="data-entry-subsection" >
-                <div class="new-div-across-auto-align">
-                    <label for="RiderNum">Bib Number:</label>
+                <div class="div-across-auto-align">
+                    <label for="RiderNum">Bib:</label>
                     <input name="RiderNum" type="text" id="RiderNum" maxlength="1" required />
                 </div>
-                <div class="new-div-across-auto-align">
+                <div class="div-across-auto-align">
                     <label for="TimeField">Time:</label>
                     <input name="TimeField" type="text" id="TimeField" maxlength="6" required />
                     <input type="checkbox" id="yesterday" name="yesterday" value="Yesterday" />
@@ -1044,10 +1036,10 @@
                 </div>
              
                 <div>
-                    <div id="inOutDropBtns" class="new-div-across-auto-align">
-                        <label>Click an Action button:</label>
+                    <div id="inOutDropBtns" class="div-across-auto-align">
+                        <label>Click Action button:</label>
                     </div>
-                    <div id="inOutDropBtns" class="new-div-across-auto-align">
+                    <div id="inOutDropBtns" class="div-across-auto-align">
                         <input name="Inbtn" type="button" id="Inbtn" value="In" title="Participant arrived at this station." />
                         <input name="Outbtn" type="button" id="Outbtn" value="Out"
                         title="Participant departed from this station." />
@@ -1060,12 +1052,12 @@
             <hr />
 
             <div>
-                <div class="new-div-across-auto-align">
+                <div class="div-across-auto-align">
                     <label for="entryCount">Entry Count:</label>
                     <input name="entryCount" type="text" id="entryCount" size="3" class="readOnlyText" tabindex="-1"
                         readonly title="Number of bib entries submitted." />
                 </div>
-                <div class="new-div-across-auto-align">
+                <div class="div-across-auto-align">
                     <label for="endOfPriorBatch">End Of Prior:</label>
                     <input name="endOfPriorBatch" type="text" id="endOfPriorBatch" size="25" class="readOnlyText"
                         tabindex="-1" readonly title="The last saved bib record."></input>
@@ -1075,20 +1067,19 @@
                     <textarea name="TheCsvData" placeholder="Limit to a sensible number of entries." id="TheCsvData"
                         class="bibEntries" maxlength="1200"></textarea> <!-- put csv items here -->
                     <textarea name="TheData" id="TheData" class="bibEntries" maxlength="1200"></textarea>
-                    <!-- put tab delim data here -->
                     <label for="comment" id="commentLabel">Optional Short Comment</label>
                     <input type="text" name="comment" id="comment-content" maxlength="340"></textarea>
                 </div>
             </div>
 
             <div class="data-entry-subsection">
-                <div class="new-div-across-auto-align">
+                <div class="div-across-auto-align">
                     <input type="submit" class="SubmitBtn" id="Submit" method="Post" name="Submit" 
                     value="SUBMIT" title="Submit form data to a new Winlink Message." />
                     <input name="savebtn" type="button" class="saveDataButton" id="savebtn"
                     value="Save Race data" title="Save data to a file." />
                 </div>
-                <div class="new-div-across-auto-align">
+                <div class="div-across-auto-align">
                     <input name="loadbtn" type="button" class="loadDataButton" id="loadbtn"
                     value="Load Race data" title="Load data from a file." />
                     <input name="doclear" type="button" id="doclear" value="Clear Entries"
@@ -1100,10 +1091,8 @@
     </section>
 
     <section id="pop1" class="pop-up">
-        <!-- The pop-up block -->
 
         <div class="popBox">
-            <!-- If the content becomes larger than the pop-up this div will scroll the content -->
             <input type="button" id="closePopBtn" value="Click to close this help" class="close" />
 
             <div class="popScroll">
