@@ -276,7 +276,7 @@
                 const prevDOM = previousItem.dayOfMonth || 'none';
                 const prevMsgNum = previousItem.messageNumber || 'none';
                 console.log('previous Runner, Action, Time, DOM, MsgNum', prevRunner, prevAction, prevTime, prevDOM, prevMsgNum);
-                const previousRecordString = '#' + previousItem.runner + ', ' + previousItem.action + ', ' + prevTime + ', D:' + previousItem.dayOfMonth + ', M#' + previousItem.messageNumber;
+                const previousRecordString = '#' + prevRunner + ', ' + prevAction + ', ' + prevTime + ', D:' + prevDOM + ', M#' + prevMsgNum;
                 GetElementById('endOfPriorBatch').value = previousRecordString;
             }
         }
