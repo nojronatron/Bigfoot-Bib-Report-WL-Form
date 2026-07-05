@@ -938,7 +938,7 @@
         <h1 class="formTitleHeader">Bigfoot Bib Report</h1>
         <form
             onsubmit="return confirm('To complete your form submission, click OK and close the browser tab. You will return to the new message window so you can post your message to the outbox.');"
-            id="myform" enctype="multipart/form-data" action="http://{FormServer}:{FormPort}">
+            id="myform" method="post" enctype="multipart/form-data" action="http://{FormServer}:{FormPort}">
             <div class="formReadVersion">
                 <input type="button" value="Form Information - READ" id="formInfoReadBtn">
                 <label id="thisVersion"></label>
@@ -1073,7 +1073,7 @@
             <div class="data-entry-subsection">
                 <div class="div-across-auto-align">
                     <input type="submit" class="SubmitBtn" id="Submit" method="Post" name="Submit" 
-                    value="SUBMIT" title="Submit form data to a new Winlink Message.">
+                    value="SUBMIT" title="Submit form data to a new Winlink Message." enctype="mulipart/form-data">
                     <input name="savebtn" type="button" class="saveDataButton" id="savebtn"
                     value="Save Race data" title="Save data to a file.">
                 </div>
