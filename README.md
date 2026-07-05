@@ -65,7 +65,7 @@ August 2026: v2.5.1
 - Fix various layout and CSS positioning issues on large and small screens.
 - Updated script that copies template and form files to WE's "global" directory.
 - Declared and documented browser back-support to ECMA 2016/ES7 and browsers built/updated during cy 2015. Earlier browser versions might not work as expected.
-- Updated HTML 5 to be closer in compliance with 2015/2015 standards (wide browser adoption since 2014): Remove XHTML self-closing tags for null elements; Update attribute usage.
+- Updated HTML 5 to be closer in compliance with 2015/2015 standards (wide browser adoption since 2014): XHMTL self-closing tags; attribute usage. Select and Options elements are non-compliant.
 
 ### Prior versions
 
