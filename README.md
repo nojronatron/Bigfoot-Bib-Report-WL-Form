@@ -1,9 +1,15 @@
 # Bigfoot Bib Report Winlink Form
 
+Validation Tools:
+
+- [![W3C CSS 3.0 Valid](https://jigsaw.w3.org/css-validator/images/vcss)](https://jigsaw.w3.org/css-validator)
+- W3C Markup Validation Service: [Nu Html Checker](https://validator.w3.org/)
+
 ## Table of Contents
 
 - [Overview](#overview)
 - [Contributing](#contributing)
+- [Device Support](#device-support)
 - [Form and Template Version](#form-and-template-version)
 - [How Winlink Forms Work](#how-winlink-forms-work)
 - [How Bib Data Is Recorded At Aid Stations](#how-bib-data-is-recorded-at-aid-stations)
@@ -31,9 +37,37 @@ For more information about Destination Trail and their ultra trail running marat
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for information. You are welcome to help me, and the Bigfoot Hams, with your ideas.
 
+## Device Support
+
+The form is meant for use on devices with web browser versions dated May 2016 or later. The form should look and work more-or-less the same as a newer, modern browser with ECMA 2016/ES7 support.
+
+More recently, devices have appeared on the market that **fold** (Galaxy Z Fold, Zenbook Fold) or have **two** **screens** (Surface Duo) and this form is **not** designed to work with those technologies. If you have one of these devices, be prepared for slightly unexpected user interface artifacts, and do one or more of the following to get an expected, fully supported view:
+
+- Flatten the foldable device to get rid of the dark/black bar
+- Toggle single-screen mode
+- Adjust the orientation from vertical to horizontal (or vice-versa) to move content out from under the obscured fold or screen-split bar
+
+This problem **could** be adressed in a future release, but additional development is required before hand.
+
+Compliance/Validation Notes as of June 2026:
+
+- The CSS was validated as level 3 (CSS 3.0) by thw W3C Css-Validator tool
+- HTML is nearly compliant with HTML 5.0 standards, save for a few arguable standards such as element closings
+
 ## Form and Template Version
 
-1-Aug-2024: v2.4.x (in development)
+August 2026: v2.5.1
+
+- Time Field is now "sticky" to last-entered time by the user and will only reset to computer time when form is loaded.
+- User control sets maximum bib **characters** count.
+- Add bib record count and bibnumber length setting to **Template** data upon submission.
+- Updated **template** file to report additional information to the Winlink Message.
+- Fix various layout and CSS positioning issues on large and small screens.
+- Updated script that copies template and form files to WE's "global" directory.
+- Declared and documented browser back-support to ECMA 2016/ES7 and browsers built/updated during cy 2015. Earlier browser versions might not work as expected.
+- Updated HTML 5 to be closer in compliance with 2015/2015 standards (wide browser adoption since 2014): XHMTL self-closing tags; attribute usage. Select and Options elements are non-compliant.
+
+### Prior versions
 
 - Mouseless input: IN, OUT, DROP buttons activated using `+`, `-`, and `/` keys.
 - Clear Entries button also removes Comment field text.
@@ -42,16 +76,10 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for information. You are welcome to help 
 - Code improvements for screen readers.
 - Improved time input sanitization.
 - Documentation updates covering the above features.
-
-25-June-2024: v2.1.3
-
 - Add sanitization to bib number and bib time inputs.
 - Format bib time input as 'HHMM' (4 characters, no colon, no non-number characters).
 - Format CSV entries as 'HHMM' etc (same as above).
 - Update Form Information (help) text.
-
-5-June-2024: v2.0.1
-
 - Updates Template file variable names.
 - Updates Form to use CSV on UI, submit Tab-delimited on Submit.
 - Update README with latest instructions, images, and depictions.
@@ -61,17 +89,12 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for information. You are welcome to help 
 - Enforce CRLF in git operations.
 - Updates code to support major desktop and mobile browsers from March 2010 forward.
 - Update in-form help documentation to bring up-to-date.
-
-6-Aug-2023: v1.1.7
-
 - Bugfix 'increment' button updates subject field.
 - Message number saved to browser storage.
 - Remove unnecessary code.
 - Remove default message number.
 
-Prior versions:
-
-Prior versions were built from original form files created by the Winlink Development Team:
+Initial versions of this form were built from original form files created by the Winlink Development Team:
 
 - "Race Tracker Initial.html" aka The Form. This is a single-page website built with html, javascript, and css.
 - "Race Tracker.txt" aka The Template. A plain-text file with special keywords elements to receive data produced by the Form.
@@ -168,7 +191,7 @@ Simplify the process by making a Favorite:
 6. Click `Select` at the top menu to set the Template and exit the Template Manager.
 7. Click `Save` on the `Set Favorite Templates` window to store the changes.
 
-Whenver you open a New Message, select the menu item named after your favorite template (for example: "BF-Form"), and Winlink Express will load the Form into your default browser window.
+Whenever you open a New Message, select the menu item named after your favorite template (for example: "BF-Form"), and Winlink Express will load the Form into your default browser window.
 
 ## Form Usage in Winlink Express
 
@@ -205,7 +228,7 @@ Use that orange outline to help you quickly find where the "focus" is on the for
 
 If you click into a field and the orange highlight does not appear, that means the field is _read only_ and you are not allowed to input or change anything within that field.
 
-Also try this: Click on `Form Information - READ` and a pop-up screen will appear with additional instructions about the form and how to use it. Read This Friendly Manual. When done, click the white-on-black text "Click To Close This" and you will be allowed to edit the form again.
+Also try this: Click on `Form Information - READ` and a pop-up screen will appear with additional instructions about the form and how to use it. Please read it. You can always close the instructions and get right back to editing the form.
 
 ![popup help screen image with green arrow pointing to the close button](./images/popup-help-screen-green-arrow.png)
 
@@ -215,6 +238,7 @@ Enter information into the top section of the form. What you enter here will upd
 
 _Note_: Many browsers will store previously entered data into fields. It is not a feature of the Form. You might (or might not) want your browser to do this.
 
+1. Select an appropriate number in the Max Bib Characters field. Bigfoot Base might even tell you what number this should be, for example `3` for a bib range of 1-450.
 1. Enter an Event Title.
 1. Update the Message Number (start with 1 unless instructed otherwise). You can use the Increment button to simplify tracking message numbers.
 1. Add Callsign(s) of the recipients you want to send the completed message to.
@@ -236,7 +260,7 @@ _Always use the Save button_ before submitting your data to a message, that way 
 
 This functionality will help you store all of the form field data in the form including the top (header) section and entered bib data.
 
-1. Complete the top section of the form.
+1. Complete the [top section](#prepare-common-form-data) of the form.
 1. Click the SAVE RACE DATA button.
 1. A pop-up will appear with a filename.
 1. Optional: Rename the file something that represents your aid station such as "Chain of Lakes WL Form Header.txt".
@@ -246,12 +270,13 @@ Here's a sample of what that saved data looks like:
 
 ```json
 {
-  "FormVersion": "2.1.3",
-  "EventTitle": "BF24 Test",
+  "FormVersion": "2.5.dev",
+  "BibNumberLengthMax": "3",
+  "EventTitle": "BF Test 2026",
   "MessageNumber": "5",
-  "address": "k7rmz",
+  "address": "N0CALL",
   "Location": "JR_Johnston Ridge",
-  "msgsubject": "BF24 Test Johnston Ridge Message #5",
+  "msgsubject": "BF26 Test Johnston Ridge Message #5",
   "entryCount": "4",
   "Comment": "",
   "TheCsvData": [
@@ -276,26 +301,36 @@ _Note 1_: The last entry from the previously submitted batch will be displayed i
 
 _Note 2_: Whenever you press `Save Race data` the form will store the last entered bib data to the file so that next time you `Load Race data`, the `End of Prior` field will be updated accordingly.
 
+_Note 3_: "BibNumberLengthMax" value does not get loaded back into the form with the other race data. This is to avoid an unexpected change to the limit already set by the current operator.
+
 ### Enter Bib Data Into The Form
 
 The form allows you to click or tap on input fields to select them, and you can use the TAB key on your keyboard to move between fields. Selecting items can be done with a click, tap, or using the spacebar.
 
 1. Click the empty box next to `Bib or Rider`.
 1. Enter the bib number. For example `101`.
-1. Press Tab to move to the "Time" entry box and the current 24-hour time will appear in the box for the _current day_.
-1. _As necessary_ update the time to an accurate representation of the time the runner arrived, left, or dropped. Generally, this timestamp should be close to actual but it is _not an official record_ so use your best judgement.
-1. Click the checkbox labeled `Yesterday` to tell the Form the time references _yesterday_.
-1. Click IN, OUT, DROP depending on what the runner `Action` was. Alternatively, hit either the + or = key for IN, - for OUT, and / for DROP.
+1. Press Tab to move to the "Time" entry box. Enter a new time in 24-hr format.
+1. _As necessary_ update the time to an accurate representation of the time the runner arrived, left, or dropped.
+1. Click the checkbox labeled `Yesterday` to tell the Form to back-date the entry by 1 day.
+1. Click IN, OUT, DROP depending on what the runner `Action` was. Alternatively, press `+` or `=` key for IN, `-` for OUT, or `/` for DROP.
 
 The correctly formatted bib data will appear in the window below and the `Number of Entries` count will increase by `1` for every enty you complete.
 
 _Important_: All bib data inside the entries window will disappear without a chance for recovery if you click the Clear Entries button. The only way to recover those entries is to had previously pressed [SAVE RACE DATA Button](#store-and-load-existing-race-data) as described above.
 
-#### Feature: Edit Entry Data
+### Edit Entry Data
 
-There are times when a bib number is mis-keyed, or 'OUT' was clicked instead of 'DROP', etc. In previous versions this was very difficult to fix, and occasionally those fixes caused data issues at Bigfoot Base. With this version you _can edit data after clicking IN, OUT, or DROP_ to make an important fix, and it is simpler than it was before because the data is in comma-separated format now.
+There are times when a bib number is mis-keyed, or 'OUT' was clicked instead of 'DROP' (etc). In previous versions these errors were very difficult to fix in the field. Occasionally, fixing the mis-keyed data caused other issues at Bigfoot Base. With this version the form's viewable bib data is in comma-separated form. You can now **edit** bib data **after** clicking IN, OUT, or DROP.
 
-Simply click on the data you need to edit, type-over it, and then press the `Tab` key and the entries will auto-reformat, ready for submission.
+To make an edit to the bib data:
+
+1. Click on the data you need to edit
+2. Use the arrow keys to navigate to the data you want to replace
+3. Use backspace or delete key to remove the errant entry
+4. Press the `Tab` key or click elsewhere on the form to save the changes
+5. Re-enter the Bib, Time, and click the correct Action button to place the correct entry into the form
+
+Recommendation: Remove the errant entry as described above rather than editing specific data within the bib record list. By changing data components directly (example: changing 'OUT' to 'DROP'), BigFoot Base may need to contact you to verify the data, slowing down operations and potentially typing up the repeater network.
 
 ### Submit Completed Form And Post Message To Outbox
 
@@ -349,10 +384,8 @@ For detailed instructions on the installation of Winlink Forms and Templates see
 
 ## Final Thoughts
 
-Have fun!
-
-This is a personal effort of love for coding and for the hobby and community of ham radio. This project open to benefit the amateur community.
-
 The original author might assert restrictions or limitations on use of their source code. See [Winlink.org](https://winlink.org/) for details.
+
+This is a personal effort of love for coding and for the hobby and community of ham radio. This project is open source, for the benefit the amateur community. ❤️👐💻🤝📻
 
 [Back To Top](#bigfoot-bib-report-winlink-form)
