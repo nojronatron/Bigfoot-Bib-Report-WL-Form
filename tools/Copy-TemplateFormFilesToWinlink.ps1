@@ -7,10 +7,13 @@ Param(
     [Parameter(Mandatory=$false,
     Position=1,
     HelpMessage="Include Form (HTML) files. Specify -includeForms to include them.")]
-    [switch]$includeForms
-    ,
+    [switch]$includeForms,
     [Parameter(Mandatory=$false,
     Position=2,
+    HelpMessage="Suppress verbose copy output while still showing the summary.")]
+    [switch]$quiet,
+    [Parameter(Mandatory=$false,
+    Position=3,
     HelpMessage="Show this help message and exit.")]
     [switch]$Help
 )
@@ -24,6 +27,7 @@ if ($Help -or $args -contains '--help' -or $args -contains '-help') {
     Write-Host "Options:" -ForegroundColor Cyan
     Write-Host "  -srcPath <path>      Path containing template files to copy. Defaults to current directory." -ForegroundColor Cyan
     Write-Host "  -includeForms        Include .html form files in addition to required .txt template files." -ForegroundColor Cyan
+    Write-Host "  -quiet               Suppress verbose copy output while still showing the summary." -ForegroundColor Cyan
     Write-Host "  -help                Show this help message and exit." -ForegroundColor Cyan
     Write-Host "" -ForegroundColor Cyan
     Write-Host "Examples:" -ForegroundColor Cyan
@@ -94,7 +98,12 @@ try {
         $dstFile = Join-Path -Path $dstPath -ChildPath $f.Name
 
         if ($PSCmdlet.ShouldProcess("$($f.FullName)", "Copy to $dstFile")) {
-            Copy-Item -Path $f.FullName -Destination $dstFile -Force -Verbose
+            if ($quiet) {
+                Copy-Item -Path $f.FullName -Destination $dstFile -Force
+            }
+            else {
+                Copy-Item -Path $f.FullName -Destination $dstFile -Force -Verbose
+            }
             if (Test-Path -Path $dstFile) {
                 $copiedFiles += $f.Name
             }
@@ -110,9 +119,12 @@ finally {
 
     # Show destination and list of files copied
     if ($copiedFiles.Count -gt 0) {
-        Write-Host "Files copied to: $dstPath" -ForegroundColor Green
-        Write-Host "Copied files:" -ForegroundColor Green
-        foreach ($cf in $copiedFiles) { Write-Host " - $cf" }
+        $fileCount = $copiedFiles.Count
+        Write-Host "$fileCount files copied to: $dstPath" -ForegroundColor Green
+        if (-not $quiet) {
+            Write-Host "Copied files:" -ForegroundColor Green
+            foreach ($cf in $copiedFiles) { Write-Host " - $cf" }
+        }
     }
     else {
         Write-Host "No files were copied." -ForegroundColor Yellow

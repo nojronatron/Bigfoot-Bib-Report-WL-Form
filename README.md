@@ -1,9 +1,15 @@
 # Bigfoot Bib Report Winlink Form
 
+Validation Tools:
+
+- [![W3C CSS 3.0 Valid](https://jigsaw.w3.org/css-validator/images/vcss)](https://jigsaw.w3.org/css-validator)
+- W3C Markup Validation Service: [Nu Html Checker](https://validator.w3.org/)
+
 ## Table of Contents
 
 - [Overview](#overview)
 - [Contributing](#contributing)
+- [Device Support](#device-support)
 - [Form and Template Version](#form-and-template-version)
 - [How Winlink Forms Work](#how-winlink-forms-work)
 - [How Bib Data Is Recorded At Aid Stations](#how-bib-data-is-recorded-at-aid-stations)
@@ -31,14 +37,35 @@ For more information about Destination Trail and their ultra trail running marat
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for information. You are welcome to help me, and the Bigfoot Hams, with your ideas.
 
+## Device Support
+
+The form is meant for use on devices with web browser versions dated May 2016 or later. The form should look and work more-or-less the same as a newer, modern browser with ECMA 2016/ES7 support.
+
+More recently, devices have appeared on the market that **fold** (Galaxy Z Fold, Zenbook Fold) or have **two** **screens** (Surface Duo) and this form is **not** designed to work with those technologies. If you have one of these devices, be prepared for slightly unexpected user interface artifacts, and do one or more of the following to get an expected, fully supported view:
+
+- Flatten the foldable device to get rid of the dark/black bar
+- Toggle single-screen mode
+- Adjust the orientation from vertical to horizontal (or vice-versa) to move content out from under the obscured fold or screen-split bar
+
+This problem **could** be adressed in a future release, but additional development is required before hand.
+
+Compliance/Validation Notes as of June 2026:
+
+- The CSS was validated as level 3 (CSS 3.0) by thw W3C Css-Validator tool
+- HTML is nearly compliant with HTML 5.0 standards, save for a few arguable standards such as element closings
+
 ## Form and Template Version
 
-August 2026: v2.5.x
+August 2026: v2.5.1
 
-- Declared browser support updated to indicate browsers that are not aware of/fully support ECMA 2015/ES6 standards are not fully supported.
 - Time Field is now "sticky" to last-entered time by the user and will only reset to computer time when form is loaded.
 - User control sets maximum bib **characters** count.
-- Update documentation with info on current features.
+- Add bib record count and bibnumber length setting to **Template** data upon submission.
+- Updated **template** file to report additional information to the Winlink Message.
+- Fix various layout and CSS positioning issues on large and small screens.
+- Updated script that copies template and form files to WE's "global" directory.
+- Declared and documented browser back-support to ECMA 2016/ES7 and browsers built/updated during cy 2015. Earlier browser versions might not work as expected.
+- Updated HTML 5 to be closer in compliance with 2015/2015 standards (wide browser adoption since 2014): XHMTL self-closing tags; attribute usage. Select and Options elements are non-compliant.
 
 ### Prior versions
 
@@ -201,7 +228,7 @@ Use that orange outline to help you quickly find where the "focus" is on the for
 
 If you click into a field and the orange highlight does not appear, that means the field is _read only_ and you are not allowed to input or change anything within that field.
 
-Also try this: Click on `Form Information - READ` and a pop-up screen will appear with additional instructions about the form and how to use it. Read This Friendly Manual. When done, click the white-on-black text "Click To Close This" and you will be allowed to edit the form again.
+Also try this: Click on `Form Information - READ` and a pop-up screen will appear with additional instructions about the form and how to use it. Please read it. You can always close the instructions and get right back to editing the form.
 
 ![popup help screen image with green arrow pointing to the close button](./images/popup-help-screen-green-arrow.png)
 
@@ -291,11 +318,19 @@ The correctly formatted bib data will appear in the window below and the `Number
 
 _Important_: All bib data inside the entries window will disappear without a chance for recovery if you click the Clear Entries button. The only way to recover those entries is to had previously pressed [SAVE RACE DATA Button](#store-and-load-existing-race-data) as described above.
 
-#### Feature: Edit Entry Data
+### Edit Entry Data
 
-There are times when a bib number is mis-keyed, or 'OUT' was clicked instead of 'DROP', etc. In previous versions this was very difficult to fix, and occasionally those fixes caused data issues at Bigfoot Base. With this version you _can edit data after clicking IN, OUT, or DROP_ to make an important fix, and it is simpler than it was before because the data is in comma-separated format now.
+There are times when a bib number is mis-keyed, or 'OUT' was clicked instead of 'DROP' (etc). In previous versions these errors were very difficult to fix in the field. Occasionally, fixing the mis-keyed data caused other issues at Bigfoot Base. With this version the form's viewable bib data is in comma-separated form. You can now **edit** bib data **after** clicking IN, OUT, or DROP.
 
-Simply click on the data you need to edit, type-over it, and then press the `Tab` key and the entries will auto-reformat, ready for submission.
+To make an edit to the bib data:
+
+1. Click on the data you need to edit
+2. Use the arrow keys to navigate to the data you want to replace
+3. Use backspace or delete key to remove the errant entry
+4. Press the `Tab` key or click elsewhere on the form to save the changes
+5. Re-enter the Bib, Time, and click the correct Action button to place the correct entry into the form
+
+Recommendation: Remove the errant entry as described above rather than editing specific data within the bib record list. By changing data components directly (example: changing 'OUT' to 'DROP'), BigFoot Base may need to contact you to verify the data, slowing down operations and potentially typing up the repeater network.
 
 ### Submit Completed Form And Post Message To Outbox
 
