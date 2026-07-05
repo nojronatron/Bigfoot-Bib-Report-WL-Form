@@ -2,9 +2,8 @@
 
 Validation Tools:
 
-[![W3C CSS 3.0 Valid](https://jigsaw.w3.org/css-validator/images/vcss)](https://jigsaw.w3.org/css-validator)
-
-W3C Markup Validation Service: [Nu Html Checker](https://validator.w3.org/)
+- [![W3C CSS 3.0 Valid](https://jigsaw.w3.org/css-validator/images/vcss)](https://jigsaw.w3.org/css-validator)
+- W3C Markup Validation Service: [Nu Html Checker](https://validator.w3.org/)
 
 ## Table of Contents
 
@@ -52,22 +51,21 @@ This problem **could** be adressed in a future release, but additional developme
 
 Compliance/Validation Notes as of June 2026:
 
-- W3C has validated the containing CSS at level 3 (CSS 3.0)
-- HTML 5.0 
-
+- The CSS was validated as level 3 (CSS 3.0) by thw W3C Css-Validator tool
+- HTML is nearly compliant with HTML 5.0 standards, save for a few arguable standards such as element closings
 
 ## Form and Template Version
 
-August 2026: v2.5.x
+August 2026: v2.5.1
 
 - Time Field is now "sticky" to last-entered time by the user and will only reset to computer time when form is loaded.
 - User control sets maximum bib **characters** count.
-- Add bib record count and bibnumber length setting to Template data upon submission.
-- Updated template file to report additional information on Winlink Message.
+- Add bib record count and bibnumber length setting to **Template** data upon submission.
+- Updated **template** file to report additional information to the Winlink Message.
 - Fix various layout and CSS positioning issues on large and small screens.
 - Updated script that copies template and form files to WE's "global" directory.
 - Declared and documented browser back-support to ECMA 2016/ES7 and browsers built/updated during cy 2015. Earlier browser versions might not work as expected.
-- Declared HTML 5 full compatibility (wide browser adoption by 2014), by removing XHTML self-closing tags for null elements, and updating attribute usage to modern (2015 or later) standards.
+- Updated HTML 5 to be closer in compliance with 2015/2015 standards (wide browser adoption since 2014): Remove XHTML self-closing tags for null elements; Update attribute usage.
 
 ### Prior versions
 
